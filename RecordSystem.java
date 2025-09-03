@@ -5,14 +5,19 @@ import java.util.StringTokenizer;
 public class RecordSystem {
     // matches to be stored in array
     private Match[] matches;
-    private int matchCount = 0;
+    private int matchCount;
+
+    public RecordSystem() {
+        this.matches = new Match[1000];
+        this.matchCount = 0;
+    }
     // add match to array
     public void addMatch(String round, String homeTeamName, int homeTeamGoals, int homeTeamBehinds, String awayTeamName, int awayTeamGoals, int awayTeamBehinds) {
         matches[matchCount] = new Match(round, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
         matchCount++;
     }
     // save matches to text file to 
-    public void saveMatches() throws Exception {
+    public void saveMatches() {
         try {
             File matchFile = new File("data.txt");
             FileWriter matchWriter = new FileWriter(matchFile);
@@ -27,11 +32,10 @@ public class RecordSystem {
         }
     }
 
-    public void loadMatches() throws Exception {
-        File matchFile = new File("data.txt");
-        Scanner matchInfile = new Scanner(matchFile);
-
+    public void loadMatches() {
         try {
+            File matchFile = new File("data.txt");
+            Scanner matchInfile = new Scanner(matchFile);
             while (matchInfile.hasNextLine()) {
                 String s = matchInfile.nextLine();
                 StringTokenizer stk = new StringTokenizer(s, ";");
@@ -44,14 +48,29 @@ public class RecordSystem {
                 int awayTeamBehinds = Integer.parseInt(stk.nextToken().trim());
                 addMatch(round, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
             }
+            matchInfile.close();
         }
         catch (Exception e) {
             System.out.println(e);
         }
-        matchInfile.close();
+
     }
 
     public String findGreatestMargins() {
         return null;
+    }
+    
+    public void displayMatchesByRound(String round, String year) {
+        Match[] results = new Match[15];
+        int resultsCount = 0;
+        for (int i = 0; i < matchCount; i++) {
+            if (matches[i].getRound().equals(String.format("Round %s, %s", round, year))) {
+                results[resultsCount] = matches[i];
+                resultsCount++;
+            }
+        }
+        for (int i = 0; i < resultsCount; i++) {
+            System.out.println(results[i]);
+        }
     }
 }
