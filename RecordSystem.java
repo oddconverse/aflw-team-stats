@@ -74,6 +74,7 @@ public class RecordSystem {
         for (int i = 0; i < matchCount; i++) {
             // instantiate team objects when a new team appears
             // team object should store matches played, won, lost, drawn, points for/against, premiership points
+            // use comparable class, return true if pp > other team, if same return true if percentage is higher
         }
     }
     
