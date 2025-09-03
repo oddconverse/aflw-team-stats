@@ -16,7 +16,7 @@ public class RecordSystem {
         matches[matchCount] = new Match(round, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
         matchCount++;
     }
-    // save matches to text file to 
+    // save matches to text file to open later
     public void saveMatches() {
         try {
             File matchFile = new File("data.txt");
@@ -56,15 +56,32 @@ public class RecordSystem {
 
     }
 
-    public String findGreatestMargins() {
-        return null;
+    public Match findGreatestMargins() {
+        int greatestMargin = 0;
+        Match matchGreatestMargin = null;
+        System.out.println("History of Greatest Winning Margin");
+        for (int i = 0; i < matchCount; i++) {
+            if (matches[i].getMargin() > greatestMargin) {
+                matchGreatestMargin = matches[i];
+                greatestMargin = matchGreatestMargin.getMargin();
+                System.out.println(String.format("%s. %s won by %d points.", matchGreatestMargin, matchGreatestMargin.getWinningTeam(), greatestMargin));
+            }
+        }
+        return matchGreatestMargin;
+    }
+
+    public void createLadder() {
+        for (int i = 0; i < matchCount; i++) {
+            // instantiate team objects when a new team appears
+            // team object should store matches played, won, lost, drawn, points for/against, premiership points
+        }
     }
     
     public void displayMatchesByRound(String round, String year) {
         Match[] results = new Match[15];
         int resultsCount = 0;
         for (int i = 0; i < matchCount; i++) {
-            if (isNumeric(round) && matches[i].getRound().equals(String.format("Round %s, %s", round, year))) {
+            if (isNumeric(round) && matches[i].getRound().equals(String.format("Round %s, %s", round, year)) || matches[i].getRound().equals(String.format("Week %s, %s", round, year))) {
                 results[resultsCount] = matches[i];
                 resultsCount++;
             }

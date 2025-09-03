@@ -132,6 +132,9 @@ public class RecordSystemMenu {
                     selection = selectOption(input);
                     break;
                 case "4":
+                    System.out.println(String.format("Greatest winning margin: %s", system.findGreatestMargins()));
+                    selection = selectOption(input);
+                    break;
                 case "5":
                     System.out.println("Round number: ");
                     String roundNumber = input.nextLine();
