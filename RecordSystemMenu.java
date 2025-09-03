@@ -109,8 +109,9 @@ public class RecordSystemMenu {
                         int awayTeamGoals = Integer.parseInt(input.nextLine());
                         System.out.println("Away team behinds: ");
                         int awayTeamBehinds = Integer.parseInt(input.nextLine());
+                        Match currentMatch = new Match(roundName, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
                         system.addMatch(roundName, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
-                        System.out.println("Match added successfully. " + String.format("%s: %s %d.%d (%d) def. by %s %d.%d (%d)", roundName, homeTeamName, homeTeamGoals, homeTeamBehinds, (homeTeamGoals * 6 + homeTeamBehinds), awayTeamName, awayTeamGoals, awayTeamBehinds, (awayTeamGoals * 6 + awayTeamBehinds)));
+                        System.out.println("Match added successfully. " + currentMatch);
                         System.out.println("Add another match from same round? (y)/n");
                         String matchSelection = input.nextLine();
                         switch (matchSelection) {
@@ -139,10 +140,11 @@ public class RecordSystemMenu {
                     system.displayMatchesByRound(roundNumber, year);
                     selection = selectOption(input);
                     break;
-                    
+
                 case "x":
                 case "X":
                     exit = true;
+                    break;
             }
         }
 

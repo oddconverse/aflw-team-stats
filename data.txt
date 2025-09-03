@@ -1,4 +1,250 @@
+Round 1, 2017; Carlton; 7; 4; Collingwood; 1; 5
+Round 1, 2017; Adelaide; 7; 6; Greater Western Sydney; 1; 6
+Round 1, 2017; Western Bulldogs; 6; 8; Fremantle; 1; 6
+Round 1, 2017; Melbourne; 1; 4; Brisbane; 4; 1
 Round 2, 2017; Western Bulldogs; 2; 11; Adelaide; 7; 6
 Round 2, 2017; Carlton; 7; 5; Greater Western Sydney; 5; 4
 Round 2, 2017; Collingwood; 4; 1; Melbourne; 7; 2
 Round 2, 2017; Fremantle; 3; 5; Brisbane; 5; 6
+Round 3, 2017; Greater Western Sydney; 7; 1; Fremantle; 6; 7
+Round 3, 2017; Brisbane; 4; 3; Collingwood; 3; 5
+Round 3, 2017; Western Bulldogs; 4; 5; Melbourne; 6; 7
+Round 3, 2017; Adelaide; 2; 5; Carlton; 2; 2
+Round 4, 2017; Melbourne; 6; 6; Carlton; 5; 6
+Round 4, 2017; Brisbane; 6; 7; Greater Western Sydney; 1; 3
+Round 4, 2017; Western Bulldogs; 3; 7; Collingwood; 5; 2
+Round 4, 2017; Fremantle; 3; 5; Adelaide; 6; 10
+Round 5, 2017; Greater Western Sydney; 3; 2; Melbourne; 1; 9
+Round 5, 2017; Carlton; 8; 6; Western Bulldogs; 7; 6
+Round 5, 2017; Fremantle; 4; 7; Collingwood; 5; 2
+Round 5, 2017; Adelaide; 4; 6; Brisbane; 5; 3
+Round 6, 2017; Fremantle; 6; 7; Carlton; 4; 3
+Round 6, 2017; Brisbane; 2; 11; Western Bulldogs; 2; 4
+Round 6, 2017; Adelaide; 5; 2; Melbourne; 5; 4
+Round 6, 2017; Collingwood; 7; 13; Greater Western Sydney; 3; 1
+Round 7, 2017; Melbourne; 11; 4; Fremantle; 2; 4
+Round 7, 2017; Greater Western Sydney; 3; 2; Western Bulldogs; 7; 10
+Round 7, 2017; Collingwood; 7; 4; Adelaide; 10; 10
+Round 7, 2017; Carlton; 6; 1; Brisbane; 5; 7
+Grand Final, 2017; Brisbane; 4; 5; Adelaide; 4; 11
+Round 1, 2018; Carlton; 3; 4; Collingwood; 2; 2
+Round 1, 2018; Melbourne; 7; 3; Greater Western Sydney; 6; 3
+Round 1, 2018; Adelaide; 3; 1; Brisbane; 4; 7
+Round 1, 2018; Western Bulldogs; 7; 7; Fremantle; 3; 5
+Round 2, 2018; Greater Western Sydney; 1; 3; Carlton; 3; 12
+Round 2, 2018; Melbourne; 8; 8; Adelaide; 4; 0
+Round 2, 2018; Fremantle; 6; 4; Collingwood; 4; 3
+Round 2, 2018; Brisbane; 3; 6; Western Bulldogs; 5; 3
+Round 3, 2018; Adelaide; 6; 5; Western Bulldogs; 5; 4
+Round 3, 2018; Carlton; 2; 6; Brisbane; 6; 4
+Round 3, 2018; Collingwood; 5; 5; Greater Western Sydney; 7; 6
+Round 3, 2018; Fremantle; 6; 0; Melbourne; 4; 7
+Round 4, 2018; Western Bulldogs; 12; 14; Carlton; 2; 1
+Round 4, 2018; Brisbane; 3; 4; Fremantle; 2; 3
+Round 4, 2018; Melbourne; 3; 6; Collingwood; 9; 4
+Round 4, 2018; Greater Western Sydney; 2; 7; Adelaide; 2; 7
+Round 5, 2018; Melbourne; 4; 10; Brisbane; 4; 4
+Round 5, 2018; Fremantle; 3; 3; Greater Western Sydney; 6; 3
+Round 5, 2018; Adelaide; 8; 7; Carlton; 2; 8
+Round 5, 2018; Collingwood; 6; 5; Western Bulldogs; 7; 7
+Round 6, 2018; Adelaide; 6; 4; Fremantle; 5; 6
+Round 6, 2018; Brisbane; 5; 9; Collingwood; 8; 5
+Round 6, 2018; Greater Western Sydney; 7; 4; Western Bulldogs; 4; 4
+Round 6, 2018; Carlton; 3; 4; Melbourne; 8; 9
+Round 7, 2018; Greater Western Sydney; 3; 6; Brisbane; 10; 4
+Round 7, 2018; Fremantle; 9; 5; Carlton; 6; 12
+Round 7, 2018; Western Bulldogs; 5; 3; Melbourne; 4; 7
+Round 7, 2018; Collingwood; 8; 5; Adelaide; 4; 8
+Grand Final, 2018; Western Bulldogs; 4; 3; Brisbane; 3; 3
+Round 1, 2019; Geelong; 3; 6; Collingwood; 3; 5
+Round 1, 2019; Adelaide; 1; 11; Western Bulldogs; 2; 6
+Round 1, 2019; North Melbourne; 7; 10; Carlton; 2; 4
+Round 1, 2019; Melbourne; 8; 7; Fremantle; 9; 5
+Round 1, 2019; Brisbane; 4; 5; Greater Western Sydney; 4; 3
+Round 2, 2019; Greater Western Sydney; 2; 11; North Melbourne; 7; 6
+Round 2, 2019; Collingwood; 1; 3; Melbourne; 3; 8
+Round 2, 2019; Western Bulldogs; 5; 4; Geelong; 2; 4
+Round 2, 2019; Carlton; 7; 2; Adelaide; 9; 3
+Round 2, 2019; Fremantle; 10; 7; Brisbane; 6; 4
+Round 3, 2019; North Melbourne; 8; 5; Western Bulldogs; 3; 4
+Round 3, 2019; Greater Western Sydney; 5; 6; Carlton; 10; 5
+Round 3, 2019; Fremantle; 7; 9; Collingwood; 2; 6
+Round 3, 2019; Adelaide; 10; 6; Geelong; 6; 1
+Round 3, 2019; Brisbane; 3; 3; Melbourne; 9; 6
+Round 4, 2019; Geelong; 2; 7; Carlton; 1; 8
+Round 4, 2019; Western Bulldogs; 2; 5; Brisbane; 7; 7
+Round 4, 2019; Adelaide; 9; 11; Fremantle; 3; 5
+Round 4, 2019; Collingwood; 4; 3; Greater Western Sydney; 5; 6
+Round 4, 2019; Melbourne; 5; 4; North Melbourne; 6; 2
+Round 5, 2019; Brisbane; 1; 2; g; 5; 5
+Round 5, 2019; Carlton; 4; 10; Collingwood; 4; 5
+Round 5, 2019; Greater Western Sydney; 2; 6; Melbourne; 8; 9
+Round 5, 2019; North Melbourne; 4; 5; Adelaide; 10; 4
+Round 5, 2019; Fremantle; 8; 4; Western Bulldogs; 5; 4
+Round 6, 2019; Geelong; 2; 1; Fremantle; 6; 13
+Round 6, 2019; Collingwood; 5; 1; North Melbourne; 7; 11
+Round 6, 2019; Western Bulldogs; 6; 2; Melbourne; 5; 9
+Round 6, 2019; Adelaide; 9; 5; Greater Western Sydney; 4; 3
+Round 6, 2019; Carlton; 6; 7; Brisbane; 4; 3
+Round 7, 2019; Greater Western Sydney; 6; 5; Geelong; 1; 4
+Round 7, 2019; Melbourne; 1; 2; Adelaide; 10; 8
+Round 7, 2019; Fremantle; 7; 10; North Melbourne; 1; 4
+Round 7, 2019; Collingwood; 3; 7; Brisbane; 2; 7
+Round 7, 2019; Western Bulldogs; 5; 8; Carlton; 6; 5
+Preliminary Final, 2019; Carlton; 9; 10; Fremantle; 4; 4
+Preliminary Final, 2019; Adelaide; 11; 7; Geelong; 1; 1
+Grand Final, 2019; Adelaide; 10; 3; Carlton; 2; 6
+Round 1, 2020; Richmond; 2; 2; Carlton; 6; 12
+Round 1, 2020; Greater Western Sydney; 1; 3; Gold Coast; 1; 2
+Round 1, 2020; Melbourne; 3; 4; North Melbourne; 3; 2
+Round 1, 2020; Brisbane; 5; 4; Adelaide; 3; 3
+Round 1, 2020; Collingwood; 5; 8; West Coast Eagles; 1; 5
+Round 1, 2020; St Kilda; 2; 2; Western Bulldogs; 6; 3
+Round 1, 2020; Fremantle; 6; 8; Geelong; 4; 4
+Round 2, 2020; Western Bulldogs; 2; 0; Melbourne; 4; 8
+Round 2, 2020; North Melbourne; 6; 1; Greater Western Sydney; 2; 7
+Round 2, 2020; Gold Coast; 5; 3; Richmond; 2; 10
+Round 2, 2020; West Coast Eagles; 2; 3; Fremantle; 9; 6
+Round 2, 2020; Geelong; 3; 2; Brisbane; 6; 3
+Round 2, 2020; Carlton; 3; 6; Collingwood; 6; 3
+Round 2, 2020; Adelaide; 6; 4; St Kilda; 4; 3
+Round 3, 2020; St Kilda; 3; 1; Melbourne; 1; 8
+Round 3, 2020; Western Bulldogs; 4; 6; Carlton; 8; 3
+Round 3, 2020; Gold Coast; 4; 4; Brisbane; 4; 4
+Round 3, 2020; Fremantle; 5; 3; Collingwood; 4; 6
+Round 3, 2020; Greater Western Sydney; 6; 6; West Coast Eagles; 2; 2
+Round 3, 2020; Richmond; 2; 8; North Melbourne; 12; 4
+Round 3, 2020; Geelong; 6; 2; Adelaide; 8; 1
+Round 4, 2020; Collingwood; 4; 2; Melbourne; 7; 4
+Round 4, 2020; Richmond; 7; 3; Geelong; 10; 7
+Round 4, 2020; North Melbourne; 6; 11; Gold Coast; 5; 4
+Round 4, 2020; West Coast Eagles; 4; 6; Western Bulldogs; 3; 8
+Round 4, 2020; Adelaide; 4; 4; Carlton; 5; 6
+Round 4, 2020; St Kilda; 3; 5; Fremantle; 3; 6
+Round 4, 2020; Brisbane; 7; 9; Greater Western Sydney; 3; 5
+Round 5, 2020; Gold Coast; 2; 6; Geelong; 5; 8
+Round 5, 2020; North Melbourne; 9; 9; Adelaide; 3; 3
+Round 5, 2020; Greater Western Sydney; 7; 14; Richmond; 1; 5
+Round 5, 2020; Carlton; 8; 2; St Kilda; 4; 5
+Round 5, 2020; Collingwood; 8; 5; Western Bulldogs; 3; 3
+Round 5, 2020; Melbourne; 10; 6; West Coast Eagles; 1; 1
+Round 5, 2020; Fremantle; 7; 8; Brisbane; 4; 8
+Round 6, 2020; Geelong; 3; 2; North Melbourne; 10; 6
+Round 6, 2020; Brisbane; 2; 2; Collingwood; 5; 13
+Round 6, 2020; St Kilda; 6; 6; Richmond; 0; 3
+Round 6, 2020; Melbourne; 3; 6; Carlton; 6; 4
+Round 6, 2020; Western Bulldogs; 8; 3; Fremantle; 10; 6
+Round 6, 2020; Adelaide; 3; 3; Greater Western Sydney; 4; 2
+Round 6, 2020; West Coast Eagles; 1; 2; Gold Coast; 5; 3
+Semi Final, 2020; North Melbourne; 5; 4; Collingwood; 5; 2
+Semi Final, 2020; Greater Western Sydney; 3; 8; Melbourne; 4; 5
+Semi Final, 2020; Fremantle; 12; 8; Gold Coast; 1; 4
+Semi Final, 2020; Carlton; 6; 8; Brisbane; 2; 3
+Round 1, 2021; Carlton; 4; 3; Collingwood; 5; 3
+Round 1, 2021; St Kilda; 8; 3; Western Bulldogs; 6; 6
+Round 1, 2021; Gold Coast; 5; 5; Melbourne; 9; 2
+Round 1, 2021; West Coast Eagles; 2; 6; Adelaide; 8; 8
+Round 1, 2021; Geelong; 1; 3; North Melbourne; 11; 5
+Round 1, 2021; Richmond; 1; 6; Brisbane; 5; 11
+Round 1, 2021; Fremantle; 8; 10; Greater Western Sydney; 4; 4
+Round 2, 2021; Western Bulldogs; 6; 6; Carlton; 5; 6
+Round 2, 2021; Collingwood; 6; 9; Geelong; 2; 4
+Round 2, 2021; Melbourne; 7; 2; Richmond; 2; 4
+Round 2, 2021; North Melbourne; 5; 6; St Kilda; 1; 4
+Round 2, 2021; Brisbane; 10; 5; Gold Coast; 0; 2
+Round 2, 2021; Greater Western Sydney; 2; 3; Adelaide; 9; 8
+Round 2, 2021; Fremantle; 2; 11; West Coast Eagles; 2; 2
+Round 3, 2021; Geelong; 1; 3; Western Bulldogs; 3; 6
+Round 3, 2021; Greater Western Sydney; 2; 6; Gold Coast; 1; 2
+Round 3, 2021; St Kilda; 2; 4; Carlton; 6; 4
+Round 3, 2021; Melbourne; 9; 6; North Melbourne; 8; 3
+Round 3, 2021; Adelaide; 1; 7; Fremantle; 7; 1
+Round 3, 2021; Richmond; 4; 7; Collingwood; 7; 6
+Round 3, 2021; Brisbane; 10; 5; West Coast Eagles; 2; 8
+Round 4, 2021; St Kilda; 7; 9; Geelong; 3; 4
+Round 4, 2021; Carlton; 8; 3; Richmond; 7; 4
+Round 4, 2021; Fremantle; 7; 13; Gold Coast; 1; 0
+Round 4, 2021; North Melbourne; 0; 8; Collingwood; 4; 4
+Round 4, 2021; Brisbane; 5; 3; Adelaide; 6; 9
+Round 4, 2021; Western Bulldogs; 6; 1; Melbourne; 2; 12
+Round 4, 2021; Greater Western Sydney; 7; 6; West Coast Eagles; 4; 4
+Round 5, 2021; Geelong; 2; 1; Richmond; 9; 6
+Round 5, 2021; Western Bulldogs; 7; 5; Greater Western Sydney; 3; 4
+Round 5, 2021; Fremantle; 1; 8; Brisbane; 3; 7
+Round 5, 2021; North Melbourne; 9; 5; Carlton; 6; 1
+Round 5, 2021; Adelaide; 8; 13; St Kilda; 1; 2
+Round 5, 2021; Collingwood; 7; 7; Melbourne; 1; 8
+Round 5, 2021; West Coast Eagles; 5; 4; Gold Coast; 4; 9
+Round 6, 2021; Richmond; 5; 2; North Melbourne; 10; 7
+Round 6, 2021; Greater Western Sydney; 2; 5; Brisbane; 7; 13
+Round 6, 2021; Adelaide; 13; 7; Gold Coast; 2; 3
+Round 6, 2021; Melbourne; 9; 12; St Kilda; 3; 4
+Round 6, 2021; Carlton; 10; 4; Geelong; 4; 7
+Round 6, 2021; Collingwood; 7; 9; Western Bulldogs; 2; 3
+Round 6, 2021; West Coast Eagles; 1; 2; Fremantle; 11; 9
+Round 7, 2021; Gold Coast; 4; 2; Richmond; 6; 5
+Round 7, 2021; St Kilda; 3; 7; Greater Western Sydney; 7; 3
+Round 7, 2021; North Melbourne; 5; 7; Western Bulldogs; 3; 8
+Round 7, 2021; Melbourne; 6; 7; Adelaide; 2; 3
+Round 7, 2021; Carlton; 6; 5; Fremantle; 6; 9
+Round 7, 2021; Brisbane; 4; 11; Collingwood; 4; 8
+Round 7, 2021; West Coast Eagles; 8; 5; Geelong; 2; 2
+Round 8, 2021; Gold Coast; 4; 3; Carlton; 13; 9
+Round 8, 2021; Geelong; 1; 3; Greater Western Sydney; 2; 4
+Round 8, 2021; Collingwood; 8; 11; St Kilda; 2; 1
+Round 8, 2021; Brisbane; 4; 11; North Melbourne; 2; 8
+Round 8, 2021; Richmond; 5; 12; West Coast Eagles; 5; 4
+Round 8, 2021; Adelaide; 12; 6; Western Bulldogs; 3; 4
+Round 8, 2021; Fremantle; 4; 8; Melbourne; 5; 7
+Round 9, 2021; Western Bulldogs; 7; 3; Richmond; 5; 2
+Round 9, 2021; North Melbourne; 4; 6; Fremantle; 4; 5
+Round 9, 2021; Melbourne; 6; 2; Brisbane; 6; 0
+Round 9, 2021; Gold Coast; 3; 6; Geelong; 6; 5
+Round 9, 2021; Adelaide; 4; 7; Collingwood; 2; 5
+Round 9, 2021; Greater Western Sydney; 4; 7; Carlton; 4; 8
+Round 9, 2021; West Coast Eagles; 3; 2; St Kilda; 11; 10
+Qualifying Final, 2021; Melbourne; 5; 10; Fremantle; 3; 5
+Qualifying Final, 2021; Collingwood; 7; 8; North Melbourne; 7; 2
+Preliminary Final, 2021; Adelaide; 5; 3; Melbourne; 1; 9
+Preliminary Final, 2021; Brisbane; 7; 3; Collingwood; 6; 5
+Grand Final, 2021; Adelaide; 3; 2; Brisbane; 6; 2
+Round 1, 2022 (Season 6); St Kilda; 3; 5; Richmond; 10; 1
+Round 1, 2022 (Season 6); North Melbourne; 4; 2; Geelong; 2; 6
+Round 1, 2022 (Season 6); Western Bulldogs; 3; 4; Melbourne; 6; 10
+Round 1, 2022 (Season 6); Fremantle; 6; 7; West Coast Eagles; 2; 3
+Round 1, 2022 (Season 6); Adelaide; 6; 3; Brisbane; 1; 3
+Round 1, 2022 (Season 6); Carlton; 3; 7; Collingwood; 6; 8
+Round 1, 2022 (Season 6); Gold Coast; 3; 3; Greater Western Sydney; 5; 6
+Round 2, 2022 (Season 6); Richmond; 6; 2; Melbourne; 8; 6
+Round 2, 2022 (Season 6); Collingwood; 6; 5; St Kilda; 2; 2
+Round 2, 2022 (Season 6); Geelong; 2; 5; Carlton; 4; 7
+Round 2, 2022 (Season 6); West Coast Eagles; 5; 3; Gold Coast; 7; 4
+Round 2, 2022 (Season 6); Adelaide; 5; 7; North Melbourne; 3; 6
+Round 2, 2022 (Season 6); Fremantle; 7; 10; Greater Western Sydney; 2; 8
+Round 3, 2022 (Season 6); Geelong; 3; 6; Collingwood; 5; 5
+Round 3, 2022 (Season 6); West Coast Eagles; 1; 3; Adelaide; 6; 6
+Round 3, 2022 (Season 6); Melbourne; 9; 10; St Kilda; 3; 5
+Round 3, 2022 (Season 6); Richmond; 7; 5; Fremantle; 11; 11
+Round 3, 2022 (Season 6); North Melbourne; 7; 12; Greater Western Sydney; 4; 3
+Round 3, 2022 (Season 6); Brisbane; 9; 9; Carlton; 4; 4
+Round 4, 2022 (Season 6); Collingwood; 1; 1; Fremantle; 5; 8
+Round 4, 2022 (Season 6); Greater Western Sydney; 7; 1; Western Bulldogs; 2; 10
+Round 4, 2022 (Season 6); Adelaide; 4; 11; Melbourne; 3; 3
+Round 4, 2022 (Season 6); Brisbane; 3; 9; Geelong; 4; 1
+Round 4, 2022 (Season 6); Carlton; 3; 3; North Melbourne; 7; 9
+Round 4, 2022 (Season 6); Gold Coast; 5; 9; Richmond; 5; 4
+Round 4, 2022 (Season 6); Western Bulldogs; 2; 7; Fremantle; 3; 7
+Round 5, 2022 (Season 6); Geelong; 4; 3; West Coast Eagles; 3; 6
+Round 5, 2022 (Season 6); Brisbane; 5; 5; Collingwood; 1; 5
+Round 5, 2022 (Season 6); Melbourne; 5; 8; Gold Coast; 4; 2
+Round 5, 2022 (Season 6); Western Bulldogs; 4; 6; Richmond; 1; 7
+Round 5, 2022 (Season 6); Carlton; 1; 6; Adelaide; 7; 9
+Round 5, 2022 (Season 6); North Melbourne; 3; 8; Fremantle; 2; 4
+Round 5, 2022 (Season 6); St Kilda; 2; 8; West Coast Eagles; 2; 10
+Round 6, 2022 (Season 6); Gold Coast; 7; 7; Geelong; 6; 2
+Round 6, 2022 (Season 6); Richmond; 2; 6; North Melbourne; 5; 7
+Round 6, 2022 (Season 6); Melbourne; 6; 8; Greater Western Sydney; 1; 1
+Round 6, 2022 (Season 6); Fremantle; 7; 9; Carlton; 1; 3
+Round 6, 2022 (Season 6); St Kilda; 4; 2; Brisbane; 3; 13
+Round 6, 2022 (Season 6); West Coast Eagles; 3; 4; Collingwood; 7; 4
+Round 6, 2022 (Season 6); Adelaide; 7; 6; Western Bulldogs; 8; 1

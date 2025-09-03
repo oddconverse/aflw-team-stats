@@ -64,13 +64,26 @@ public class RecordSystem {
         Match[] results = new Match[15];
         int resultsCount = 0;
         for (int i = 0; i < matchCount; i++) {
-            if (matches[i].getRound().equals(String.format("Round %s, %s", round, year))) {
+            if (isNumeric(round) && matches[i].getRound().equals(String.format("Round %s, %s", round, year))) {
+                results[resultsCount] = matches[i];
+                resultsCount++;
+            }
+            else if (matches[i].getRound().equals(String.format("%s, %s", round, year))) {
                 results[resultsCount] = matches[i];
                 resultsCount++;
             }
         }
         for (int i = 0; i < resultsCount; i++) {
             System.out.println(results[i]);
+        }
+    }
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
         }
     }
 }
