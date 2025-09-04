@@ -59,7 +59,7 @@ public class Team implements Comparable<Team> {
         return wins * 4 + draws * 2;
     }
     public String ladderDisplay() {
-        return String.format("%24s | %4d | %4d | %4d | %4d | %4d | %4d | %4d | %7.2f | %7.2f", name, gamesPlayed, wins, losses, draws, getPoints(), pointsFor, pointsAgainst, getPercentage(), getWinPercentage());
+        return String.format("%24s | %4d | %4d | %4d | %4d | %4d | %4d | %4d | %7.2f | %7.2f |", name, gamesPlayed, wins, losses, draws, getPoints(), pointsFor, pointsAgainst, getPercentage(), getWinPercentage());
     }
     public String getName() {
         return name;

@@ -31,10 +31,18 @@ public class Match {
         return awayTeamGoals * 6 + awayTeamBehinds;
     }
     public int getWinningScore() {
+        //function assumes no draws, draws need to be accounted for later on
         if (homeTeamWin()) {
             return getHomeScore();
         }
         return getAwayScore();
+    }
+    public int getLosingScore() {
+        //function assumes no draws, draws need to be accounted for later on
+        if (homeTeamWin()) {
+            return getAwayScore();
+        }
+        return getHomeScore();
     }
     public String getWinningTeam() {
         if (getHomeScore() > getAwayScore()) {

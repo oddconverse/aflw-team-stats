@@ -35,11 +35,16 @@ public class Ladder {
     }
     public void display() {
         System.out.println();
-        System.out.println(String.format("%4s | %24s | %4s | %4s | %4s | %4s | %4s | %4s | %4s | %7s | %7s", "Pos", "Name", "Pl", "W", "L", "D", "Pts", "PF", "PA", "%", "W%"));
+        System.out.println("|------------------------------------------------------------------------------------------------------|");
+        System.out.println(String.format("| %4s | %24s | %4s | %4s | %4s | %4s | %4s | %4s | %4s | %7s | %7s |", "Pos", "Name", "Pl", "W", "L", "D", "Pts", "PF", "PA", "%", "W%"));
+        System.out.println("|------|--------------------------|------|------|------|------|------|------|------|---------|---------|");
         Arrays.sort(teams, 0, teamCount);
         for (int i = 0; i < teamCount; i++) {
-            System.out.println(String.format("%4d | %s", i + 1, teams[i].ladderDisplay()));
+            System.out.println(String.format("| %4d | %s", i + 1, teams[i].ladderDisplay()));
         }
+        System.out.println("|------------------------------------------------------------------------------------------------------|");
+        System.out.println();
         System.out.println("Key: Pl = Games Played, W = Wins, L = Losses, D = Draws, Pts = Premiership Points, PF = Points For, PA = Points Against, % = Percentage (PF / PA * 100), W% = Win Percentage (W / Pl * 100)");
+        System.out.println();
     }
 }

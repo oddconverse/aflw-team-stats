@@ -59,11 +59,10 @@ public class RecordSystem {
 
     }
 
-    public Match[] findGreatestMargins() {
+    public void findGreatestMargins() {
         int greatestMargin = 0;
         Match matchGreatestMargin = null;
         Match[] matchesClone = matches.clone();
-        Match[] results = new Match[5];
         MarginComparator byMargin = new MarginComparator();
         // uncomment below code to see history of the record
         /* System.out.println("History of Greatest Winning Margin");
@@ -77,53 +76,62 @@ public class RecordSystem {
 
         Arrays.sort(matchesClone, 0, matchCount, byMargin);
         for (int i = 0; i < 5; i++) {
-            results[i] = matchesClone[i];
+            System.out.println(String.format("%s. %s won by %d points.", matchesClone[i], matchesClone[i].getWinningTeam(), matchesClone[i].getMargin()));
         }
-        return results;
     }
 
-    public Match[] findHighestTeamScore() {
+    public void findHighestTeamScore() {
         Match[] matchesClone = matches.clone();
-        Match[] results = new Match[5];
         HighSingleTeamScoreComparator byTeamScore = new HighSingleTeamScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byTeamScore);
         for (int i = 0; i < 5; i++) {
-            results[i] = matchesClone[i];
+            System.out.println(matchesClone[i]);
         }
-        return results;
     }
 
-    public Match[] findHighestCombinedScore() {
+    public void findHighestCombinedScore() {
         Match[] matchesClone = matches.clone();
-        Match[] results = new Match[5];
         HighCombinedScoreComparator byCombinedScore = new HighCombinedScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byCombinedScore);
         for (int i = 0; i < 5; i++) {
-            results[i] = matchesClone[i];
+            System.out.println(String.format("%s. Combined score: %d", matchesClone[i], matchesClone[i].getAwayScore() + matchesClone[i].getHomeScore()));
         }
-        return results;
     }
 
-    public Match[] findHighestLosingScore() {
+    public void findHighestLosingScore() {
         Match[] matchesClone = matches.clone();
-        Match[] results = new Match[5];
         HighestLosingScoreComparator byHighestLosingScore = new HighestLosingScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byHighestLosingScore);
         for (int i = 0; i < 5; i++) {
-            results[i] = matchesClone[i];
+            System.out.println(matchesClone[i]);
         }
-        return results;
     }
     // null moved to top of sort, needs fix
-    public Match[] findLowestWinningScore() {
+    public void findLowestWinningScore() {
         Match[] matchesClone = matches.clone();
-        Match[] results = new Match[5];
         LowestWinningScoreComparator byLowestWinningScore = new LowestWinningScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byLowestWinningScore);
         for (int i = 0; i < 5; i++) {
-            results[i] = matchesClone[i];
+            System.out.println(matchesClone[i]);
         }
-        return results;
+    }
+
+    public void findLowestTeamScore() {
+        Match[] matchesClone = matches.clone();
+        LowestTeamScoreComparator byLowestTeamScore = new LowestTeamScoreComparator();
+        Arrays.sort(matchesClone, 0, matchCount, byLowestTeamScore);
+        for (int i = 0; i < 5; i++) {
+            System.out.println(matchesClone[i]);
+        }
+    }
+
+    public void findLowestCombinedScore() {
+        Match[] matchesClone = matches.clone();
+        LowestCombinedScoreComparator byLowestCombinedScore = new LowestCombinedScoreComparator();
+        Arrays.sort(matchesClone, 0, matchCount, byLowestCombinedScore);
+        for (int i = 0; i < 5; i++) {
+            System.out.println(String.format("%s. Combined score: %d", matchesClone[i], matchesClone[i].getHomeScore() + matchesClone[i].getAwayScore()));
+        }
     }
     public void createLadder() {
         Ladder ladder = new Ladder();
@@ -228,32 +236,27 @@ class HighCombinedScoreComparator implements Comparator<Match> {
 class HighestLosingScoreComparator implements Comparator<Match> {
     @Override
     public int compare(Match a, Match b) {
-        if (a.homeTeamWin() && b.homeTeamWin()) {
-            return Integer.compare(b.getAwayScore(), a.getAwayScore());
-        }
-        else if (!a.homeTeamWin() && b.homeTeamWin()) {
-            return Integer.compare(b.getAwayScore(), a.getHomeScore());
-        }
-        else if (a.homeTeamWin() && !b.homeTeamWin()) {
-            return Integer.compare(b.getHomeScore(), a.getAwayScore());
-        }
-        return Integer.compare(b.getHomeScore(), a.getHomeScore());
+        return Integer.compare(b.getLosingScore(), a.getLosingScore());
     }
 }
 
 class LowestWinningScoreComparator implements Comparator<Match> {
     @Override
     public int compare(Match a, Match b) {
-        
-        if (!a.homeTeamWin() && !b.homeTeamWin()) {
-            return Integer.compare(a.getAwayScore(), b.getAwayScore());
-        }
-        else if (a.homeTeamWin() && !b.homeTeamWin()) {
-            return Integer.compare(a.getAwayScore(), b.getHomeScore());
-        }
-        else if (!a.homeTeamWin() && b.homeTeamWin()) {
-            return Integer.compare(a.getHomeScore(), b.getAwayScore());
-        }
-        return Integer.compare(a.getHomeScore(), b.getHomeScore());
+        return Integer.compare(a.getWinningScore(), b.getWinningScore());
+    }
+}
+
+class LowestTeamScoreComparator implements Comparator<Match> {
+    @Override
+    public int compare(Match a, Match b) {
+        return Integer.compare(a.getLosingScore(), b.getLosingScore());
+    }
+}
+
+class LowestCombinedScoreComparator implements Comparator<Match> {
+    @Override
+    public int compare (Match a, Match b) {
+        return Integer.compare(a.getAwayScore() + a.getHomeScore(), b.getAwayScore() + b.getHomeScore());
     }
 }

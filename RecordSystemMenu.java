@@ -131,26 +131,20 @@ public class RecordSystemMenu {
                     selection = selectOption(input);
                     break;
                 case "3":
-                    System.out.println("Greatest winning margins: ");
-                    for (Match result : system.findGreatestMargins()) {
-                        System.out.println(String.format("%s. %s won by %d points.", result, result.getWinningTeam(), result.getMargin()));
-                    }
-                    System.out.println("Highest team scores: ");
-                    for (Match result : system.findHighestTeamScore()) {
-                        System.out.println(result);
-                    }
-                    System.out.println("Highest combined scores: ");
-                    for (Match result : system.findHighestCombinedScore()) {
-                        System.out.println(String.format("%s. Combined score: %d", result, result.getAwayScore() + result.getHomeScore()));
-                    }
-                    System.out.println("Highest losing scores: ");
-                    for (Match result : system.findHighestLosingScore()) {
-                        System.out.println(result);
-                    }
-                    System.out.println("Lowest winning scores: ");
-                    for (Match result : system.findLowestWinningScore()) {
-                        System.out.println(result);
-                    }
+                    System.out.println("\nGreatest winning margins: ");
+                    system.findGreatestMargins();
+                    System.out.println("\nHighest team scores: ");
+                    system.findHighestTeamScore();
+                    System.out.println("\nHighest combined scores: ");
+                    system.findHighestCombinedScore();
+                    System.out.println("\nHighest losing scores: ");
+                    system.findHighestLosingScore();
+                    System.out.println("\nLowest winning scores: ");
+                    system.findLowestWinningScore();
+                    System.out.println("\nLowest team scores: ");
+                    system.findLowestTeamScore();
+                    System.out.println("\nLowest combined scores: ");
+                    system.findLowestCombinedScore();
                     selection = selectOption(input);
                     break;
                 case "4":
