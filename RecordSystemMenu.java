@@ -1,5 +1,7 @@
-import java.io.*;
 import java.util.Scanner;
+
+// IMPORTANT: NEVER EVER SORT THE MATSTER MATCHES DATASET. ALWAYS CLONE AND SORT. NO WAY TO RE-SORT INTO CHRONOLOGICAL ORDER
+// Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
 
 public class RecordSystemMenu {
     public static String selectOption(Scanner input) {
@@ -9,11 +11,10 @@ public class RecordSystemMenu {
         System.out.println("Select an option by typing a number (1-6 or X):");
         System.out.println("1. Add new matches");
         System.out.println("2. Save data");
-        System.out.println("3. Load data");
-        System.out.println("4. View records");
-        System.out.println("5. View matches by round");
-        System.out.println("6. View all time ladder");
-        System.out.println("7. View results by team");
+        System.out.println("3. View records");
+        System.out.println("4. View matches by round");
+        System.out.println("5. View all time ladder");
+        System.out.println("6. View results by team");
         System.out.println("X. Exit");
         return input.nextLine();
     }
@@ -130,14 +131,13 @@ public class RecordSystemMenu {
                     selection = selectOption(input);
                     break;
                 case "3":
-                    system.loadMatches();
+                    System.out.println("Greatest winning margins: ");
+                    for (Match result : system.findGreatestMargins()) {
+                        System.out.println(String.format("%s. %s won by %d points.", result, result.getWinningTeam(), result.getMargin()));
+                    }
                     selection = selectOption(input);
                     break;
                 case "4":
-                    System.out.println(String.format("Greatest winning margin: %s", system.findGreatestMargins()));
-                    selection = selectOption(input);
-                    break;
-                case "5":
                     System.out.println("Round number: ");
                     String roundNumber = input.nextLine();
                     System.out.println("Year of matches: ");
@@ -145,11 +145,11 @@ public class RecordSystemMenu {
                     system.displayMatchesByRound(roundNumber, year);
                     selection = selectOption(input);
                     break;
-                case "6":
+                case "5":
                     system.createLadder();
                     selection = selectOption(input);
                     break;
-                case "7":
+                case "6":
                     System.out.println("Team name: ");
                     String teamName = input.nextLine();
                     system.displayMatchesByTeam(teamName);
@@ -158,6 +158,10 @@ public class RecordSystemMenu {
                 case "x":
                 case "X":
                     exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid option. Select an option from 1-7 or X.");
+                    selection = selectOption(input);
                     break;
             }
         }

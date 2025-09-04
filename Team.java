@@ -1,5 +1,8 @@
 import java.util.*;
 
+// IMPORTANT: NEVER EVER SORT THE MATSTER MATCHES DATASET. ALWAYS CLONE AND SORT. NO WAY TO RE-SORT INTO CHRONOLOGICAL ORDER
+// Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
+
 public class Team implements Comparable<Team> {
     private String name;
     private int gamesPlayed;

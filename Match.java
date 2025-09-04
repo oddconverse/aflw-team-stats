@@ -1,5 +1,8 @@
 import java.lang.Math;
 
+// IMPORTANT: NEVER EVER SORT THE MATSTER MATCHES DATASET. ALWAYS CLONE AND SORT. NO WAY TO RE-SORT INTO CHRONOLOGICAL ORDER
+// Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
+
 public class Match {
     private String round;
     private String homeTeamName;

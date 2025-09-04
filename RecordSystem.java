@@ -1,9 +1,12 @@
 import java.io.*;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
+
+
+// IMPORTANT: NEVER EVER SORT THE MATSTER MATCHES DATASET. ALWAYS CLONE AND SORT. NO WAY TO RE-SORT INTO CHRONOLOGICAL ORDER
+// Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
 
 public class RecordSystem {
-    // matches to be stored in array
+    // matches to be stored in array. DO NOT SORT. CLONE AND SORT AFTER
     private Match[] matches;
     private int matchCount;
 
@@ -56,18 +59,27 @@ public class RecordSystem {
 
     }
 
-    public Match findGreatestMargins() {
+    public Match[] findGreatestMargins() {
         int greatestMargin = 0;
         Match matchGreatestMargin = null;
-        System.out.println("History of Greatest Winning Margin");
+        Match[] matchesClone = matches.clone();
+        Match[] results = new Match[5];
+        MarginComparator byMargin = new MarginComparator();
+        // uncomment below code to see history of the record
+        /* System.out.println("History of Greatest Winning Margin");
         for (int i = 0; i < matchCount; i++) {
             if (matches[i].getMargin() > greatestMargin) {
                 matchGreatestMargin = matches[i];
                 greatestMargin = matchGreatestMargin.getMargin();
                 System.out.println(String.format("%s. %s won by %d points.", matchGreatestMargin, matchGreatestMargin.getWinningTeam(), greatestMargin));
             }
+        }*/
+
+        Arrays.sort(matchesClone, 0, matchCount, byMargin);
+        for (int i = 0; i < 5; i++) {
+            results[i] = matchesClone[i];
         }
-        return matchGreatestMargin;
+        return results;
     }
 
     public void createLadder() {
@@ -149,5 +161,12 @@ public class RecordSystem {
         catch (Exception e) {
             return false;
         }
+    }
+}
+
+class MarginComparator implements Comparator<Match>{
+    @Override
+    public int compare(Match a, Match b) {
+        return Integer.compare(b.getMargin(), a.getMargin());
     }
 }
