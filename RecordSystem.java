@@ -82,6 +82,28 @@ public class RecordSystem {
         return results;
     }
 
+    public Match[] findHighestTeamScore() {
+        Match[] matchesClone = matches.clone();
+        Match[] results = new Match[5];
+        HighSingleTeamScoreComparator byTeamScore = new HighSingleTeamScoreComparator();
+        Arrays.sort(matchesClone, 0, matchCount, byTeamScore);
+        for (int i = 0; i < 5; i++) {
+            results[i] = matchesClone[i];
+        }
+        return results;
+    }
+
+    public Match[] findHighestCombinedScore() {
+        Match[] matchesClone = matches.clone();
+        Match[] results = new Match[5];
+        HighCombinedScoreComparator byCombinedScore = new HighCombinedScoreComparator();
+        Arrays.sort(matchesClone, 0, matchCount, byCombinedScore);
+        for (int i = 0; i < 5; i++) {
+            results[i] = matchesClone[i];
+        }
+        return results;
+    }
+
     public void createLadder() {
         Ladder ladder = new Ladder();
         for (int i = 0; i < matchCount; i++) {
@@ -164,9 +186,36 @@ public class RecordSystem {
     }
 }
 
-class MarginComparator implements Comparator<Match>{
+class MarginComparator implements Comparator<Match> {
     @Override
     public int compare(Match a, Match b) {
         return Integer.compare(b.getMargin(), a.getMargin());
+    }
+}
+class HighSingleTeamScoreComparator implements Comparator<Match> {
+    @Override
+    public int compare(Match a, Match b) {
+        return Integer.compare(b.getWinningScore(), a.getWinningScore());
+    }
+}
+class HighCombinedScoreComparator implements Comparator<Match> {
+    @Override
+    public int compare(Match a, Match b) {
+        return Integer.compare(b.getAwayScore() + b.getHomeScore(), a.getAwayScore() + a.getHomeScore());
+    }
+}
+class HighestLosingScoreComparator implements Comparator<Match> {
+    @Override
+    public int compare(Match a, Match b) {
+        if (a.homeTeamWin() && b.homeTeamWin()) {
+            return Integer.compare(b.getAwayScore(), a.getAwayScore())
+        }
+        else if (!a.homeTeamWin() && b.homeTeamWin()) {
+            return Integer.compare(b.getAwayScore(), a.getHomeScore());
+        }
+        else if (a.homeTeamWin() && !b.homeTeamWin()) {
+            return Integer.compare(b.getHomeScore(), a.getAwayScore());
+        }
+        return Integer.compare(b.getHomeScore(), a.getHomeScore());
     }
 }

@@ -30,6 +30,12 @@ public class Match {
     public int getAwayScore() {
         return awayTeamGoals * 6 + awayTeamBehinds;
     }
+    public int getWinningScore() {
+        if (homeTeamWin()) {
+            return getHomeScore();
+        }
+        return getAwayScore();
+    }
     public String getWinningTeam() {
         if (getHomeScore() > getAwayScore()) {
             return getHomeTeamName();

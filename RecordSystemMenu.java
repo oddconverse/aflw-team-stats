@@ -135,6 +135,14 @@ public class RecordSystemMenu {
                     for (Match result : system.findGreatestMargins()) {
                         System.out.println(String.format("%s. %s won by %d points.", result, result.getWinningTeam(), result.getMargin()));
                     }
+                    System.out.println("Highest team scores: ");
+                    for (Match result : system.findHighestTeamScore()) {
+                        System.out.println(result);
+                    }
+                    System.out.println("Highest combined scores: ");
+                    for (Match result : system.findHighestCombinedScore()) {
+                        System.out.println(String.format("%s. Combined score: %d", result, result.getAwayScore() + result.getHomeScore()));
+                    }
                     selection = selectOption(input);
                     break;
                 case "4":
@@ -165,8 +173,5 @@ public class RecordSystemMenu {
                     break;
             }
         }
-
-
-        
     }
 }
