@@ -143,6 +143,14 @@ public class RecordSystemMenu {
                     for (Match result : system.findHighestCombinedScore()) {
                         System.out.println(String.format("%s. Combined score: %d", result, result.getAwayScore() + result.getHomeScore()));
                     }
+                    System.out.println("Highest losing scores: ");
+                    for (Match result : system.findHighestLosingScore()) {
+                        System.out.println(result);
+                    }
+                    System.out.println("Lowest winning scores: ");
+                    for (Match result : system.findLowestWinningScore()) {
+                        System.out.println(result);
+                    }
                     selection = selectOption(input);
                     break;
                 case "4":
