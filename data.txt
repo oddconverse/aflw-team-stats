@@ -76,7 +76,7 @@ Round 4, 2019; Western Bulldogs; 2; 5; Brisbane; 7; 7
 Round 4, 2019; Adelaide; 9; 11; Fremantle; 3; 5
 Round 4, 2019; Collingwood; 4; 3; Greater Western Sydney; 5; 6
 Round 4, 2019; Melbourne; 5; 4; North Melbourne; 6; 2
-Round 5, 2019; Brisbane; 1; 2; g; 5; 5
+Round 5, 2019; Brisbane; 1; 2; Geelong; 5; 5
 Round 5, 2019; Carlton; 4; 10; Collingwood; 4; 5
 Round 5, 2019; Greater Western Sydney; 2; 6; Melbourne; 8; 9
 Round 5, 2019; North Melbourne; 4; 5; Adelaide; 10; 4
@@ -463,7 +463,7 @@ Round 9, 2023; Richmond; 1; 5; Geelong; 6; 13
 Round 9, 2023; Sydney Swans; 9; 4; Collingwood; 5; 9
 Round 9, 2023; Adelaide; 6; 5; North Melbourne; 5; 8
 Round 9, 2023; Hawthorn; 6; 4; Port Adelaide; 5; 2
-Round 10, 2023; gcx; 6; 3; Essendon; 3; 7
+Round 10, 2023; Gold Coast; 6; 3; Essendon; 3; 7
 Round 10, 2023; Western Bulldogs; 1; 3; North Melbourne; 7; 13
 Round 10, 2023; Port Adelaide; 13; 10; Greater Western Sydney; 4; 6
 Round 10, 2023; Geelong; 9; 6; Hawthorn; 3; 2
@@ -488,7 +488,7 @@ Week 1, 2024; Essendon; 3; 3; Fremantle; 10; 4
 Week 1, 2024; Gold Coast; 2; 8; St Kilda; 11; 8
 Week 1, 2024; Geelong; 6; 4; Melbourne; 6; 6
 Week 1, 2024; Port Adelaide; 5; 5; Adelaide; 7; 7
-Week 1, 2024; Hawthorn; 9; 12; c; 4; 4
+Week 1, 2024; Hawthorn; 9; 12; Carlton; 4; 4
 Week 1, 2024; Brisbane; 5; 4; North Melbourne; 12; 6
 Week 2, 2024; Western Bulldogs; 0; 6; Port Adelaide; 7; 4
 Week 2, 2024; Melbourne; 2; 3; Brisbane; 5; 3

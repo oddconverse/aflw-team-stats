@@ -6,12 +6,14 @@ public class RecordSystemMenu {
         System.out.println("=========================");
         System.out.println(" | AFLW Record Keeping | ");
         System.out.println("=========================");
-        System.out.println("Select an option by typing a number (1-4 or X):");
+        System.out.println("Select an option by typing a number (1-6 or X):");
         System.out.println("1. Add new matches");
         System.out.println("2. Save data");
         System.out.println("3. Load data");
         System.out.println("4. View records");
         System.out.println("5. View matches by round");
+        System.out.println("6. View all time ladder");
+        System.out.println("7. View results by team");
         System.out.println("X. Exit");
         return input.nextLine();
     }
@@ -143,7 +145,16 @@ public class RecordSystemMenu {
                     system.displayMatchesByRound(roundNumber, year);
                     selection = selectOption(input);
                     break;
-
+                case "6":
+                    system.createLadder();
+                    selection = selectOption(input);
+                    break;
+                case "7":
+                    System.out.println("Team name: ");
+                    String teamName = input.nextLine();
+                    system.displayMatchesByTeam(teamName);
+                    selection = selectOption(input);
+                    break;
                 case "x":
                 case "X":
                     exit = true;

@@ -71,11 +71,41 @@ public class RecordSystem {
     }
 
     public void createLadder() {
+        Ladder ladder = new Ladder();
         for (int i = 0; i < matchCount; i++) {
             // instantiate team objects when a new team appears
-            // team object should store matches played, won, lost, drawn, points for/against, premiership points
-            // use comparable class, return true if pp > other team, if same return true if percentage is higher
+            if (!ladder.doesTeamExist(matches[i].getHomeTeamName())) {
+                ladder.addTeam(matches[i].getHomeTeamName());
+            }
+            // adjust stats for home team
+            Team currentHomeTeam = ladder.getTeam(matches[i].getHomeTeamName());
+            currentHomeTeam.incrementPercentage(matches[i].getHomeScore(), matches[i].getAwayScore());
+            if (matches[i].homeTeamWin()) {
+                currentHomeTeam.incrementWin();
+            }
+            else if (matches[i].wasDrawn()) {
+                currentHomeTeam.incrementDraws();
+            }
+            else {
+                currentHomeTeam.incrementLosses();
+            }
+            // same function but for away team
+            if (!ladder.doesTeamExist(matches[i].getAwayTeamName())) {
+                ladder.addTeam(matches[i].getAwayTeamName());
+            }
+            Team currentAwayTeam = ladder.getTeam(matches[i].getAwayTeamName());
+            currentAwayTeam.incrementPercentage(matches[i].getAwayScore(), matches[i].getHomeScore());
+            if (matches[i].homeTeamWin()) {
+                currentAwayTeam.incrementLosses();
+            }
+            else if (matches[i].wasDrawn()) {
+                currentAwayTeam.incrementDraws();
+            }
+            else {
+                currentAwayTeam.incrementWin();
+            }
         }
+        ladder.display();
     }
     
     public void displayMatchesByRound(String round, String year) {
@@ -95,6 +125,22 @@ public class RecordSystem {
             System.out.println(results[i]);
         }
     }
+
+    public void displayMatchesByTeam(String team) {
+        Match[] results = new Match[100];
+        int resultsCount = 0;
+        for (int i = 0; i < matchCount; i++) {
+            if (matches[i].getHomeTeamName().equals(team) || matches[i].getAwayTeamName().equals(team)) {
+                results[resultsCount] = matches[i];
+                resultsCount++;
+            }
+
+        }
+        for (int i = 0; i < resultsCount; i++) {
+            System.out.println(results[i]);
+        }
+    }
+
     public static boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);
