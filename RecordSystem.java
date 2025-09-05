@@ -59,13 +59,28 @@ public class RecordSystem {
 
     }
 
+    // RECORDS
+
+    // returns 5 greatest winning margins in history
     public void findGreatestMargins() {
-        int greatestMargin = 0;
-        Match matchGreatestMargin = null;
+        // clone match array as to not sort original array
         Match[] matchesClone = matches.clone();
+
+        //create comparator to sort by margin (comparator code at bottom of document)
         MarginComparator byMargin = new MarginComparator();
+
+        // marginTieTracker keeps track of what the winning margin of the previous match was, to see if it is tied with the current match to be analysed
+        // if it is tied, tieRank will not be updated
+        // e.g two matches with the same winning margin should be displayed as:
+        //  1: Fremantle 2.2 (14) def. by North Melbourne 18.6 (114). North Melbourne won by 100 points.
+        //  1: Adelaide 15.12 (108) def. Carlton 1.2 (8). Adelaide won by 100 points.
+        int marginTieTracker = 0;
+        int tieRank = 0;
+
         // uncomment below code to see history of the record
-        /* System.out.println("History of Greatest Winning Margin");
+        /*int greatestMargin = 0;
+        Match matchGreatestMargin = null;
+        System.out.println("History of Greatest Winning Margin");
         for (int i = 0; i < matchCount; i++) {
             if (matches[i].getMargin() > greatestMargin) {
                 matchGreatestMargin = matches[i];
@@ -74,63 +89,100 @@ public class RecordSystem {
             }
         }*/
 
+        // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
         Arrays.sort(matchesClone, 0, matchCount, byMargin);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(String.format("%s. %s won by %d points.", matchesClone[i], matchesClone[i].getWinningTeam(), matchesClone[i].getMargin()));
+        // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
+        for (int i = 0; i < 5 || marginTieTracker == matchesClone[i].getMargin(); i++) {
+            if (marginTieTracker != matchesClone[i].getMargin())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchesClone[i], matchesClone[i].getWinningTeam(), matchesClone[i].getMargin()));
+            marginTieTracker = matchesClone[i].getMargin();
         }
     }
 
+    // all of the following records work on same principals as the above record, use above comments for reference
+
     public void findHighestTeamScore() {
         Match[] matchesClone = matches.clone();
+        int highestTeamScore = 0;
+        int tieRank = 0;
         HighSingleTeamScoreComparator byTeamScore = new HighSingleTeamScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byTeamScore);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(matchesClone[i]);
+        for (int i = 0; i < 5 || highestTeamScore == matchesClone[i].getWinningScore(); i++) {
+            if (highestTeamScore != matchesClone[i].getWinningScore())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i]));
+            highestTeamScore = matchesClone[i].getWinningScore();
         }
     }
 
     public void findHighestCombinedScore() {
         Match[] matchesClone = matches.clone();
+        int highestCombinedScore = 0;
+        int tieRank = 0;
         HighCombinedScoreComparator byCombinedScore = new HighCombinedScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byCombinedScore);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(String.format("%s. Combined score: %d", matchesClone[i], matchesClone[i].getAwayScore() + matchesClone[i].getHomeScore()));
+        for (int i = 0; i < 5 || highestCombinedScore == matchesClone[i].getCombinedScore(); i++) {
+            if (highestCombinedScore != matchesClone[i].getCombinedScore())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s. Combined score: %d", tieRank, matchesClone[i], matchesClone[i].getAwayScore() + matchesClone[i].getHomeScore()));
+            highestCombinedScore = matchesClone[i].getCombinedScore();
         }
     }
 
     public void findHighestLosingScore() {
         Match[] matchesClone = matches.clone();
+        int highestLosingScore = 0;
+        int tieRank = 0;
         HighestLosingScoreComparator byHighestLosingScore = new HighestLosingScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byHighestLosingScore);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(matchesClone[i]);
+        for (int i = 0; i < 5 || matchesClone[i].getLosingScore() == highestLosingScore; i++) {
+            if (highestLosingScore != matchesClone[i].getLosingScore())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i]));
+            highestLosingScore = matchesClone[i].getLosingScore();
         }
     }
-    // null moved to top of sort, needs fix
+
     public void findLowestWinningScore() {
         Match[] matchesClone = matches.clone();
+        int lowestWinningScore = 0;
+        int tieRank = 0;
         LowestWinningScoreComparator byLowestWinningScore = new LowestWinningScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byLowestWinningScore);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(matchesClone[i]);
+        for (int i = 0; i < 5 || lowestWinningScore == matchesClone[i].getWinningScore(); i++) {
+            if (lowestWinningScore != matchesClone[i].getWinningScore())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i]));
+            lowestWinningScore = matchesClone[i].getWinningScore();
         }
     }
 
     public void findLowestTeamScore() {
         Match[] matchesClone = matches.clone();
+        int lowestTeamScore = 0;
+        int tieRank = 0;
         LowestTeamScoreComparator byLowestTeamScore = new LowestTeamScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byLowestTeamScore);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(matchesClone[i]);
+        for (int i = 0; i < 5 || lowestTeamScore == matchesClone[i].getLosingScore(); i++) {
+            if (lowestTeamScore != matchesClone[i].getLosingScore())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i]));
+            lowestTeamScore = matchesClone[i].getLosingScore();
         }
     }
 
     public void findLowestCombinedScore() {
         Match[] matchesClone = matches.clone();
+        int lowestCombinedScore = 0;
+        int tieRank = 0;
         LowestCombinedScoreComparator byLowestCombinedScore = new LowestCombinedScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byLowestCombinedScore);
-        for (int i = 0; i < 5; i++) {
-            System.out.println(String.format("%s. Combined score: %d", matchesClone[i], matchesClone[i].getHomeScore() + matchesClone[i].getAwayScore()));
+        for (int i = 0; i < 5 || lowestCombinedScore == matchesClone[i].getCombinedScore(); i++) {
+            if (lowestCombinedScore != matchesClone[i].getCombinedScore())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s. Combined score: %d", tieRank, matchesClone[i], matchesClone[i].getCombinedScore()));
+            lowestCombinedScore = matchesClone[i].getAwayScore() + matchesClone[i].getHomeScore();
         }
     }
     public void createLadder() {

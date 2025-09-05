@@ -73,6 +73,10 @@ public class Match {
     public int getMargin() {
         return Math.abs(getHomeScore() - getAwayScore());
     }
+
+    public int getCombinedScore() {
+        return getHomeScore() + getAwayScore();
+    }
     // String returned is dependent on result of match
     // e.g if home team wins it will say "Richmond 6.2 (38) def. Essendon 6.1 (37)"
     // if away deam wins it will say "Sydney 5.5 (35) def. by Hawthorn 7.3 (45)"
