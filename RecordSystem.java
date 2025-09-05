@@ -206,33 +206,33 @@ public class RecordSystem {
     }
     public void createLadder(Match[] matchSet) {
         Ladder ladder = new Ladder();
-        for (int i = 0; i < matchCount; i++) {
+        for (Match match : matchSet) {
             // instantiate team objects when a new team appears
-            if (!ladder.doesTeamExist(matchSet[i].getHomeTeamName())) {
-                ladder.addTeam(matchSet[i].getHomeTeamName());
+            if (!ladder.doesTeamExist(match.getHomeTeamName())) {
+                ladder.addTeam(match.getHomeTeamName());
             }
             // adjust stats for home team
-            Team currentHomeTeam = ladder.getTeam(matchSet[i].getHomeTeamName());
-            currentHomeTeam.incrementPercentage(matchSet[i].getHomeScore(), matchSet[i].getAwayScore());
-            if (matchSet[i].homeTeamWin()) {
+            Team currentHomeTeam = ladder.getTeam(match.getHomeTeamName());
+            currentHomeTeam.incrementPercentage(match.getHomeScore(), match.getAwayScore());
+            if (match.homeTeamWin()) {
                 currentHomeTeam.incrementHomeWins();
             }
-            else if (matchSet[i].wasDrawn()) {
+            else if (match.wasDrawn()) {
                 currentHomeTeam.incrementHomeDraws();
             }
             else {
                 currentHomeTeam.incrementHomeLosses();
             }
             // same function but for away team
-            if (!ladder.doesTeamExist(matchSet[i].getAwayTeamName())) {
-                ladder.addTeam(matchSet[i].getAwayTeamName());
+            if (!ladder.doesTeamExist(match.getAwayTeamName())) {
+                ladder.addTeam(match.getAwayTeamName());
             }
-            Team currentAwayTeam = ladder.getTeam(matchSet[i].getAwayTeamName());
-            currentAwayTeam.incrementPercentage(matchSet[i].getAwayScore(), matchSet[i].getHomeScore());
-            if (matchSet[i].homeTeamWin()) {
+            Team currentAwayTeam = ladder.getTeam(match.getAwayTeamName());
+            currentAwayTeam.incrementPercentage(match.getAwayScore(), match.getHomeScore());
+            if (match.homeTeamWin()) {
                 currentAwayTeam.incrementAwayLosses();
             }
-            else if (matchSet[i].wasDrawn()) {
+            else if (match.wasDrawn()) {
                 currentAwayTeam.incrementAwayDraws();
             }
             else {
@@ -369,13 +369,17 @@ public class RecordSystem {
         return null;
     }
     public Match[] getMatchesByYear(String year) {
-        Match[] results = new Match[200];
+        Match[] resultsFirstParse = new Match[200];
         int resultCount = 0;
         for (int i = 0; i < matchCount; i++) {
             if (matches[i].getRound().contains(year)) {
-                results[resultCount] = matches[i];
+                resultsFirstParse[resultCount] = matches[i];
                 resultCount++;
             }
+        }
+        Match[] results = new Match[resultCount];
+        for (int i = 0; i < resultCount; i++) {
+            results[i] = resultsFirstParse[i];
         }
         return results;
     }
