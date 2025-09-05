@@ -6,18 +6,24 @@
 public class Team implements Comparable<Team> {
     private String name;
     private int gamesPlayed;
-    private int wins;
-    private int losses;
-    private int draws;
+    private int homeWins;
+    private int awayWins;
+    private int homeLosses;
+    private int awayLosses;
+    private int homeDraws;
+    private int awayDraws;
     private int pointsFor;
     private int pointsAgainst;
 
     public Team(String name) {
         this.name = name;
         this.gamesPlayed = 0;
-        this.wins = 0;
-        this.losses = 0;
-        this.draws = 0;
+        this.homeWins = 0;
+        this.awayWins = 0;
+        this.homeLosses = 0;
+        this.awayLosses = 0;
+        this.homeDraws = 0;
+        this.awayDraws = 0;
         this.pointsFor = 0;
         this.pointsAgainst = 0;
     }
@@ -29,17 +35,29 @@ public class Team implements Comparable<Team> {
         }
         return (int) (t.getPercentage() - this.getPercentage());
     }
-    public void incrementWin() {
+    public void incrementHomeWins() {
         this.gamesPlayed++;
-        this.wins++;
+        this.homeWins++;
     }
-    public void incrementLosses() {
+    public void incrementAwayWins() {
         this.gamesPlayed++;
-        this.losses++;
+        this.awayWins++;
     }
-    public void incrementDraws() {
+    public void incrementHomeLosses() {
         this.gamesPlayed++;
-        this.draws++;
+        this.homeLosses++;
+    }
+    public void incrementAwayLosses() {
+        this.gamesPlayed++;
+        this.awayLosses++;
+    }
+    public void incrementHomeDraws() {
+        this.gamesPlayed++;
+        this.homeDraws++;
+    }
+    public void incrementAwayDraws() {
+        this.gamesPlayed++;
+        this.awayDraws++;
     }
     
     public void incrementPercentage(int newPointsFor, int newPointsAgainst) {
@@ -52,19 +70,40 @@ public class Team implements Comparable<Team> {
     }
     
     public double getWinPercentage() {
-        return (double) wins / (double) gamesPlayed * 100;
+        return (double) getWins() / (double) gamesPlayed * 100;
     }
 
     public int getPoints() {
-        return wins * 4 + draws * 2;
+        return getWins() * 4 + getDraws() * 2;
     }
     public String ladderDisplay() {
-        return String.format("%24s | %4d | %4d | %4d | %4d | %4d | %4d | %4d | %7.2f | %7.2f |", name, gamesPlayed, wins, losses, draws, getPoints(), pointsFor, pointsAgainst, getPercentage(), getWinPercentage());
+        return String.format("%24s | %4d | %4d | %4d | %4d | %4d | %4d | %4d | %7.2f | %7.2f |", name, gamesPlayed, getWins(), getLosses(), getDraws(), getPoints(), pointsFor, pointsAgainst, getPercentage(), getWinPercentage());
     }
     public String getName() {
         return name;
     }
     public String toString() {
         return name;
+    }
+    public int getWins() {
+        return homeWins + awayWins;
+    }
+    public int getLosses() {
+        return homeLosses + awayLosses;
+    }
+    public int getDraws() {
+        return homeDraws + awayDraws;
+    }
+    public int getPointsFor() {
+        return pointsFor;
+    }
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    } 
+    public int getHomeWins() {
+        return homeWins;
+    }
+    public int getAwayWins() {
+        return awayWins;
     }
 }

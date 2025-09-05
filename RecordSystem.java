@@ -89,7 +89,7 @@ public class RecordSystem {
             if (matches[i].getMargin() > greatestMargin) {
                 matchGreatestMargin = matches[i];
                 greatestMargin = matchGreatestMargin.getMargin();
-                System.out.println(String.format("%s. %s won by %d points.", matchGreatestMargin, matchGreatestMargin.getWinningTeam(), greatestMargin));
+                System.out.println(String.format("%s. %s won by %d points.", matchGreatestMargin, matchGreatestMargin.getWinningTeamName(), greatestMargin));
             }
         }*/
 
@@ -99,7 +99,7 @@ public class RecordSystem {
         for (int i = 0; i < 5 || marginTieTracker == matchesClone[i].getMargin(); i++) {
             if (marginTieTracker != matchesClone[i].getMargin())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchesClone[i], matchesClone[i].getWinningTeam(), matchesClone[i].getMargin()));
+            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchesClone[i], matchesClone[i].getWinningTeamName(), matchesClone[i].getMargin()));
             marginTieTracker = matchesClone[i].getMargin();
         }
     }
@@ -215,13 +215,13 @@ public class RecordSystem {
             Team currentHomeTeam = ladder.getTeam(matches[i].getHomeTeamName());
             currentHomeTeam.incrementPercentage(matches[i].getHomeScore(), matches[i].getAwayScore());
             if (matches[i].homeTeamWin()) {
-                currentHomeTeam.incrementWin();
+                currentHomeTeam.incrementHomeWins();
             }
             else if (matches[i].wasDrawn()) {
-                currentHomeTeam.incrementDraws();
+                currentHomeTeam.incrementHomeDraws();
             }
             else {
-                currentHomeTeam.incrementLosses();
+                currentHomeTeam.incrementHomeLosses();
             }
             // same function but for away team
             if (!ladder.doesTeamExist(matches[i].getAwayTeamName())) {
@@ -230,13 +230,13 @@ public class RecordSystem {
             Team currentAwayTeam = ladder.getTeam(matches[i].getAwayTeamName());
             currentAwayTeam.incrementPercentage(matches[i].getAwayScore(), matches[i].getHomeScore());
             if (matches[i].homeTeamWin()) {
-                currentAwayTeam.incrementLosses();
+                currentAwayTeam.incrementAwayLosses();
             }
             else if (matches[i].wasDrawn()) {
-                currentAwayTeam.incrementDraws();
+                currentAwayTeam.incrementAwayDraws();
             }
             else {
-                currentAwayTeam.incrementWin();
+                currentAwayTeam.incrementAwayWins();
             }
         }
         ladder.display();
@@ -275,17 +275,86 @@ public class RecordSystem {
         }
     }
 
-    public void displayHeadToHead(String team1, String team2) {
+    public void displayHeadToHead(String team1str, String team2str) {
+        // TODO: It works but its so hard to read. Just make it less shit. Also add more home/away functions and stuff. Margin works.
         Match[] results = new Match[20];
         int resultCount = 0;
         for (int i = 0; i < matchCount; i++) {
-            if ((matches[i].getHomeTeamName().equals(team1) || matches[i].getHomeTeamName().equals(team2)) && (matches[i].getAwayTeamName().equals(team2) || matches[i].getAwayTeamName.equals(team1))) {
+            if ((matches[i].getHomeTeamName().equals(team1str) || matches[i].getHomeTeamName().equals(team2str)) && (matches[i].getAwayTeamName().equals(team2str) || matches[i].getAwayTeamName().equals(team1str))) {
                 results[resultCount] = matches[i];
                 resultCount++;
             }
         }
+        Team team1 = new Team(team1str);
+        Match team1GreatestWin = null;
+        int team1GreatestWinningMargin = 0;
+        Team team2 = new Team(team2str);
+        Match team2GreatestWin = null;
+        int team2GreatestWinningMargin = 0;
+        for (int i = 0; i < resultCount; i++) {
+            System.out.println(results[i]);
+            // trigger if team 1 is winning team
+            if (results[i].getWinningTeamName().equals(team1.getName())){
+                // increment if team 1 is home team and team 1 win
+                if (results[i].getHomeTeamName().equals(team1.getName())) {
+                    team1.incrementHomeWins();
+                    team2.incrementAwayLosses();
+                }
+                // increment if team 2 is home team and team 1 win
+                else if (results[i].getHomeTeamName().equals(team2.getName())) {
+                    team1.incrementAwayWins();
+                    team2.incrementHomeLosses();
+                }
+                team1.incrementPercentage(results[i].getWinningScore(), results[i].getLosingScore());
+                team2.incrementPercentage(results[i].getLosingScore(), results[i].getWinningScore());
+                if (results[i].getMargin() > team1GreatestWinningMargin) {
+                    team1GreatestWin = results[i];
+                    team1GreatestWinningMargin = results[i].getMargin();
+                }
+            }
+            // trigger if team 2 is winning team
+            else if (results[i].getWinningTeamName().equals(team2.getName())) {
+                // increment if team 1 is home team and team 2 wins
+                if (results[i].getHomeTeamName().equals(team1.getName())) {
+                    team1.incrementHomeLosses();
+                    team2.incrementAwayWins();
+                }
+                // increment if team 1 is home team and team 2 win
+                else if (results[i].getHomeTeamName().equals(team2.getName())) {
+                    team1.incrementAwayLosses();
+                    team2.incrementHomeWins();
+                }              
+                team1.incrementPercentage(results[i].getLosingScore(), results[i].getWinningScore());
+                team2.incrementPercentage(results[i].getWinningScore(), results[i].getLosingScore());
+                if (results[i].getMargin() > team2GreatestWinningMargin) {
+                    team2GreatestWin = results[i];
+                    team2GreatestWinningMargin = results[i].getMargin();
+                }
+            }
+            else {
+                if (results[i].getHomeTeamName().equals(team1.getName())) {
+                    team1.incrementHomeDraws();
+                    team2.incrementAwayDraws();
+                }
+                // increment if team 1 is home team and team 2 win
+                else if (results[i].getHomeTeamName().equals(team2.getName())) {
+                    team1.incrementAwayDraws();
+                    team2.incrementHomeDraws();
+                }
+                team1.incrementPercentage(results[i].getHomeScore(), results[i].getHomeScore());
+                team2.incrementPercentage(results[i].getHomeScore(), results[i].getHomeScore());
+            }
+        }
+        System.out.println("HEAD TO HEAD");
+        System.out.println(team1.getName() + " Name " + team2.getName());
+        System.out.println(team1.getGamesPlayed() + " Games Played " + team2.getGamesPlayed());
+        System.out.println(team1.getWins() + " Wins " + team2.getWins());
+        System.out.println(team1.getDraws() + " Draws " + team2.getDraws());
+        System.out.println(team1.getPointsFor() + " Points Scored " + team2.getPointsFor());
+        System.out.println(team1.getHomeWins() + " Home Wins " + team2.getHomeWins());
+        System.out.println(team1.getAwayWins() + " Away Wins " + team2.getAwayWins());
+        System.out.println(team1GreatestWinningMargin + "pts, " + team1GreatestWin.getRound() + " Greatest Win " + team2GreatestWinningMargin + "pts, " + team2GreatestWin.getRound());
     }
-
     public static boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);

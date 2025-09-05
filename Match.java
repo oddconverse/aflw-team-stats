@@ -44,7 +44,7 @@ public class Match {
         }
         return getHomeScore();
     }
-    public String getWinningTeam() {
+    public String getWinningTeamName() {
         if (getHomeScore() > getAwayScore()) {
             return getHomeTeamName();
         }
