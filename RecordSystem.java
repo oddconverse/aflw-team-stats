@@ -275,6 +275,17 @@ public class RecordSystem {
         }
     }
 
+    public void displayHeadToHead(String team1, String team2) {
+        Match[] results = new Match[20];
+        int resultCount = 0;
+        for (int i = 0; i < matchCount; i++) {
+            if ((matches[i].getHomeTeamName().equals(team1) || matches[i].getHomeTeamName().equals(team2)) && (matches[i].getAwayTeamName().equals(team2) || matches[i].getAwayTeamName.equals(team1))) {
+                results[resultCount] = matches[i];
+                resultCount++;
+            }
+        }
+    }
+
     public static boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);
