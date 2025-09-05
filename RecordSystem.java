@@ -345,15 +345,16 @@ public class RecordSystem {
                 team2.incrementPercentage(results[i].getHomeScore(), results[i].getHomeScore());
             }
         }
-        System.out.println("HEAD TO HEAD");
-        System.out.println(team1.getName() + " Name " + team2.getName());
-        System.out.println(team1.getGamesPlayed() + " Games Played " + team2.getGamesPlayed());
-        System.out.println(team1.getWins() + " Wins " + team2.getWins());
-        System.out.println(team1.getDraws() + " Draws " + team2.getDraws());
-        System.out.println(team1.getPointsFor() + " Points Scored " + team2.getPointsFor());
-        System.out.println(team1.getHomeWins() + " Home Wins " + team2.getHomeWins());
-        System.out.println(team1.getAwayWins() + " Away Wins " + team2.getAwayWins());
-        System.out.println(team1GreatestWinningMargin + "pts, " + team1GreatestWin.getRound() + " Greatest Win " + team2GreatestWinningMargin + "pts, " + team2GreatestWin.getRound());
+        System.out.println(String.format("|----------------------------HEAD TO HEAD----------------------------|"));
+        System.out.println(String.format("| %-30s Name %30s |", team1.getName(), team2.getName()));
+        System.out.println(String.format("| %-26d Games Played %26d |", team1.getGamesPlayed(), team2.getGamesPlayed()));
+        System.out.println(String.format("| %-30d Wins %30d |", team1.getWins(), team2.getWins()));
+        System.out.println(String.format("| %-29d Draws %30d |", team1.getDraws(), team2.getDraws()));
+        System.out.println(String.format("| %-25d Points Scored %26d |", team1.getPointsFor(), team2.getPointsFor()));
+        System.out.println(String.format("| %-28d Home Wins %27d |", team1.getHomeWins(), team2.getHomeWins()));
+        System.out.println(String.format("| %-28d Away Wins %27d |", team1.getAwayWins(), team2.getAwayWins()));
+        System.out.println(String.format("| %-26s Greatest Win %26s |", String.format("%dpts, %s", team1GreatestWinningMargin, team1GreatestWin.getRound()), String.format("%dpts, %s", team2GreatestWinningMargin, team2GreatestWin.getRound())));
+        System.out.println(String.format("|--------------------------------------------------------------------|"));
     }
     public static boolean isNumeric(String str) {
         try {
@@ -374,6 +375,9 @@ public class RecordSystem {
         return null;
     }
     public Match[] getMatches(String startYear, String endYear, String startRound, String endRound) {
+        return null;
+    }
+    public Match[] getMatchesByTeam(String team) {
         return null;
     }
 }
