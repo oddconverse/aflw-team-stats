@@ -616,3 +616,4 @@ Round 3, 2025; Western Bulldogs; 1; 4; Hawthorn; 2; 2
 Round 3, 2025; Collingwood; 4; 9; Melbourne; 5; 7
 Round 3, 2025; Fremantle; 2; 2; North Melbourne; 18; 6
 Round 3, 2025; Brisbane; 6; 8; Carlton; 9; 4
+Round 4, 2025; North Melbourne; 8; 6; Collingwood; 8; 6

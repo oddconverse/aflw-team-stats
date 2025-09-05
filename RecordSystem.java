@@ -5,6 +5,10 @@ import java.util.*;
 // IMPORTANT: NEVER EVER SORT THE MATSTER MATCHES DATASET. ALWAYS CLONE AND SORT. NO WAY TO RE-SORT INTO CHRONOLOGICAL ORDER
 // Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
 
+// TODO
+// - lowest winning/highest losing score records do not account for draws
+// - if multiple records broken in same game, they will not appear
+
 public class RecordSystem {
     // matches to be stored in array. DO NOT SORT. CLONE AND SORT AFTER
     private Match[] matches;
@@ -134,13 +138,20 @@ public class RecordSystem {
         Match[] matchesClone = matches.clone();
         int highestLosingScore = 0;
         int tieRank = 0;
+        // see findLowestWinningScore() for explanation
+        int skips = 0;
         HighestLosingScoreComparator byHighestLosingScore = new HighestLosingScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byHighestLosingScore);
-        for (int i = 0; i < 5 || matchesClone[i].getLosingScore() == highestLosingScore; i++) {
-            if (highestLosingScore != matchesClone[i].getLosingScore())
+        for (int i = 0; i < 5 || matchesClone[i + skips].getLosingScore() == highestLosingScore; i++) {
+            if (matchesClone[i + skips].wasDrawn()) {
+                skips++;
+                i--;
+                continue;
+            }
+            if (highestLosingScore != matchesClone[i + skips].getLosingScore())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i]));
-            highestLosingScore = matchesClone[i].getLosingScore();
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i + skips]));
+            highestLosingScore = matchesClone[i + skips].getLosingScore();
         }
     }
 
@@ -148,13 +159,21 @@ public class RecordSystem {
         Match[] matchesClone = matches.clone();
         int lowestWinningScore = 0;
         int tieRank = 0;
+        // skips accounts for draws and skips them
+        int skips = 0;
         LowestWinningScoreComparator byLowestWinningScore = new LowestWinningScoreComparator();
         Arrays.sort(matchesClone, 0, matchCount, byLowestWinningScore);
-        for (int i = 0; i < 5 || lowestWinningScore == matchesClone[i].getWinningScore(); i++) {
-            if (lowestWinningScore != matchesClone[i].getWinningScore())
+        for (int i = 0; i < 5 || lowestWinningScore == matchesClone[i + skips].getWinningScore(); i++) {
+            // if a match is drawn, skips is incremented and loop completed again (so final loop is reached)
+            if (matchesClone[i + skips].wasDrawn()) {
+                skips++;
+                i--;
+                continue; 
+            }
+            if (lowestWinningScore != matchesClone[i + skips].getWinningScore())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i]));
-            lowestWinningScore = matchesClone[i].getWinningScore();
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i + skips]));
+            lowestWinningScore = matchesClone[i + skips].getWinningScore();
         }
     }
 
@@ -264,6 +283,18 @@ public class RecordSystem {
         catch (Exception e) {
             return false;
         }
+    }
+    public Match[] getMatches(String startYear, String endYear) {
+        return null;
+    }
+    public Match[] getMatches(String year) {
+        return null;
+    }
+    public Match[] getMatches(String startYear, String endYear, String startRound) {
+        return null;
+    }
+    public Match[] getMatches(String startYear, String endYear, String startRound, String endRound) {
+        return null;
     }
 }
 
