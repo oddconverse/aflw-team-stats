@@ -180,7 +180,7 @@ public class RecordSystemMenu {
                     selection = selectOption(input);
                     break;
                 case "5":
-                    system.createLadder();
+                    system.createLadder(system.getAllMatches());
                     selection = selectOption(input);
                     break;
                 case "6":
