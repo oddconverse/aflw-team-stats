@@ -64,9 +64,9 @@ public class RecordSystem {
 
     // returns 5 greatest winning margins in history
     // currently only works for full dataset, does not work for individual teams
-    public void findGreatestMargins(ArrayList<Match> matchSet) {
+    public void findGreatestMargins(String teamName) {
+        ArrayList<Match> matchSet = getMatchesByTeam(teamName);
 
-        
         // create comparator to sort by margin (comparator code at bottom of document)
         MarginComparator byMargin = new MarginComparator();
 
@@ -93,11 +93,17 @@ public class RecordSystem {
         // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
         matchSet.sort(byMargin);
         // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
-        for (int i = 0; i < 5 || marginTieTracker == matchSet.get(i + tieRank).getMargin(); i++) {
-            if (marginTieTracker != matchSet.get(i).getMargin())
+        int wrongResults = 0;
+        for (int i = 0; i < 5 || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
+            if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName)) {
+                wrongResults++;
+                i--;
+                continue;
+            }
+            if (marginTieTracker != matchSet.get(i + wrongResults).getMargin())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i), matchSet.get(i).getWinningTeamName(), matchSet.get(i).getMargin()));
-            marginTieTracker = matchSet.get(i).getMargin();
+            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i + wrongResults), matchSet.get(i + wrongResults).getWinningTeamName(), matchSet.get(i + wrongResults).getMargin()));
+            marginTieTracker = matchSet.get(i + wrongResults).getMargin();
         }
     }
 

@@ -156,7 +156,7 @@ public class RecordSystemMenu {
                     break;
                 case "3":
                     System.out.println("\nGreatest winning margins: ");
-                    system.findGreatestMargins(system.getAllMatches());
+                    //system.findGreatestMargins(system.getAllMatches());
                     System.out.println("\nHighest team scores: ");
                     system.findHighestTeamScore();
                     System.out.println("\nHighest combined scores: ");

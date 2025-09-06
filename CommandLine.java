@@ -31,10 +31,10 @@ public class CommandLine {
                 case "r":
                     if (stk.hasMoreTokens()) {
                         String team = RecordSystemMenu.nameTranslation(stk.nextToken().trim());
-                        system.findGreatestMargins(system.getMatchesByTeam(team));
+                        system.findGreatestMargins(team);
                     }
                     else {
-                        system.findGreatestMargins(system.getAllMatches());
+                        // system.findGreatestMargins(system.getAllMatches());
                     }
                     command = input.nextLine();
                     break;
@@ -42,6 +42,7 @@ public class CommandLine {
                 case "x":
                     System.out.println("Thank you for using the AFLW Team Stats centre.");
                     exit = true;
+                    break;
                 default: 
                     System.out.println("Unknown command. Type \"help\" for a list of commands.");
                     command = input.nextLine();
