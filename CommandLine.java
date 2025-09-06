@@ -19,7 +19,7 @@ public class CommandLine {
                 case "l":
                     if (stk.hasMoreTokens()) {
                         String secondWord = stk.nextToken().trim();
-                        // does not work, ladder keeps going until null is hit
+                        // all time ladder no longer works
                         system.createLadder(system.getMatchesByYear(secondWord));
                     }
                     else {
