@@ -156,7 +156,7 @@ public class RecordSystemMenu {
                     break;
                 case "3":
                     System.out.println("\nGreatest winning margins: ");
-                    system.findGreatestMargins();
+                    system.findGreatestMargins(system.getAllMatches());
                     System.out.println("\nHighest team scores: ");
                     system.findHighestTeamScore();
                     System.out.println("\nHighest combined scores: ");
@@ -185,7 +185,7 @@ public class RecordSystemMenu {
                     break;
                 case "6":
                     System.out.println("Team name: ");
-                    String teamName = input.nextLine();
+                    String teamName = nameTranslation(input.nextLine());
                     system.displayMatchesByTeam(teamName);
                     selection = selectOption(input);
                     break;

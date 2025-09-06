@@ -6,7 +6,7 @@ import java.util.*;
 // Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
 
 // TODO
-// - lowest winning/highest losing score records do not account for draws
+// - team record implementation sorts by margin regardless of winning team
 // - if multiple records broken in same game, they will not appear
 
 public class RecordSystem {
@@ -63,11 +63,11 @@ public class RecordSystem {
     // RECORDS
 
     // returns 5 greatest winning margins in history
-    public void findGreatestMargins() {
-        // clone match array as to not sort original array
-        ArrayList<Match> matchesClone = (ArrayList<Match>)matches.clone();
+    // currently only works for full dataset, does not work for individual teams
+    public void findGreatestMargins(ArrayList<Match> matchSet) {
 
-        //create comparator to sort by margin (comparator code at bottom of document)
+        
+        // create comparator to sort by margin (comparator code at bottom of document)
         MarginComparator byMargin = new MarginComparator();
 
         // marginTieTracker keeps track of what the winning margin of the previous match was, to see if it is tied with the current match to be analysed
@@ -91,13 +91,13 @@ public class RecordSystem {
         }*/
 
         // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
-        matchesClone.sort(byMargin);
+        matchSet.sort(byMargin);
         // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
-        for (int i = 0; i < 5 || marginTieTracker == matchesClone.get(i + tieRank).getMargin(); i++) {
-            if (marginTieTracker != matchesClone.get(i).getMargin())
+        for (int i = 0; i < 5 || marginTieTracker == matchSet.get(i + tieRank).getMargin(); i++) {
+            if (marginTieTracker != matchSet.get(i).getMargin())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchesClone.get(i), matchesClone.get(i).getWinningTeamName(), matchesClone.get(i).getMargin()));
-            marginTieTracker = matchesClone.get(i).getMargin();
+            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i), matchSet.get(i).getWinningTeamName(), matchSet.get(i).getMargin()));
+            marginTieTracker = matchSet.get(i).getMargin();
         }
     }
 
@@ -254,10 +254,8 @@ public class RecordSystem {
     }
 
     public void displayMatchesByTeam(String team) {
-        ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
             if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
-                results.add(match);
                 System.out.println(match);
             }
         }
@@ -378,10 +376,16 @@ public class RecordSystem {
         return null;
     }
     public ArrayList<Match> getMatchesByTeam(String team) {
-        return null;
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : matches) {
+            if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
+                results.add(match);
+            }
+        }
+        return results;
     }
     public ArrayList<Match> getAllMatches() {
-        return matches;
+        return (ArrayList)matches.clone();
     }
 }
 

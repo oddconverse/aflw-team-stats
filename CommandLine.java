@@ -27,10 +27,25 @@ public class CommandLine {
                     }
                     command = input.nextLine();
                     break;
+                case "records":
+                case "r":
+                    if (stk.hasMoreTokens()) {
+                        String team = RecordSystemMenu.nameTranslation(stk.nextToken().trim());
+                        system.findGreatestMargins(system.getMatchesByTeam(team));
+                    }
+                    else {
+                        system.findGreatestMargins(system.getAllMatches());
+                    }
+                    command = input.nextLine();
+                    break;
                 case "exit":
                 case "x":
                     System.out.println("Thank you for using the AFLW Team Stats centre.");
                     exit = true;
+                default: 
+                    System.out.println("Unknown command. Type \"help\" for a list of commands.");
+                    command = input.nextLine();
+                    break;
             }
         }
         input.close();
