@@ -12,16 +12,13 @@ import java.util.*;
 public class RecordSystem {
     // matches to be stored in array. DO NOT SORT. CLONE AND SORT AFTER
     private ArrayList<Match> matches;
-    private int matchCount;
 
     public RecordSystem() {
         this.matches = new ArrayList<Match>();
-        this.matchCount = 0;
     }
     // add match to array
     public void addMatch(String round, String homeTeamName, int homeTeamGoals, int homeTeamBehinds, String awayTeamName, int awayTeamGoals, int awayTeamBehinds) {
         matches.add(new Match(round, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds));
-        matchCount++;
     }
     // save matches to text file to open later
     public void saveMatches() {
@@ -68,7 +65,7 @@ public class RecordSystem {
     // returns 5 greatest winning margins in history
     public void findGreatestMargins() {
         // clone match array as to not sort original array
-        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
+        ArrayList<Match> matchesClone = (ArrayList<Match>)matches.clone();
 
         //create comparator to sort by margin (comparator code at bottom of document)
         MarginComparator byMargin = new MarginComparator();
