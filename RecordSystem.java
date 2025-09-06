@@ -355,6 +355,14 @@ public class RecordSystem {
         return null;
     }
     public ArrayList<Match> getMatchesByYear(String year) {
+        switch (year.toLowerCase()) {
+            case "s6":
+            case "season6":
+                year = "Season 6";
+            case "s7":
+            case "season7":
+                year = "Season 7";
+        }
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
             if (match.getRound().contains(year)) {
