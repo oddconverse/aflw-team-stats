@@ -33,5 +33,6 @@ public class CommandLine {
                     exit = true;
             }
         }
+        input.close();
     }
 }

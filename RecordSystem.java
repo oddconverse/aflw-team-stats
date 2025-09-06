@@ -11,16 +11,16 @@ import java.util.*;
 
 public class RecordSystem {
     // matches to be stored in array. DO NOT SORT. CLONE AND SORT AFTER
-    private Match[] matches;
+    private ArrayList<Match> matches;
     private int matchCount;
 
     public RecordSystem() {
-        this.matches = new Match[1000];
+        this.matches = new ArrayList<Match>();
         this.matchCount = 0;
     }
     // add match to array
     public void addMatch(String round, String homeTeamName, int homeTeamGoals, int homeTeamBehinds, String awayTeamName, int awayTeamGoals, int awayTeamBehinds) {
-        matches[matchCount] = new Match(round, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
+        matches.add(new Match(round, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds));
         matchCount++;
     }
     // save matches to text file to open later
@@ -28,8 +28,8 @@ public class RecordSystem {
         try {
             File matchFile = new File("data.txt");
             FileWriter matchWriter = new FileWriter(matchFile);
-            for (int i = 0; i < matchCount; i++) {
-                Match currentMatch = matches[i];
+            for (Match match : matches) {
+                Match currentMatch = match;
                 matchWriter.write(String.format("%s; %s; %d; %d; %s; %d; %d\n", currentMatch.getRound(), currentMatch.getHomeTeamName(), currentMatch.getHomeTeamGoals(), currentMatch.getHomeTeamBehinds(), currentMatch.getAwayTeamName(), currentMatch.getAwayTeamGoals(), currentMatch.getAwayTeamBehinds()));
             }
             matchWriter.close();
@@ -68,7 +68,7 @@ public class RecordSystem {
     // returns 5 greatest winning margins in history
     public void findGreatestMargins() {
         // clone match array as to not sort original array
-        Match[] matchesClone = matches.clone();
+        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
 
         //create comparator to sort by margin (comparator code at bottom of document)
         MarginComparator byMargin = new MarginComparator();
@@ -94,117 +94,121 @@ public class RecordSystem {
         }*/
 
         // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
-        Arrays.sort(matchesClone, 0, matchCount, byMargin);
+        matchesClone.sort(byMargin);
         // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
-        for (int i = 0; i < 5 || marginTieTracker == matchesClone[i].getMargin(); i++) {
-            if (marginTieTracker != matchesClone[i].getMargin())
+        for (int i = 0; i < 5 || marginTieTracker == matchesClone.get(i + tieRank).getMargin(); i++) {
+            if (marginTieTracker != matchesClone.get(i).getMargin())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchesClone[i], matchesClone[i].getWinningTeamName(), matchesClone[i].getMargin()));
-            marginTieTracker = matchesClone[i].getMargin();
+            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchesClone.get(i), matchesClone.get(i).getWinningTeamName(), matchesClone.get(i).getMargin()));
+            marginTieTracker = matchesClone.get(i).getMargin();
         }
     }
 
     // all of the following records work on same principals as the above record, use above comments for reference
 
     public void findHighestTeamScore() {
-        Match[] matchesClone = matches.clone();
+        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
         int highestTeamScore = 0;
         int tieRank = 0;
         HighSingleTeamScoreComparator byTeamScore = new HighSingleTeamScoreComparator();
-        Arrays.sort(matchesClone, 0, matchCount, byTeamScore);
-        for (int i = 0; i < 5 || highestTeamScore == matchesClone[i].getWinningScore(); i++) {
-            if (highestTeamScore != matchesClone[i].getWinningScore())
+        matchesClone.sort(byTeamScore);
+        for (int i = 0; i < 5 || highestTeamScore == matchesClone.get(i).getWinningScore(); i++) {
+            if (highestTeamScore != matchesClone.get(i).getWinningScore())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i]));
-            highestTeamScore = matchesClone[i].getWinningScore();
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone.get(i)));
+            highestTeamScore = matchesClone.get(i).getWinningScore();
         }
     }
 
     public void findHighestCombinedScore() {
-        Match[] matchesClone = matches.clone();
+        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
         int highestCombinedScore = 0;
         int tieRank = 0;
         HighCombinedScoreComparator byCombinedScore = new HighCombinedScoreComparator();
-        Arrays.sort(matchesClone, 0, matchCount, byCombinedScore);
-        for (int i = 0; i < 5 || highestCombinedScore == matchesClone[i].getCombinedScore(); i++) {
-            if (highestCombinedScore != matchesClone[i].getCombinedScore())
+        matchesClone.sort(byCombinedScore);
+        for (int i = 0; i < 5 || highestCombinedScore == matchesClone.get(i).getCombinedScore(); i++) {
+            if (highestCombinedScore != matchesClone.get(i).getCombinedScore())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. Combined score: %d", tieRank, matchesClone[i], matchesClone[i].getAwayScore() + matchesClone[i].getHomeScore()));
-            highestCombinedScore = matchesClone[i].getCombinedScore();
+            System.out.println(String.format("%5d: %s. Combined score: %d", tieRank, matchesClone.get(i), matchesClone.get(i).getAwayScore() + matchesClone.get(i).getHomeScore()));
+            highestCombinedScore = matchesClone.get(i).getCombinedScore();
         }
     }
 
     public void findHighestLosingScore() {
-        Match[] matchesClone = matches.clone();
+        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
+
         int highestLosingScore = 0;
         int tieRank = 0;
         // see findLowestWinningScore() for explanation
         int skips = 0;
         HighestLosingScoreComparator byHighestLosingScore = new HighestLosingScoreComparator();
-        Arrays.sort(matchesClone, 0, matchCount, byHighestLosingScore);
-        for (int i = 0; i < 5 || matchesClone[i + skips].getLosingScore() == highestLosingScore; i++) {
-            if (matchesClone[i + skips].wasDrawn()) {
+        matchesClone.sort(byHighestLosingScore);
+        for (int i = 0; i < 5 || matchesClone.get(i + skips).getLosingScore() == highestLosingScore; i++) {
+            if (matchesClone.get(i + skips).wasDrawn()) {
                 skips++;
                 i--;
                 continue;
             }
-            if (highestLosingScore != matchesClone[i + skips].getLosingScore())
+            if (highestLosingScore != matchesClone.get(i + skips).getLosingScore())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i + skips]));
-            highestLosingScore = matchesClone[i + skips].getLosingScore();
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone.get(i + skips)));
+            highestLosingScore = matchesClone.get(i + skips).getLosingScore();
         }
     }
 
     public void findLowestWinningScore() {
-        Match[] matchesClone = matches.clone();
+        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
+
         int lowestWinningScore = 0;
         int tieRank = 0;
         // skips accounts for draws and skips them
         int skips = 0;
         LowestWinningScoreComparator byLowestWinningScore = new LowestWinningScoreComparator();
-        Arrays.sort(matchesClone, 0, matchCount, byLowestWinningScore);
-        for (int i = 0; i < 5 || lowestWinningScore == matchesClone[i + skips].getWinningScore(); i++) {
+        matchesClone.sort(byLowestWinningScore);
+        for (int i = 0; i < 5 || lowestWinningScore == matchesClone.get(i + skips).getWinningScore(); i++) {
             // if a match is drawn, skips is incremented and loop completed again (so final loop is reached)
-            if (matchesClone[i + skips].wasDrawn()) {
+            if (matchesClone.get(i + skips).wasDrawn()) {
                 skips++;
                 i--;
                 continue; 
             }
-            if (lowestWinningScore != matchesClone[i + skips].getWinningScore())
+            if (lowestWinningScore != matchesClone.get(i + skips).getWinningScore())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i + skips]));
-            lowestWinningScore = matchesClone[i + skips].getWinningScore();
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone.get(i + skips)));
+            lowestWinningScore = matchesClone.get(i + skips).getWinningScore();
         }
     }
 
     public void findLowestTeamScore() {
-        Match[] matchesClone = matches.clone();
+        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
+
         int lowestTeamScore = 0;
         int tieRank = 0;
         LowestTeamScoreComparator byLowestTeamScore = new LowestTeamScoreComparator();
-        Arrays.sort(matchesClone, 0, matchCount, byLowestTeamScore);
-        for (int i = 0; i < 5 || lowestTeamScore == matchesClone[i].getLosingScore(); i++) {
-            if (lowestTeamScore != matchesClone[i].getLosingScore())
+        matchesClone.sort(byLowestTeamScore);
+        for (int i = 0; i < 5 || lowestTeamScore == matchesClone.get(i).getLosingScore(); i++) {
+            if (lowestTeamScore != matchesClone.get(i).getLosingScore())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone[i]));
-            lowestTeamScore = matchesClone[i].getLosingScore();
+            System.out.println(String.format("%5d: %s", tieRank, matchesClone.get(i)));
+            lowestTeamScore = matchesClone.get(i).getLosingScore();
         }
     }
 
     public void findLowestCombinedScore() {
-        Match[] matchesClone = matches.clone();
+        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
+
         int lowestCombinedScore = 0;
         int tieRank = 0;
         LowestCombinedScoreComparator byLowestCombinedScore = new LowestCombinedScoreComparator();
-        Arrays.sort(matchesClone, 0, matchCount, byLowestCombinedScore);
-        for (int i = 0; i < 5 || lowestCombinedScore == matchesClone[i].getCombinedScore(); i++) {
-            if (lowestCombinedScore != matchesClone[i].getCombinedScore())
+        matchesClone.sort(byLowestCombinedScore);
+        for (int i = 0; i < 5 || lowestCombinedScore == matchesClone.get(i).getCombinedScore(); i++) {
+            if (lowestCombinedScore != matchesClone.get(i).getCombinedScore())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. Combined score: %d", tieRank, matchesClone[i], matchesClone[i].getCombinedScore()));
-            lowestCombinedScore = matchesClone[i].getAwayScore() + matchesClone[i].getHomeScore();
+            System.out.println(String.format("%5d: %s. Combined score: %d", tieRank, matchesClone.get(i), matchesClone.get(i).getCombinedScore()));
+            lowestCombinedScore = matchesClone.get(i).getAwayScore() + matchesClone.get(i).getHomeScore();
         }
     }
-    public void createLadder(Match[] matchSet) {
+    public void createLadder(ArrayList<Match> matchSet) {
         Ladder ladder = new Ladder();
         for (Match match : matchSet) {
             // instantiate team objects when a new team appears
@@ -243,46 +247,31 @@ public class RecordSystem {
     }
     
     public void displayMatchesByRound(String round, String year) {
-        Match[] results = new Match[15];
-        int resultsCount = 0;
-        for (int i = 0; i < matchCount; i++) {
-            if (isNumeric(round) && matches[i].getRound().equals(String.format("Round %s, %s", round, year)) || matches[i].getRound().equals(String.format("Week %s, %s", round, year))) {
-                results[resultsCount] = matches[i];
-                resultsCount++;
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : matches) {
+            if (isNumeric(round) && match.getRound().equals(String.format("Round %s, %s", round, year)) || match.getRound().equals(String.format("Week %s, %s", round, year)) || match.getRound().equals(String.format("%s, %s", round, year))) {
+                results.add(match);
+                System.out.println(match);
             }
-            else if (matches[i].getRound().equals(String.format("%s, %s", round, year))) {
-                results[resultsCount] = matches[i];
-                resultsCount++;
-            }
-        }
-        for (int i = 0; i < resultsCount; i++) {
-            System.out.println(results[i]);
         }
     }
 
     public void displayMatchesByTeam(String team) {
-        Match[] results = new Match[100];
-        int resultsCount = 0;
-        for (int i = 0; i < matchCount; i++) {
-            if (matches[i].getHomeTeamName().equals(team) || matches[i].getAwayTeamName().equals(team)) {
-                results[resultsCount] = matches[i];
-                resultsCount++;
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : matches) {
+            if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
+                results.add(match);
+                System.out.println(match);
             }
-
-        }
-        for (int i = 0; i < resultsCount; i++) {
-            System.out.println(results[i]);
         }
     }
 
     public void displayHeadToHead(String team1str, String team2str) {
         // TODO: It works but its so hard to read. Just make it less shit. Also add more home/away functions and stuff. Margin works.
-        Match[] results = new Match[20];
-        int resultCount = 0;
-        for (int i = 0; i < matchCount; i++) {
-            if ((matches[i].getHomeTeamName().equals(team1str) || matches[i].getHomeTeamName().equals(team2str)) && (matches[i].getAwayTeamName().equals(team2str) || matches[i].getAwayTeamName().equals(team1str))) {
-                results[resultCount] = matches[i];
-                resultCount++;
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : matches) {
+            if ((match.getHomeTeamName().equals(team1str) || match.getHomeTeamName().equals(team2str)) && (match.getAwayTeamName().equals(team2str) || match.getAwayTeamName().equals(team1str))) {
+                results.add(match);
             }
         }
         Team team1 = new Team(team1str);
@@ -291,58 +280,58 @@ public class RecordSystem {
         Team team2 = new Team(team2str);
         Match team2GreatestWin = null;
         int team2GreatestWinningMargin = 0;
-        for (int i = 0; i < resultCount; i++) {
-            System.out.println(results[i]);
+        for (Match result : results) {
+            System.out.println(result);
             // trigger if team 1 is winning team
-            if (results[i].getWinningTeamName().equals(team1.getName())){
+            if (result.getWinningTeamName().equals(team1.getName())){
                 // increment if team 1 is home team and team 1 win
-                if (results[i].getHomeTeamName().equals(team1.getName())) {
+                if (result.getHomeTeamName().equals(team1.getName())) {
                     team1.incrementHomeWins();
                     team2.incrementAwayLosses();
                 }
                 // increment if team 2 is home team and team 1 win
-                else if (results[i].getHomeTeamName().equals(team2.getName())) {
+                else if (result.getHomeTeamName().equals(team2.getName())) {
                     team1.incrementAwayWins();
                     team2.incrementHomeLosses();
                 }
-                team1.incrementPercentage(results[i].getWinningScore(), results[i].getLosingScore());
-                team2.incrementPercentage(results[i].getLosingScore(), results[i].getWinningScore());
-                if (results[i].getMargin() > team1GreatestWinningMargin) {
-                    team1GreatestWin = results[i];
-                    team1GreatestWinningMargin = results[i].getMargin();
+                team1.incrementPercentage(result.getWinningScore(), result.getLosingScore());
+                team2.incrementPercentage(result.getLosingScore(), result.getWinningScore());
+                if (result.getMargin() > team1GreatestWinningMargin) {
+                    team1GreatestWin = result;
+                    team1GreatestWinningMargin = result.getMargin();
                 }
             }
             // trigger if team 2 is winning team
-            else if (results[i].getWinningTeamName().equals(team2.getName())) {
+            else if (result.getWinningTeamName().equals(team2.getName())) {
                 // increment if team 1 is home team and team 2 wins
-                if (results[i].getHomeTeamName().equals(team1.getName())) {
+                if (result.getHomeTeamName().equals(team1.getName())) {
                     team1.incrementHomeLosses();
                     team2.incrementAwayWins();
                 }
                 // increment if team 1 is home team and team 2 win
-                else if (results[i].getHomeTeamName().equals(team2.getName())) {
+                else if (result.getHomeTeamName().equals(team2.getName())) {
                     team1.incrementAwayLosses();
                     team2.incrementHomeWins();
                 }              
-                team1.incrementPercentage(results[i].getLosingScore(), results[i].getWinningScore());
-                team2.incrementPercentage(results[i].getWinningScore(), results[i].getLosingScore());
-                if (results[i].getMargin() > team2GreatestWinningMargin) {
-                    team2GreatestWin = results[i];
-                    team2GreatestWinningMargin = results[i].getMargin();
+                team1.incrementPercentage(result.getLosingScore(), result.getWinningScore());
+                team2.incrementPercentage(result.getWinningScore(), result.getLosingScore());
+                if (result.getMargin() > team2GreatestWinningMargin) {
+                    team2GreatestWin = result;
+                    team2GreatestWinningMargin = result.getMargin();
                 }
             }
             else {
-                if (results[i].getHomeTeamName().equals(team1.getName())) {
+                if (result.getHomeTeamName().equals(team1.getName())) {
                     team1.incrementHomeDraws();
                     team2.incrementAwayDraws();
                 }
                 // increment if team 1 is home team and team 2 win
-                else if (results[i].getHomeTeamName().equals(team2.getName())) {
+                else if (result.getHomeTeamName().equals(team2.getName())) {
                     team1.incrementAwayDraws();
                     team2.incrementHomeDraws();
                 }
-                team1.incrementPercentage(results[i].getHomeScore(), results[i].getHomeScore());
-                team2.incrementPercentage(results[i].getHomeScore(), results[i].getHomeScore());
+                team1.incrementPercentage(result.getHomeScore(), result.getHomeScore());
+                team2.incrementPercentage(result.getHomeScore(), result.getHomeScore());
             }
         }
         System.out.println(String.format("|----------------------------HEAD TO HEAD----------------------------|"));
@@ -365,34 +354,28 @@ public class RecordSystem {
             return false;
         }
     }
-    public Match[] getMatchesByYear(String startYear, String endYear) {
+    public ArrayList<Match> getMatchesByYear(String startYear, String endYear) {
         return null;
     }
-    public Match[] getMatchesByYear(String year) {
-        Match[] resultsFirstParse = new Match[200];
-        int resultCount = 0;
-        for (int i = 0; i < matchCount; i++) {
-            if (matches[i].getRound().contains(year)) {
-                resultsFirstParse[resultCount] = matches[i];
-                resultCount++;
+    public ArrayList<Match> getMatchesByYear(String year) {
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : matches) {
+            if (match.getRound().contains(year)) {
+                results.add(match);
             }
-        }
-        Match[] results = new Match[resultCount];
-        for (int i = 0; i < resultCount; i++) {
-            results[i] = resultsFirstParse[i];
         }
         return results;
     }
-    public Match[] getMatches(String startYear, String endYear, String startRound) {
+    public ArrayList<Match> getMatches(String startYear, String endYear, String startRound) {
         return null;
     }
-    public Match[] getMatches(String startYear, String endYear, String startRound, String endRound) {
+    public ArrayList<Match> getMatches(String startYear, String endYear, String startRound, String endRound) {
         return null;
     }
-    public Match[] getMatchesByTeam(String team) {
+    public ArrayList<Match> getMatchesByTeam(String team) {
         return null;
     }
-    public Match[] getAllMatches() {
+    public ArrayList<Match> getAllMatches() {
         return matches;
     }
 }

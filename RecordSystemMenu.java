@@ -199,5 +199,6 @@ public class RecordSystemMenu {
                     break;
             }
         }
+        input.close();
     }
 }
