@@ -1,7 +1,9 @@
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class CommandLine {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         RecordSystem system = new RecordSystem();
@@ -29,12 +31,37 @@ public class CommandLine {
                     break;
                 case "records":
                 case "r":
-                    if (stk.hasMoreTokens()) {
-                        String team = RecordSystemMenu.nameTranslation(stk.nextToken().trim());
-                        system.findGreatestMargins(team);
+                // TODO:
+                // want to rework
+                // check if command contains a team, or a season, or multiple seasons
+                // if so, run commands to get team data, or season data, or multiple season data
+                // if not, run command on all matches
+
+                // 7/9/25: command now functional without season implementation
+                    String[] words = new String[50];
+                    int wordCount = 0;
+                    while (stk.hasMoreTokens()) {
+                        words[wordCount] = stk.nextToken().trim();
+                        wordCount++;
                     }
-                    else {
-                        // system.findGreatestMargins(system.getAllMatches());
+                    String teamName = null;
+                    Comparator[] comparators = new Comparator[10];
+                    int comparatorCount = 0;
+                    for (int i = 0; i < wordCount; i++) {
+                        if (system.stringToRecordComparator(words[i]) != null) {
+                            comparators[comparatorCount] = (Comparator) system.stringToRecordComparator(words[i]);
+                            comparatorCount++;
+                        }
+                        else if (system.abbreviationToName(words[i]) != null) {
+                            teamName = system.abbreviationToName(words[i]);
+                        }
+                        // future season implementation
+                        //else if () {
+
+                        //}
+                    }
+                    for (int i = 0; i < comparatorCount; i++) {
+                        system.findRecord(teamName, comparators[i]);
                     }
                     command = input.nextLine();
                     break;

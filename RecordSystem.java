@@ -62,13 +62,10 @@ public class RecordSystem {
 
     // RECORDS
 
-    // returns 5 greatest winning margins in history
-    // currently only works for full dataset, does not work for individual teams
-    public void findGreatestMargins(String teamName) {
+    // function displays all records using comparator input
+    // to be overloaded in future
+    public void findRecord(String teamName, Comparator<Match> compareBy) {
         ArrayList<Match> matchSet = getMatchesByTeam(teamName);
-
-        // create comparator to sort by margin (comparator code at bottom of document)
-        MarginComparator byMargin = new MarginComparator();
 
         // marginTieTracker keeps track of what the winning margin of the previous match was, to see if it is tied with the current match to be analysed
         // if it is tied, tieRank will not be updated
@@ -91,7 +88,7 @@ public class RecordSystem {
         }*/
 
         // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
-        matchSet.sort(byMargin);
+        matchSet.sort(compareBy);
         // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
         int wrongResults = 0;
         for (int i = 0; i < 5 || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
@@ -110,6 +107,7 @@ public class RecordSystem {
     // all of the following records work on same principals as the above record, use above comments for reference
 
     public void findHighestTeamScore() {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         ArrayList<Match> matchesClone = (ArrayList)matches.clone();
         int highestTeamScore = 0;
         int tieRank = 0;
@@ -124,6 +122,7 @@ public class RecordSystem {
     }
 
     public void findHighestCombinedScore() {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         ArrayList<Match> matchesClone = (ArrayList)matches.clone();
         int highestCombinedScore = 0;
         int tieRank = 0;
@@ -138,6 +137,7 @@ public class RecordSystem {
     }
 
     public void findHighestLosingScore() {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         ArrayList<Match> matchesClone = (ArrayList)matches.clone();
 
         int highestLosingScore = 0;
@@ -160,6 +160,7 @@ public class RecordSystem {
     }
 
     public void findLowestWinningScore() {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         ArrayList<Match> matchesClone = (ArrayList)matches.clone();
 
         int lowestWinningScore = 0;
@@ -183,6 +184,7 @@ public class RecordSystem {
     }
 
     public void findLowestTeamScore() {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         ArrayList<Match> matchesClone = (ArrayList)matches.clone();
 
         int lowestTeamScore = 0;
@@ -198,6 +200,7 @@ public class RecordSystem {
     }
 
     public void findLowestCombinedScore() {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         ArrayList<Match> matchesClone = (ArrayList)matches.clone();
 
         int lowestCombinedScore = 0;
@@ -390,8 +393,156 @@ public class RecordSystem {
         }
         return results;
     }
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public ArrayList<Match> getAllMatches() {
         return (ArrayList)matches.clone();
+    }
+
+    public Comparator<Match> stringToRecordComparator(String str) {
+        switch (str.toLowerCase()) {
+            // greatest winning margin abbreviations
+            case "greatest margin":
+            case "greatest winning margin":
+            case "margin":
+            case "gm":
+                return new MarginComparator();
+            // highest team score abbreviations
+            case "high score":
+            case "highest score":
+            case "hs":
+            case "score":
+            case "top score":
+            case "highscore":
+            case "topscore":
+            case "ts":
+            case "highest team score":
+            case "hts":
+            case "highteamscore":
+            case "high team score":
+            case "highestteamscore":
+                return new HighSingleTeamScoreComparator();
+            // highest combined score abbreviations
+            case "hcs":
+            case "highest combined score":
+            case "high combined score":
+            case "top combined score":
+            case "tcs":
+                return new HighCombinedScoreComparator();
+            // lowest score abbreviations
+            case "ls":
+            case "lowest score":
+            case "low score":
+            case "lowscore":
+            case "lowestscore":
+            case "lowest team score":
+            case "low team score":
+            case "lts":
+            case "lowestteamscore":
+            case "lowteamscore":
+                return new LowestTeamScoreComparator();
+            // lowest combined score abbreviations
+            case "lowest combined score":
+            case "lcs":
+            case "low combined score":
+            case "lowestcombinedscore":
+            case "lowcombinedscore":
+                return new LowestCombinedScoreComparator();
+            default:
+                return null;
+
+        }
+    }
+
+    public String abbreviationToName(String abbr) {
+        switch (abbr.toLowerCase()) {
+            case "a":
+            case "ad":
+            case "ade":
+            case "adel":
+            case "adelaide":
+                return "Adelaide";
+            case "b":
+            case "br":
+            case "bris":
+            case "brisbane":
+                return "Brisbane";
+            case "ca":
+            case "carl":
+            case "carlton":
+                return "Carlton";
+            case "co":
+            case "coll":
+            case "collingwood":
+                return "Collingwood";
+            case "e":
+            case "es":
+            case "ess":
+            case "essendon":
+                return "Essendon";
+            case "f":
+            case "fr":
+            case "fre":
+            case "freo":
+            case "fremantle":
+                return "Fremantle";
+            case "ge":
+            case "gee":
+            case "geelong":
+                return "Geelong";
+            case "gc":
+            case "gold coast":
+                return "Gold Coast";
+            case "gws":
+            case "greater western sydney":
+                return "Greater Western Sydney";
+            case "h":
+            case "ha":
+            case "haw":
+            case "hawthorn":
+                return "Hawthorn";
+            case "m":
+            case "me":
+            case "mel":
+            case "melb":
+            case "melbourne":
+                return "Melbourne";
+            case "nm":
+            case "n":
+            case "north melbourne":
+            case "north":
+            case "kangaroos":
+                return "North Melbourne";
+            case "p":
+            case "pa":
+            case "port":
+            case "port adelaide":
+                return "Port Adelaide";
+            case "r":
+            case "ri":
+            case "rich":
+            case "richmond":
+                return "Richmond";
+            case "st":
+            case "stk":
+            case "st kilda":
+                return "St Kilda";
+            case "ss":
+            case "syd":
+            case "sydney":
+            case "sydney swans":
+                return "Sydney Swans";
+            case "wc":
+            case "wce":
+            case "west coast":
+            case "west coast eagles":
+                return "West Coast Eagles";
+            case "footscray":
+            case "wb":
+            case "western bulldogs":
+                return "Western Bulldogs";
+            default:
+                return null;
+        }
     }
 }
 
