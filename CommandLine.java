@@ -47,6 +47,8 @@ public class CommandLine {
                     String teamName = null;
                     Comparator[] comparators = new Comparator[10];
                     int comparatorCount = 0;
+                    String firstSeason = null;
+                    String secondSeason = null;
                     for (int i = 0; i < wordCount; i++) {
                         if (system.stringToRecordComparator(words[i]) != null) {
                             comparators[comparatorCount] = (Comparator) system.stringToRecordComparator(words[i]);
@@ -56,12 +58,17 @@ public class CommandLine {
                             teamName = system.abbreviationToName(words[i]);
                         }
                         // future season implementation
-                        //else if () {
-
-                        //}
+                        else if (system.isSeason(words[i])) {
+                            if (firstSeason == null) {
+                                firstSeason = words[i];
+                            }
+                            else {
+                                secondSeason = words[i];
+                            }
+                        }
                     }
                     for (int i = 0; i < comparatorCount; i++) {
-                        system.findRecord(teamName, comparators[i]);
+                        system.findRecord(teamName, comparators[i], firstSeason);
                     }
                     command = input.nextLine();
                     break;

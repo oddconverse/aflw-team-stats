@@ -64,8 +64,8 @@ public class RecordSystem {
 
     // function displays all records using comparator input
     // to be overloaded in future
-    public void findRecord(String teamName, Comparator<Match> compareBy) {
-        ArrayList<Match> matchSet = getMatchesByTeam(teamName);
+    public void findRecord(String teamName, Comparator<Match> compareBy, String season) {
+        ArrayList<Match> matchSet = getMatchesByTeam(teamName, getMatchesByYear(season));
 
         // marginTieTracker keeps track of what the winning margin of the previous match was, to see if it is tied with the current match to be analysed
         // if it is tied, tieRank will not be updated
@@ -393,6 +393,15 @@ public class RecordSystem {
         }
         return results;
     }
+    public ArrayList<Match> getMatchesByTeam(String team, ArrayList<Match> matchArray) {
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : matchArray) {
+            if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
+                results.add(match);
+            }
+        }
+        return results;
+    }
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public ArrayList<Match> getAllMatches() {
         return (ArrayList)matches.clone();
@@ -542,6 +551,26 @@ public class RecordSystem {
                 return "Western Bulldogs";
             default:
                 return null;
+        }
+    }
+    public boolean isSeason(String str) {
+        switch (str.toLowerCase()) {
+            case "2017":
+            case "2018":
+            case "2019":
+            case "2020": 
+            case "2021":
+            case "2022":
+            case "s6":
+            case "s7":
+            case "season7":
+            case "season6":
+            case "2023":
+            case "2024":
+            case "2025":
+                return true;
+            default:
+                return false;
         }
     }
 }
