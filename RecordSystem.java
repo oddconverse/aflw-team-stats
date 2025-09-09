@@ -64,7 +64,7 @@ public class RecordSystem {
 
     // function displays all records using comparator input
     // to be overloaded in future
-    public void findRecord(String teamName, Comparator<Match> compareBy, String startSeason, String endSeason) {
+    public void findRecord(String teamName, Comparator<Match> compareBy, String startSeason, String endSeason, int resultCount) {
         ArrayList<Match> matchSet = getMatchesByTeam(teamName, getMatchesByYears(startSeason, endSeason));
 
         // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
@@ -79,7 +79,7 @@ public class RecordSystem {
         matchSet.sort(compareBy);
         // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
         int wrongResults = 0;
-        for (int i = 0; i < 5 || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
+        for (int i = 0; i < resultCount || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
             if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName)) {
                 wrongResults++;
                 i--;
@@ -237,26 +237,8 @@ public class RecordSystem {
         }
     }
     public ArrayList<Match> getMatchesByYears(String startYear, String endYear) {
-        switch (startYear.toLowerCase()) {
-            case "s6":
-            case "season6":
-                startYear = "Season 6";
-                break;
-            case "s7":
-            case "season7":
-                startYear = "Season 7";
-                break;
-        }
-        switch (endYear.toLowerCase()) {
-            case "s6":
-            case "season6":
-                endYear = "Season 6";
-                break;
-            case "s7":
-            case "season7":
-                endYear = "Season 7";
-                break;
-        }
+        startYear = abbreviationToSeason(startYear);
+        endYear = abbreviationToSeason(endYear);
         ArrayList<Match> results = new ArrayList<Match>();
         boolean seasonFlag = false;
         for (Match match : matches) {
@@ -273,16 +255,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Match> getMatchesByYear(String year) {
-        switch (year.toLowerCase()) {
-            case "s6":
-            case "season6":
-                year = "Season 6";
-                break;
-            case "s7":
-            case "season7":
-                year = "Season 7";
-                break;
-        }
+        year = abbreviationToSeason(year);
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
             if (match.getRound().contains(year)) {
@@ -293,16 +266,7 @@ public class RecordSystem {
     }
 
     public ArrayList<Match> getMatchesByYear(String year, ArrayList<Match> inputArray) {
-        switch (year.toLowerCase()) {
-            case "s6":
-            case "season6":
-                year = "Season 6";
-                break;
-            case "s7":
-            case "season7":
-                year = "Season 7";
-                break;
-        }
+        year = abbreviationToSeason(year);
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : inputArray) {
             if (match.getRound().contains(year)) {
@@ -311,7 +275,7 @@ public class RecordSystem {
         }
         return results;
     }
-    } 
+     
 
     public ArrayList<Match> getMatchesByTeam(String team) {
         ArrayList<Match> results = new ArrayList<Match>();
@@ -498,23 +462,76 @@ public class RecordSystem {
         }
     }
     public boolean isSeason(String str) {
+
         switch (str.toLowerCase()) {
+            case "s1":
+            case "season1":
             case "2017":
+            case "s2":
+            case "season2":
             case "2018":
+            case "s3":
+            case "season3":
             case "2019":
+            case "s4":
+            case "season4":
             case "2020": 
+            case "s5":
+            case "season5":
             case "2021":
             case "2022":
             case "s6":
             case "s7":
             case "season7":
             case "season6":
+            case "s8":
+            case "season8":
             case "2023":
+            case "s9":
+            case "season9":
             case "2024":
+            case "s10":
+            case "season10":
             case "2025":
                 return true;
             default:
                 return false;
+        }
+    }
+    public String abbreviationToSeason(String abbr) {
+        switch (abbr.toLowerCase()) {
+            case "s1":
+            case "season1":
+                return "2017";
+            case "s2":
+            case "season2":
+                return "2018";
+            case "s3":
+            case "season3":
+                return "2019";
+            case "s4":
+            case "season4":
+                return "2020";
+            case "s5":
+            case "season5":
+                return "2021";
+            case "s6":
+            case "season6":
+                return "Season 6";
+            case "s7":
+            case "season7":
+                return "Season 7";
+            case "s8":
+            case "season8":
+                return "2023";
+            case "s9":
+            case "season9":
+                return "2024";
+            case "s10":
+            case "season10":
+                return "2025";
+            default:
+                return abbr;
         }
     }
 }

@@ -620,3 +620,8 @@ Round 4, 2025; Melbourne; 8; 9; Richmond; 2; 8
 Round 4, 2025; Gold Coast; 7; 10; Greater Western Sydney; 4; 9
 Round 4, 2025; Carlton; 7; 7; Western Bulldogs; 4; 9
 Round 4, 2025; Hawthorn; 5; 10; St Kilda; 2; 5
+Round 4, 2025; Sydney Swans; 9; 8; Fremantle; 5; 7
+Round 4, 2025; Adelaide; 6; 2; Brisbane; 6; 5
+Round 4, 2025; North Melbourne; 8; 10; Collingwood; 2; 1
+Round 4, 2025; Essendon; 4; 3; Geelong; 8; 10
+Round 4, 2025; West Coast Eagles; 10; 4; Port Adelaide; 7; 3

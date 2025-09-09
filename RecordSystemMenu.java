@@ -158,19 +158,20 @@ public class RecordSystemMenu {
                     System.out.println("\nGreatest winning margins: ");
                     //system.findGreatestMargins(system.getAllMatches());
                     System.out.println("\nHighest team scores: ");
-                    system.findHighestTeamScore();
+                    //system.findHighestTeamScore();
                     System.out.println("\nHighest combined scores: ");
-                    system.findHighestCombinedScore();
+                    //system.findHighestCombinedScore();
                     System.out.println("\nHighest losing scores: ");
-                    system.findHighestLosingScore();
+                    //system.findHighestLosingScore();
                     System.out.println("\nLowest winning scores: ");
-                    system.findLowestWinningScore();
+                    //system.findLowestWinningScore();
                     System.out.println("\nLowest team scores: ");
-                    system.findLowestTeamScore();
+                    //system.findLowestTeamScore();
                     System.out.println("\nLowest combined scores: ");
-                    system.findLowestCombinedScore();
+                    //system.findLowestCombinedScore();
                     selection = selectOption(input);
                     break;
+                    
                 case "4":
                     System.out.println("Round number: ");
                     String roundNumber = input.nextLine();
