@@ -64,28 +64,16 @@ public class RecordSystem {
 
     // function displays all records using comparator input
     // to be overloaded in future
-    public void findRecord(String teamName, Comparator<Match> compareBy, String season) {
-        ArrayList<Match> matchSet = getMatchesByTeam(teamName, getMatchesByYear(season));
+    public void findRecord(String teamName, Comparator<Match> compareBy, String startSeason, String endSeason) {
+        ArrayList<Match> matchSet = getMatchesByTeam(teamName, getMatchesByYears(startSeason, endSeason));
 
-        // marginTieTracker keeps track of what the winning margin of the previous match was, to see if it is tied with the current match to be analysed
+        // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
         // if it is tied, tieRank will not be updated
         // e.g two matches with the same winning margin should be displayed as:
         //  1: Fremantle 2.2 (14) def. by North Melbourne 18.6 (114). North Melbourne won by 100 points.
         //  1: Adelaide 15.12 (108) def. Carlton 1.2 (8). Adelaide won by 100 points.
         int marginTieTracker = 0;
         int tieRank = 0;
-
-        // uncomment below code to see history of the record
-        /*int greatestMargin = 0;
-        Match matchGreatestMargin = null;
-        System.out.println("History of Greatest Winning Margin");
-        for (int i = 0; i < matchCount; i++) {
-            if (matches[i].getMargin() > greatestMargin) {
-                matchGreatestMargin = matches[i];
-                greatestMargin = matchGreatestMargin.getMargin();
-                System.out.println(String.format("%s. %s won by %d points.", matchGreatestMargin, matchGreatestMargin.getWinningTeamName(), greatestMargin));
-            }
-        }*/
 
         // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
         matchSet.sort(compareBy);
@@ -358,8 +346,37 @@ public class RecordSystem {
             return false;
         }
     }
-    public ArrayList<Match> getMatchesByYear(String startYear, String endYear) {
-        return null;
+    public ArrayList<Match> getMatchesByYears(String startYear, String endYear) {
+        switch (startYear.toLowerCase()) {
+            case "s6":
+            case "season6":
+                startYear = "Season 6";
+            case "s7":
+            case "season7":
+                startYear = "Season 7";
+        }
+        switch (endYear.toLowerCase()) {
+            case "s6":
+            case "season6":
+                endYear = "Season 6";
+            case "s7":
+            case "season7":
+                endYear = "Season 7";
+        }
+        ArrayList<Match> results = new ArrayList<Match>();
+        boolean seasonFlag = false;
+        for (Match match : matches) {
+            if (match.getRound().contains(startYear)) {
+                seasonFlag = true;
+            }
+            if (match.getRound().contains(endYear)) {
+                seasonFlag = false;
+            }
+            if (match.getRound().contains(endYear) || seasonFlag) {
+                results.add(match);
+            }
+        }
+        return results;
     }
     public ArrayList<Match> getMatchesByYear(String year) {
         switch (year.toLowerCase()) {
@@ -456,6 +473,21 @@ public class RecordSystem {
             case "lowestcombinedscore":
             case "lowcombinedscore":
                 return new LowestCombinedScoreComparator();
+            // highest losing score abbreviations
+            case "highest losing score":
+            case "hls":
+            case "highestlosingscore":
+            case "highlosingscore":
+            case "high losing score":
+                return new HighestLosingScoreComparator();
+            // lowest winning score abbreviations
+            case "lowest winning score":
+            case "lowestwinningscore":
+            case "lws":
+            case "lowwinningscore":
+            case "low winning score":
+                return new LowestWinningScoreComparator();
+
             default:
                 return null;
 

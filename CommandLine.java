@@ -3,6 +3,8 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class CommandLine {
+    private static final Comparator[] allComparators = {new HighCombinedScoreComparator(), new MarginComparator(), new HighSingleTeamScoreComparator(), new HighestLosingScoreComparator(), new LowestWinningScoreComparator(), new LowestCombinedScoreComparator(), new LowestTeamScoreComparator()};
+    private static final int allComparatorCount = 7;
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -67,8 +69,47 @@ public class CommandLine {
                             }
                         }
                     }
+                    if (comparators[0] == null) {
+                        comparators = allComparators;
+                        comparatorCount = allComparatorCount;
+                    }
                     for (int i = 0; i < comparatorCount; i++) {
-                        system.findRecord(teamName, comparators[i], firstSeason);
+                        switch (comparators[i].getClass().getName()) {
+                            case "MarginComparator":
+                                System.out.println("Greatest Winning Margins");
+                                break;
+                            case "HighSingleTeamScoreComparator":
+                                System.out.println("Highest Scores");
+                                break;
+                            case "HighCombinedScoreComparator":
+                                System.out.println("Highest Combined Scores");
+                                break;
+                            case "HighestLosingScoreComparator":
+                                System.out.println("Highest Losing Scores");
+                                break;
+                            case "LowestWinningScoreComparator":
+                                System.out.println("Lowest Winning Scores");
+                                break;
+                            case "LowestTeamScoreComparator":
+                                System.out.println("Lowest Scores");
+                                break;
+                            case "LowestCombinedScoreComparator":
+                                System.out.println("Lowest Combined Scores");
+                                break;
+
+                        }
+                        if (teamName == null) {
+
+                        }
+                        else if (secondSeason == null) {
+                            
+                        }
+                        else if (firstSeason == null) {
+                            
+                        }
+                        else {
+                            system.findRecord(teamName, comparators[i], firstSeason, secondSeason);
+                        }
                     }
                     command = input.nextLine();
                     break;
