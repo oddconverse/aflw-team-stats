@@ -17,18 +17,22 @@ public class CommandLine {
         while (!exit) {
             StringTokenizer stk = new StringTokenizer(command);
             String firstWord = stk.nextToken().trim();
+            String[] words = new String[50];
+            int wordCount = 0;
+            while (stk.hasMoreTokens()) {
+                words[wordCount] = stk.nextToken().trim();
+                wordCount++;
+            }
             switch (firstWord.toLowerCase()) {
                 case "help":
                 case "ladder":
                 case "l":
-                    if (stk.hasMoreTokens()) {
-                        String secondWord = stk.nextToken().trim();
-                        // all time ladder no longer works
-                        system.createLadder(system.getMatchesByYear(secondWord));
+                    for (int i = 0; i < wordCount; i++) {
+
                     }
-                    else {
-                        system.createLadder(system.getAllMatches());
-                    }
+                    
+                    system.createLadder(system.getAllMatches());
+                    
                     command = input.nextLine();
                     break;
                 case "records":
@@ -40,12 +44,6 @@ public class CommandLine {
                 // if not, run command on all matches
 
                 // 7/9/25: command now functional without season implementation
-                    String[] words = new String[50];
-                    int wordCount = 0;
-                    while (stk.hasMoreTokens()) {
-                        words[wordCount] = stk.nextToken().trim();
-                        wordCount++;
-                    }
                     String teamName = null;
                     Comparator[] comparators = new Comparator[10];
                     int comparatorCount = 0;
