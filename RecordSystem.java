@@ -351,17 +351,21 @@ public class RecordSystem {
             case "s6":
             case "season6":
                 startYear = "Season 6";
+                break;
             case "s7":
             case "season7":
                 startYear = "Season 7";
+                break;
         }
         switch (endYear.toLowerCase()) {
             case "s6":
             case "season6":
                 endYear = "Season 6";
+                break;
             case "s7":
             case "season7":
                 endYear = "Season 7";
+                break;
         }
         ArrayList<Match> results = new ArrayList<Match>();
         boolean seasonFlag = false;
@@ -410,9 +414,9 @@ public class RecordSystem {
         }
         return results;
     }
-    public ArrayList<Match> getMatchesByTeam(String team, ArrayList<Match> matchArray) {
+    public ArrayList<Match> getMatchesByTeam(String team, ArrayList<Match> inputArray) {
         ArrayList<Match> results = new ArrayList<Match>();
-        for (Match match : matchArray) {
+        for (Match match : inputArray) {
             if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
                 results.add(match);
             }
