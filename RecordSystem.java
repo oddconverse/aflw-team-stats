@@ -92,116 +92,6 @@ public class RecordSystem {
         }
     }
 
-    // all of the following records work on same principals as the above record, use above comments for reference
-
-    public void findHighestTeamScore() {
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
-        int highestTeamScore = 0;
-        int tieRank = 0;
-        HighSingleTeamScoreComparator byTeamScore = new HighSingleTeamScoreComparator();
-        matchesClone.sort(byTeamScore);
-        for (int i = 0; i < 5 || highestTeamScore == matchesClone.get(i).getWinningScore(); i++) {
-            if (highestTeamScore != matchesClone.get(i).getWinningScore())
-                tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone.get(i)));
-            highestTeamScore = matchesClone.get(i).getWinningScore();
-        }
-    }
-
-    public void findHighestCombinedScore() {
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
-        int highestCombinedScore = 0;
-        int tieRank = 0;
-        HighCombinedScoreComparator byCombinedScore = new HighCombinedScoreComparator();
-        matchesClone.sort(byCombinedScore);
-        for (int i = 0; i < 5 || highestCombinedScore == matchesClone.get(i).getCombinedScore(); i++) {
-            if (highestCombinedScore != matchesClone.get(i).getCombinedScore())
-                tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. Combined score: %d", tieRank, matchesClone.get(i), matchesClone.get(i).getAwayScore() + matchesClone.get(i).getHomeScore()));
-            highestCombinedScore = matchesClone.get(i).getCombinedScore();
-        }
-    }
-
-    public void findHighestLosingScore() {
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
-
-        int highestLosingScore = 0;
-        int tieRank = 0;
-        // see findLowestWinningScore() for explanation
-        int skips = 0;
-        HighestLosingScoreComparator byHighestLosingScore = new HighestLosingScoreComparator();
-        matchesClone.sort(byHighestLosingScore);
-        for (int i = 0; i < 5 || matchesClone.get(i + skips).getLosingScore() == highestLosingScore; i++) {
-            if (matchesClone.get(i + skips).wasDrawn()) {
-                skips++;
-                i--;
-                continue;
-            }
-            if (highestLosingScore != matchesClone.get(i + skips).getLosingScore())
-                tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone.get(i + skips)));
-            highestLosingScore = matchesClone.get(i + skips).getLosingScore();
-        }
-    }
-
-    public void findLowestWinningScore() {
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
-
-        int lowestWinningScore = 0;
-        int tieRank = 0;
-        // skips accounts for draws and skips them
-        int skips = 0;
-        LowestWinningScoreComparator byLowestWinningScore = new LowestWinningScoreComparator();
-        matchesClone.sort(byLowestWinningScore);
-        for (int i = 0; i < 5 || lowestWinningScore == matchesClone.get(i + skips).getWinningScore(); i++) {
-            // if a match is drawn, skips is incremented and loop completed again (so final loop is reached)
-            if (matchesClone.get(i + skips).wasDrawn()) {
-                skips++;
-                i--;
-                continue; 
-            }
-            if (lowestWinningScore != matchesClone.get(i + skips).getWinningScore())
-                tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone.get(i + skips)));
-            lowestWinningScore = matchesClone.get(i + skips).getWinningScore();
-        }
-    }
-
-    public void findLowestTeamScore() {
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
-
-        int lowestTeamScore = 0;
-        int tieRank = 0;
-        LowestTeamScoreComparator byLowestTeamScore = new LowestTeamScoreComparator();
-        matchesClone.sort(byLowestTeamScore);
-        for (int i = 0; i < 5 || lowestTeamScore == matchesClone.get(i).getLosingScore(); i++) {
-            if (lowestTeamScore != matchesClone.get(i).getLosingScore())
-                tieRank = i + 1;
-            System.out.println(String.format("%5d: %s", tieRank, matchesClone.get(i)));
-            lowestTeamScore = matchesClone.get(i).getLosingScore();
-        }
-    }
-
-    public void findLowestCombinedScore() {
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        ArrayList<Match> matchesClone = (ArrayList)matches.clone();
-
-        int lowestCombinedScore = 0;
-        int tieRank = 0;
-        LowestCombinedScoreComparator byLowestCombinedScore = new LowestCombinedScoreComparator();
-        matchesClone.sort(byLowestCombinedScore);
-        for (int i = 0; i < 5 || lowestCombinedScore == matchesClone.get(i).getCombinedScore(); i++) {
-            if (lowestCombinedScore != matchesClone.get(i).getCombinedScore())
-                tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. Combined score: %d", tieRank, matchesClone.get(i), matchesClone.get(i).getCombinedScore()));
-            lowestCombinedScore = matchesClone.get(i).getAwayScore() + matchesClone.get(i).getHomeScore();
-        }
-    }
     public void createLadder(ArrayList<Match> matchSet) {
         Ladder ladder = new Ladder();
         for (Match match : matchSet) {
@@ -387,9 +277,11 @@ public class RecordSystem {
             case "s6":
             case "season6":
                 year = "Season 6";
+                break;
             case "s7":
             case "season7":
                 year = "Season 7";
+                break;
         }
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
@@ -399,12 +291,28 @@ public class RecordSystem {
         }
         return results;
     }
-    public ArrayList<Match> getMatches(String startYear, String endYear, String startRound) {
-        return null;
+
+    public ArrayList<Match> getMatchesByYear(String year, ArrayList<Match> inputArray) {
+        switch (year.toLowerCase()) {
+            case "s6":
+            case "season6":
+                year = "Season 6";
+                break;
+            case "s7":
+            case "season7":
+                year = "Season 7";
+                break;
+        }
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : inputArray) {
+            if (match.getRound().contains(year)) {
+                results.add(match);
+            }
+        }
+        return results;
     }
-    public ArrayList<Match> getMatches(String startYear, String endYear, String startRound, String endRound) {
-        return null;
-    }
+    } 
+
     public ArrayList<Match> getMatchesByTeam(String team) {
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
