@@ -25,17 +25,34 @@ public class CommandLine {
             }
             switch (firstWord.toLowerCase()) {
                 case "help":
+                    String defaultFormat = "| %s: %s |";
+                    System.out.println("|----------------------------------LIST OF COMMANDS-------------------------------------------|");
+                    System.out.println(String.format("| %60s |", "Parameters listed between <> arrows. Default values marked with an = after parameter name."));
+                    System.out.println(String.format(defaultFormat, "headtohead <team1> <team2>", "Command will output a head to head comparison between two teams."));
+                    System.out.println(String.format(defaultFormat, "ladder <firstSeason> <secondSeason> <includefinals=true> <includehomeandaway=true>", "Command will output a ladder of all matches played during and between the given seasons."));
                     command = input.nextLine();
                     break;
                 case "headtohead":
                 case "head2head":
                 case "htoh":
                 case "h2h":
+                    String team1 = null;
+                    String team2 = null;
+                    for (int i = 0; i < wordCount; i++) {
+                        if (system.abbreviationToName(words[i]) != null && team1 == null) {
+                            team1 = system.abbreviationToName(words[i]);
+                        }
+                        else if (system.abbreviationToName(words[i]) != null) {
+                            team2 = system.abbreviationToName(words[i]);
+                        }
+                    }
+                    system.displayHeadToHead(team1, team2);
                     command = input.nextLine();
                     break;
                 case "ladder":
                 case "l":
                 // TODO: implement per round commands
+                // TODO: ALSO DOES NOT ACCOUNT FOR CONFERENCES
                     if (wordCount == 0) {
                         system.createLadder(system.getAllMatches());
                     }
@@ -108,7 +125,15 @@ public class CommandLine {
                             }
                         }
                         if (firstSeason == null) {
-                            system.createLadder(system.getMatchesByYears("s1", "s10", includeFinals, includeHomeAway));
+                            // code generates values for first and last seasons using the first and last matches in the database
+                            // will fail if list ever not ordered chronologically
+                            // flawed logic
+                            // sucks
+                            Match firstMatch = system.getAllMatches().get(0);
+                            Match lastMatch = system.getAllMatches().get(system.getAllMatches().size() - 1);
+                            firstSeason = firstMatch.getRound().substring(firstMatch.getRound().indexOf(",") + 2, firstMatch.getRound().length());
+                            secondSeason = lastMatch.getRound().substring(firstMatch.getRound().indexOf(",") + 2, firstMatch.getRound().length());
+                            system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway));
                         }
                         else if (secondSeason == null)
                             system.createLadder(system.getMatchesByYear(firstSeason, includeFinals, includeHomeAway));
@@ -117,6 +142,11 @@ public class CommandLine {
                         }
                     }
                     
+                    command = input.nextLine();
+                    break;
+                case "minorpremiers":
+                case "mp":
+                    System.out.println("");
                     command = input.nextLine();
                     break;
                 case "records":

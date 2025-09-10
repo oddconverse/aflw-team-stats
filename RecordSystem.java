@@ -168,7 +168,7 @@ public class RecordSystem {
     }
 
     public void displayHeadToHead(String team1str, String team2str) {
-        // TODO: It works but its so hard to read. Just make it less shit. Also add more home/away functions and stuff. Margin works.
+        // TODO: if a team has no wins, program crashes at greatest win checkpoint
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
             if ((match.getHomeTeamName().equals(team1str) || match.getHomeTeamName().equals(team2str)) && (match.getAwayTeamName().equals(team2str) || match.getAwayTeamName().equals(team1str))) {
@@ -235,16 +235,16 @@ public class RecordSystem {
                 team2.incrementPercentage(result.getHomeScore(), result.getHomeScore());
             }
         }
-        System.out.println(String.format("|----------------------------HEAD TO HEAD----------------------------|"));
-        System.out.println(String.format("| %-30s Name %30s |", team1.getName(), team2.getName()));
-        System.out.println(String.format("| %-26d Games Played %26d |", team1.getGamesPlayed(), team2.getGamesPlayed()));
-        System.out.println(String.format("| %-30d Wins %30d |", team1.getWins(), team2.getWins()));
-        System.out.println(String.format("| %-29d Draws %30d |", team1.getDraws(), team2.getDraws()));
-        System.out.println(String.format("| %-25d Points Scored %26d |", team1.getPointsFor(), team2.getPointsFor()));
-        System.out.println(String.format("| %-28d Home Wins %27d |", team1.getHomeWins(), team2.getHomeWins()));
-        System.out.println(String.format("| %-28d Away Wins %27d |", team1.getAwayWins(), team2.getAwayWins()));
-        System.out.println(String.format("| %-26s Greatest Win %26s |", String.format("%dpts, %s", team1GreatestWinningMargin, team1GreatestWin.getRound()), String.format("%dpts, %s", team2GreatestWinningMargin, team2GreatestWin.getRound())));
-        System.out.println(String.format("|--------------------------------------------------------------------|"));
+        System.out.println(String.format("|--------------------------------------HEAD TO HEAD--------------------------------------|"));
+        System.out.println(String.format("| %-40s Name %40s |", team1.getName(), team2.getName()));
+        System.out.println(String.format("| %-36d Games Played %36d |", team1.getGamesPlayed(), team2.getGamesPlayed()));
+        System.out.println(String.format("| %-40d Wins %40d |", team1.getWins(), team2.getWins()));
+        System.out.println(String.format("| %-39d Draws %40d |", team1.getDraws(), team2.getDraws()));
+        System.out.println(String.format("| %-35d Points Scored %36d |", team1.getPointsFor(), team2.getPointsFor()));
+        System.out.println(String.format("| %-38d Home Wins %37d |", team1.getHomeWins(), team2.getHomeWins()));
+        System.out.println(String.format("| %-38d Away Wins %37d |", team1.getAwayWins(), team2.getAwayWins()));
+        System.out.println(String.format("| %-36s Greatest Win %36s |", String.format("%dpts, %s", team1GreatestWinningMargin, team1GreatestWin.getRound()), String.format("%dpts, %s", team2GreatestWinningMargin, team2GreatestWin.getRound())));
+        System.out.println(String.format("|----------------------------------------------------------------------------------------|"));
     }
     public boolean isNumeric(String str) {
         try {
