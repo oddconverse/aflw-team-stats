@@ -235,16 +235,16 @@ public class RecordSystem {
                 team2.incrementPercentage(result.getHomeScore(), result.getHomeScore());
             }
         }
-        System.out.println(String.format("|--------------------------------------HEAD TO HEAD--------------------------------------|"));
-        System.out.println(String.format("| %-40s Name %40s |", team1.getName(), team2.getName()));
-        System.out.println(String.format("| %-36d Games Played %36d |", team1.getGamesPlayed(), team2.getGamesPlayed()));
-        System.out.println(String.format("| %-40d Wins %40d |", team1.getWins(), team2.getWins()));
-        System.out.println(String.format("| %-39d Draws %40d |", team1.getDraws(), team2.getDraws()));
-        System.out.println(String.format("| %-35d Points Scored %36d |", team1.getPointsFor(), team2.getPointsFor()));
-        System.out.println(String.format("| %-38d Home Wins %37d |", team1.getHomeWins(), team2.getHomeWins()));
-        System.out.println(String.format("| %-38d Away Wins %37d |", team1.getAwayWins(), team2.getAwayWins()));
-        System.out.println(String.format("| %-36s Greatest Win %36s |", String.format("%dpts, %s", team1GreatestWinningMargin, team1GreatestWin.getRound()), String.format("%dpts, %s", team2GreatestWinningMargin, team2GreatestWin.getRound())));
-        System.out.println(String.format("|----------------------------------------------------------------------------------------|"));
+        System.out.println(String.format("|-------------------------------------------HEAD TO HEAD-------------------------------------------|"));
+        System.out.println(String.format("| %-45s Name %45s |", team1.getName(), team2.getName()));
+        System.out.println(String.format("| %-41d Games Played %41d |", team1.getGamesPlayed(), team2.getGamesPlayed()));
+        System.out.println(String.format("| %-45d Wins %45d |", team1.getWins(), team2.getWins()));
+        System.out.println(String.format("| %-44d Draws %45d |", team1.getDraws(), team2.getDraws()));
+        System.out.println(String.format("| %-40d Points Scored %41d |", team1.getPointsFor(), team2.getPointsFor()));
+        System.out.println(String.format("| %-43d Home Wins %42d |", team1.getHomeWins(), team2.getHomeWins()));
+        System.out.println(String.format("| %-43d Away Wins %42d |", team1.getAwayWins(), team2.getAwayWins()));
+        System.out.println(String.format("| %-41s Greatest Win %41s |", String.format("%dpts, %s", team1GreatestWinningMargin, team1GreatestWin.getRound()), String.format("%dpts, %s", team2GreatestWinningMargin, team2GreatestWin.getRound())));
+        System.out.println(String.format("|--------------------------------------------------------------------------------------------------|"));
     }
     public boolean isNumeric(String str) {
         try {
@@ -362,6 +362,26 @@ public class RecordSystem {
             }
         }
         return results;
+    }
+
+    public String getPremiers() {
+        ArrayList<Match> grandFinalList = new ArrayList<Match>();
+        String returnString = "";
+        for (Match match : getAllMatches()) {
+            if (match.getRound().contains("Grand Final")) {
+                grandFinalList.add(match);
+            }
+        }
+        for (Match match : grandFinalList) {
+            if (returnString.contains(match.getWinningTeamName())) {
+                // INSERT NEXT PREMIERSHIP AT CORRECT POINT. FIND INDEX OF END OF LINE AND ADD PREMIERSHIP BEFORE IT
+                returnString = returnString.substring(0, returnString.indexOf("\n", returnString.indexOf(match.getWinningTeamName()))) + ", " + match.getRound().substring(match.getRound().indexOf(",") + 2, match.getRound().length()) + returnString.substring(returnString.indexOf("\n", returnString.indexOf(match.getWinningTeamName())), returnString.length());
+            }
+            else {
+                returnString += String.format("%s: %s\n", match.getWinningTeamName(), match.getRound().substring(match.getRound().indexOf(",") + 2, match.getRound().length()));
+            }
+        }
+        return returnString;
     }
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public ArrayList<Match> getAllMatches() {

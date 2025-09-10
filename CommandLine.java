@@ -149,6 +149,11 @@ public class CommandLine {
                     System.out.println("");
                     command = input.nextLine();
                     break;
+                case "premiers":
+                case "p":
+                    System.out.println(system.getPremiers());
+                    command = input.nextLine();
+                    break;
                 case "records":
                 case "r":
                 // TODO:
