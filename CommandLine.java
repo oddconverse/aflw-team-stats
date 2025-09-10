@@ -56,7 +56,6 @@ public class CommandLine {
                             comparatorCount++;
                         }
                         else if (system.abbreviationToName(words[i]) != null) {
-                            System.out.println(teamName);
                             teamName = system.abbreviationToName(words[i]);
                         }
                         

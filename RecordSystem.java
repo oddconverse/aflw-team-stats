@@ -63,7 +63,10 @@ public class RecordSystem {
     // RECORDS
 
     // function displays all records using comparator input
-    // to be overloaded in future
+    // TODO: function only displays records where target team wins, must use record input to check if a win or a loss is necessary
+    // TODO: tie tracker no longer works
+    // TODO: must code a "getDifferential" method to determine how ties should be handled
+
     public void findRecord(String teamName, Comparator<Match> compareBy, int resultCount, String startSeason, String endSeason) {
         ArrayList<Match> matchSet;
         if (startSeason == null) {
@@ -76,28 +79,35 @@ public class RecordSystem {
             matchSet = getMatchesByTeam(teamName, getMatchesByYears(startSeason, endSeason));
         }
         
-        // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
+        // tieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
         // if it is tied, tieRank will not be updated
         // e.g two matches with the same winning margin should be displayed as:
         //  1: Fremantle 2.2 (14) def. by North Melbourne 18.6 (114). North Melbourne won by 100 points.
         //  1: Adelaide 15.12 (108) def. Carlton 1.2 (8). Adelaide won by 100 points.
-        int marginTieTracker = 0;
+        int tieTracker = 0;
         int tieRank = 0;
 
         // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
         matchSet.sort(compareBy);
-        // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
+        // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records, ensures that loop ends at some stage
         int wrongResults = 0;
-        for (int i = 0; i < resultCount || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
-            if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName) && teamName != null) {
+        for (int i = 0; (i < resultCount || tieTracker == matchSet.get(i + wrongResults).getMargin()) && i + wrongResults < matchSet.size(); i++) {
+            // code below allows records to only be shown in the case where the selected team won the match
+            /* if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName) && teamName != null) {
                 wrongResults++;
                 i--;
                 continue;
-            }
-            if (marginTieTracker != matchSet.get(i + wrongResults).getMargin())
+            }*/
+            // same as above but if team loses
+            /*if (!matchSet.get(i + wrongResults).getLosingTeamName().equals(teamName) && teamName != null) {
+                wrongResults++;
+                i--;
+                continue;
+            }*/
+            if (tieTracker != matchSet.get(i + wrongResults).getMargin())
                 tieRank = i + 1;
             System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i + wrongResults), matchSet.get(i + wrongResults).getWinningTeamName(), matchSet.get(i + wrongResults).getMargin()));
-            marginTieTracker = matchSet.get(i + wrongResults).getMargin();
+            tieTracker = matchSet.get(i + wrongResults).getMargin();
         }
     }
 
