@@ -56,6 +56,7 @@ public class CommandLine {
                             comparatorCount++;
                         }
                         else if (system.abbreviationToName(words[i]) != null) {
+                            System.out.println(teamName);
                             teamName = system.abbreviationToName(words[i]);
                         }
                         
@@ -103,14 +104,15 @@ public class CommandLine {
                         if (teamName == null) {
 
                         }
-                        else if (secondSeason == null) {
-                            
-                        }
                         else if (firstSeason == null) {
-                            
+                            system.findRecord(teamName, comparators[i], resultCount);
                         }
+                        else if (secondSeason == null) {
+                            system.findRecord(teamName, comparators[i], resultCount, firstSeason);
+                        }
+
                         else {
-                            system.findRecord(teamName, comparators[i], firstSeason, secondSeason, resultCount);
+                            system.findRecord(teamName, comparators[i], resultCount, firstSeason, secondSeason);
                         }
                     }
                     command = input.nextLine();

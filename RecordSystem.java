@@ -64,8 +64,64 @@ public class RecordSystem {
 
     // function displays all records using comparator input
     // to be overloaded in future
-    public void findRecord(String teamName, Comparator<Match> compareBy, String startSeason, String endSeason, int resultCount) {
+    public void findRecord(String teamName, Comparator<Match> compareBy, int resultCount, String startSeason, String endSeason) {
         ArrayList<Match> matchSet = getMatchesByTeam(teamName, getMatchesByYears(startSeason, endSeason));
+
+        // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
+        // if it is tied, tieRank will not be updated
+        // e.g two matches with the same winning margin should be displayed as:
+        //  1: Fremantle 2.2 (14) def. by North Melbourne 18.6 (114). North Melbourne won by 100 points.
+        //  1: Adelaide 15.12 (108) def. Carlton 1.2 (8). Adelaide won by 100 points.
+        int marginTieTracker = 0;
+        int tieRank = 0;
+
+        // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
+        matchSet.sort(compareBy);
+        // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
+        int wrongResults = 0;
+        for (int i = 0; i < resultCount || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
+            if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName)) {
+                wrongResults++;
+                i--;
+                continue;
+            }
+            if (marginTieTracker != matchSet.get(i + wrongResults).getMargin())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i + wrongResults), matchSet.get(i + wrongResults).getWinningTeamName(), matchSet.get(i + wrongResults).getMargin()));
+            marginTieTracker = matchSet.get(i + wrongResults).getMargin();
+        }
+    }
+
+    public void findRecord(String teamName, Comparator<Match> compareBy, int resultCount, String season) {
+        ArrayList<Match> matchSet = getMatchesByTeam(teamName, getMatchesByYear(season));
+
+        // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
+        // if it is tied, tieRank will not be updated
+        // e.g two matches with the same winning margin should be displayed as:
+        //  1: Fremantle 2.2 (14) def. by North Melbourne 18.6 (114). North Melbourne won by 100 points.
+        //  1: Adelaide 15.12 (108) def. Carlton 1.2 (8). Adelaide won by 100 points.
+        int marginTieTracker = 0;
+        int tieRank = 0;
+
+        // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
+        matchSet.sort(compareBy);
+        // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
+        int wrongResults = 0;
+        for (int i = 0; i < resultCount || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
+            if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName)) {
+                wrongResults++;
+                i--;
+                continue;
+            }
+            if (marginTieTracker != matchSet.get(i + wrongResults).getMargin())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i + wrongResults), matchSet.get(i + wrongResults).getWinningTeamName(), matchSet.get(i + wrongResults).getMargin()));
+            marginTieTracker = matchSet.get(i + wrongResults).getMargin();
+        }
+    }
+
+    public void findRecord(String teamName, Comparator<Match> compareBy, int resultCount) {
+        ArrayList<Match> matchSet = getMatchesByTeam(teamName, getAllMatches());
 
         // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
         // if it is tied, tieRank will not be updated
@@ -227,7 +283,7 @@ public class RecordSystem {
         System.out.println(String.format("| %-26s Greatest Win %26s |", String.format("%dpts, %s", team1GreatestWinningMargin, team1GreatestWin.getRound()), String.format("%dpts, %s", team2GreatestWinningMargin, team2GreatestWin.getRound())));
         System.out.println(String.format("|--------------------------------------------------------------------|"));
     }
-    public static boolean isNumeric(String str) {
+    public boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);
             return true;
@@ -371,94 +427,99 @@ public class RecordSystem {
     }
 
     public String abbreviationToName(String abbr) {
-        switch (abbr.toLowerCase()) {
-            case "a":
-            case "ad":
-            case "ade":
-            case "adel":
-            case "adelaide":
-                return "Adelaide";
-            case "b":
-            case "br":
-            case "bris":
-            case "brisbane":
-                return "Brisbane";
-            case "ca":
-            case "carl":
-            case "carlton":
-                return "Carlton";
-            case "co":
-            case "coll":
-            case "collingwood":
-                return "Collingwood";
-            case "e":
-            case "es":
-            case "ess":
-            case "essendon":
-                return "Essendon";
-            case "f":
-            case "fr":
-            case "fre":
-            case "freo":
-            case "fremantle":
-                return "Fremantle";
-            case "ge":
-            case "gee":
-            case "geelong":
-                return "Geelong";
-            case "gc":
-            case "gold coast":
-                return "Gold Coast";
-            case "gws":
-            case "greater western sydney":
-                return "Greater Western Sydney";
-            case "h":
-            case "ha":
-            case "haw":
-            case "hawthorn":
-                return "Hawthorn";
-            case "m":
-            case "me":
-            case "mel":
-            case "melb":
-            case "melbourne":
-                return "Melbourne";
-            case "nm":
-            case "n":
-            case "north melbourne":
-            case "north":
-            case "kangaroos":
-                return "North Melbourne";
-            case "p":
-            case "pa":
-            case "port":
-            case "port adelaide":
-                return "Port Adelaide";
-            case "r":
-            case "ri":
-            case "rich":
-            case "richmond":
-                return "Richmond";
-            case "st":
-            case "stk":
-            case "st kilda":
-                return "St Kilda";
-            case "ss":
-            case "syd":
-            case "sydney":
-            case "sydney swans":
-                return "Sydney Swans";
-            case "wc":
-            case "wce":
-            case "west coast":
-            case "west coast eagles":
-                return "West Coast Eagles";
-            case "footscray":
-            case "wb":
-            case "western bulldogs":
-                return "Western Bulldogs";
-            default:
-                return null;
+        try {
+            switch (abbr.toLowerCase()) {
+                case "a":
+                case "ad":
+                case "ade":
+                case "adel":
+                case "adelaide":
+                    return "Adelaide";
+                case "b":
+                case "br":
+                case "bris":
+                case "brisbane":
+                    return "Brisbane";
+                case "ca":
+                case "carl":
+                case "carlton":
+                    return "Carlton";
+                case "co":
+                case "coll":
+                case "collingwood":
+                    return "Collingwood";
+                case "e":
+                case "es":
+                case "ess":
+                case "essendon":
+                    return "Essendon";
+                case "f":
+                case "fr":
+                case "fre":
+                case "freo":
+                case "fremantle":
+                    return "Fremantle";
+                case "ge":
+                case "gee":
+                case "geelong":
+                    return "Geelong";
+                case "gc":
+                case "gold coast":
+                    return "Gold Coast";
+                case "gws":
+                case "greater western sydney":
+                    return "Greater Western Sydney";
+                case "h":
+                case "ha":
+                case "haw":
+                case "hawthorn":
+                    return "Hawthorn";
+                case "m":
+                case "me":
+                case "mel":
+                case "melb":
+                case "melbourne":
+                    return "Melbourne";
+                case "nm":
+                case "n":
+                case "north melbourne":
+                case "north":
+                case "kangaroos":
+                    return "North Melbourne";
+                case "p":
+                case "pa":
+                case "port":
+                case "port adelaide":
+                    return "Port Adelaide";
+                case "r":
+                case "ri":
+                case "rich":
+                case "richmond":
+                    return "Richmond";
+                case "st":
+                case "stk":
+                case "st kilda":
+                    return "St Kilda";
+                case "ss":
+                case "syd":
+                case "sydney":
+                case "sydney swans":
+                    return "Sydney Swans";
+                case "wc":
+                case "wce":
+                case "west coast":
+                case "west coast eagles":
+                    return "West Coast Eagles";
+                case "footscray":
+                case "wb":
+                case "western bulldogs":
+                    return "Western Bulldogs";
+                default:
+                    return null;
+            }
+        }
+        catch (Exception e) {
+            return null;
         }
     }
     public boolean isSeason(String str) {
