@@ -267,11 +267,40 @@ public class RecordSystem {
             if (match.getRound().contains(endYear)) {
                 seasonFlag = false;
             }
-            if (match.getRound().contains(endYear) || seasonFlag) {
+            if ((match.getRound().contains(endYear) || seasonFlag)) {
                 results.add(match);
             }
         }
         return results;
+    }
+    public ArrayList<Match> getMatchesByYears(String startYear, String endYear, boolean includeFinals, boolean includeHomeAway) {
+        startYear = abbreviationToSeason(startYear);
+        endYear = abbreviationToSeason(endYear);
+        ArrayList<Match> results = new ArrayList<Match>();
+        boolean seasonFlag = false;
+        for (Match match : matches) {
+            if (match.getRound().contains(startYear)) {
+                seasonFlag = true;
+            }
+            if (match.getRound().contains(endYear)) {
+                seasonFlag = false;
+            }
+            // if statement checks if the match is within the desired timeframe
+            // then checks if includeFinals and includeHomeAway are both true
+            // OR checks if match isnt a final and includeHomeAway is true
+            // OR checks if match is a final and includeFinals is true
+            
+            if ((match.getRound().contains(endYear) || seasonFlag) && ((includeFinals && includeHomeAway) || (!match.isFinal() && includeHomeAway) || (match.isFinal() && includeFinals))) {
+                results.add(match);
+            }
+            /*else if ((match.getRound().contains(endYear) || seasonFlag) && !match.isFinal() && includeHomeAway) {
+                results.add(match);
+            }
+            else if ((match.getRound().contains(endYear) || seasonFlag) && match.isFinal() && includeFinals) {
+                results.add(match);
+            }*/
+        }
+    return results;
     }
     public ArrayList<Match> getMatchesByYear(String year) {
         year = abbreviationToSeason(year);
@@ -289,6 +318,20 @@ public class RecordSystem {
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : inputArray) {
             if (match.getRound().contains(year)) {
+                results.add(match);
+            }
+        }
+        return results;
+    }
+    public ArrayList<Match> getMatchesByYear(String year, boolean includeFinals, boolean includeHomeAway) {
+        year = abbreviationToSeason(year);
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : matches) {
+            // checks if match took place in the year being checked
+            // then if both includeFinals and includeHomeAway are true
+            // OR if match is a final and includeFinals is true
+            // OR if match is a home and away game and includeHomeAway is true
+            if (match.getRound().contains(year) && ((includeFinals && includeHomeAway) || (match.isFinal() && includeFinals) || (!match.isFinal() && includeHomeAway))) {
                 results.add(match);
             }
         }

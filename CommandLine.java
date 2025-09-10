@@ -20,18 +20,101 @@ public class CommandLine {
             String[] words = new String[50];
             int wordCount = 0;
             while (stk.hasMoreTokens()) {
-                words[wordCount] = stk.nextToken().trim();
+                words[wordCount] = stk.nextToken().trim().toLowerCase();
                 wordCount++;
             }
             switch (firstWord.toLowerCase()) {
                 case "help":
+                    command = input.nextLine();
+                    break;
+                case "headtohead":
+                case "head2head":
+                case "htoh":
+                case "h2h":
+                    command = input.nextLine();
+                    break;
                 case "ladder":
                 case "l":
-                    for (int i = 0; i < wordCount; i++) {
-
+                    if (wordCount == 0) {
+                        system.createLadder(system.getAllMatches());
                     }
-                    
-                    system.createLadder(system.getAllMatches());
+                    else {
+                        String firstSeason = null;
+                        String secondSeason = null;
+                        boolean includeFinals = true;
+                        boolean includeHomeAway = true;
+                        for (int i = 0; i < wordCount; i++) {
+                            if (system.isSeason(words[i])) {
+                                if (firstSeason == null) {
+                                    firstSeason = words[i];
+                                    includeFinals = false;
+                                }
+                                else {
+                                    secondSeason = words[i];
+                                    includeFinals = true;
+                                }
+                            }
+                            // switch should be moved somewhere better
+                            switch (words[i]) {
+                                case "nofinals":
+                                case "nf":
+                                    includeFinals = false;
+                                    break;
+                                case "finals":
+                                case "f":
+                                    includeFinals = true;
+                                    includeHomeAway = false;
+                                    break;
+                                case "includefinals":
+                                case "incfinals":
+                                case "if":
+                                case "incf":
+                                    includeFinals = true;
+                                    break;
+                                case "nohomeaway":
+                                case "nha":
+                                case "nohome+away":
+                                case "nohome&away":
+                                case "noh+a":
+                                case "noh&a":
+                                    includeHomeAway = false;
+                                    break;
+                                case "homeaway":
+                                case "ha":
+                                case "home&away":
+                                case "h&a":
+                                case "home+away":
+                                case "h+a":
+                                    includeHomeAway = true;
+                                    includeFinals = false;
+                                    break;
+                                case "includehomeandaway":
+                                case "inchomeandaway":
+                                case "includehomeaway":
+                                case "inchomeaway":
+                                case "iha":
+                                case "incha":
+                                case "includehome+away":
+                                case "inchome+away":
+                                case "ih+a":
+                                case "inch+a":
+                                case "includehome&away":
+                                case "inchome&away":
+                                case "ih&a":
+                                case "inch&a":
+                                    includeHomeAway = true;
+                                    break;
+                            }
+                        }
+                        if (firstSeason == null) {
+                            system.createLadder(system.getMatchesByYears("s1", "s10", includeFinals, includeHomeAway));
+                        }
+                        else if (secondSeason == null)
+                            system.createLadder(system.getMatchesByYear(firstSeason, includeFinals, includeHomeAway));
+                        else {
+                            system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway));
+                        }
+                    }
                     
                     command = input.nextLine();
                     break;
