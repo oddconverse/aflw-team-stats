@@ -101,19 +101,7 @@ public class CommandLine {
                                 break;
 
                         }
-                        if (teamName == null) {
-
-                        }
-                        else if (firstSeason == null) {
-                            system.findRecord(teamName, comparators[i], resultCount);
-                        }
-                        else if (secondSeason == null) {
-                            system.findRecord(teamName, comparators[i], resultCount, firstSeason);
-                        }
-
-                        else {
-                            system.findRecord(teamName, comparators[i], resultCount, firstSeason, secondSeason);
-                        }
+                        system.findRecord(teamName, comparators[i], resultCount, firstSeason, secondSeason);
                     }
                     command = input.nextLine();
                     break;

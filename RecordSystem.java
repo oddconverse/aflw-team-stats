@@ -65,64 +65,17 @@ public class RecordSystem {
     // function displays all records using comparator input
     // to be overloaded in future
     public void findRecord(String teamName, Comparator<Match> compareBy, int resultCount, String startSeason, String endSeason) {
-        ArrayList<Match> matchSet = getMatchesByTeam(teamName, getMatchesByYears(startSeason, endSeason));
-
-        // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
-        // if it is tied, tieRank will not be updated
-        // e.g two matches with the same winning margin should be displayed as:
-        //  1: Fremantle 2.2 (14) def. by North Melbourne 18.6 (114). North Melbourne won by 100 points.
-        //  1: Adelaide 15.12 (108) def. Carlton 1.2 (8). Adelaide won by 100 points.
-        int marginTieTracker = 0;
-        int tieRank = 0;
-
-        // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
-        matchSet.sort(compareBy);
-        // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
-        int wrongResults = 0;
-        for (int i = 0; i < resultCount || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
-            if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName)) {
-                wrongResults++;
-                i--;
-                continue;
-            }
-            if (marginTieTracker != matchSet.get(i + wrongResults).getMargin())
-                tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i + wrongResults), matchSet.get(i + wrongResults).getWinningTeamName(), matchSet.get(i + wrongResults).getMargin()));
-            marginTieTracker = matchSet.get(i + wrongResults).getMargin();
+        ArrayList<Match> matchSet;
+        if (startSeason == null) {
+            matchSet = getMatchesByTeam(teamName);
         }
-    }
-
-    public void findRecord(String teamName, Comparator<Match> compareBy, int resultCount, String season) {
-        ArrayList<Match> matchSet = getMatchesByTeam(teamName, getMatchesByYear(season));
-
-        // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
-        // if it is tied, tieRank will not be updated
-        // e.g two matches with the same winning margin should be displayed as:
-        //  1: Fremantle 2.2 (14) def. by North Melbourne 18.6 (114). North Melbourne won by 100 points.
-        //  1: Adelaide 15.12 (108) def. Carlton 1.2 (8). Adelaide won by 100 points.
-        int marginTieTracker = 0;
-        int tieRank = 0;
-
-        // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
-        matchSet.sort(compareBy);
-        // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
-        int wrongResults = 0;
-        for (int i = 0; i < resultCount || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
-            if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName)) {
-                wrongResults++;
-                i--;
-                continue;
-            }
-            if (marginTieTracker != matchSet.get(i + wrongResults).getMargin())
-                tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i + wrongResults), matchSet.get(i + wrongResults).getWinningTeamName(), matchSet.get(i + wrongResults).getMargin()));
-            marginTieTracker = matchSet.get(i + wrongResults).getMargin();
+        else if (endSeason == null) {
+            matchSet = getMatchesByTeam(teamName, getMatchesByYear(startSeason));
         }
-    }
-
-    public void findRecord(String teamName, Comparator<Match> compareBy, int resultCount) {
-        ArrayList<Match> matchSet = getMatchesByTeam(teamName, getAllMatches());
-
+        else {
+            matchSet = getMatchesByTeam(teamName, getMatchesByYears(startSeason, endSeason));
+        }
+        
         // marginTieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
         // if it is tied, tieRank will not be updated
         // e.g two matches with the same winning margin should be displayed as:
@@ -136,7 +89,7 @@ public class RecordSystem {
         // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records
         int wrongResults = 0;
         for (int i = 0; i < resultCount || marginTieTracker == matchSet.get(i + tieRank + wrongResults).getMargin(); i++) {
-            if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName)) {
+            if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName) && teamName != null) {
                 wrongResults++;
                 i--;
                 continue;
@@ -334,6 +287,9 @@ public class RecordSystem {
      
 
     public ArrayList<Match> getMatchesByTeam(String team) {
+        if (team == null) {
+            return getAllMatches();
+        }
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
             if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
@@ -343,6 +299,9 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Match> getMatchesByTeam(String team, ArrayList<Match> inputArray) {
+        if (team == null) {
+            return inputArray;
+        }
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : inputArray) {
             if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
