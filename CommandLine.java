@@ -35,6 +35,7 @@ public class CommandLine {
                     break;
                 case "ladder":
                 case "l":
+                // TODO: implement per round commands
                     if (wordCount == 0) {
                         system.createLadder(system.getAllMatches());
                     }
