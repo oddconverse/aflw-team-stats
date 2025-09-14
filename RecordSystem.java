@@ -373,12 +373,19 @@ public class RecordSystem {
             }
         }
         for (Match match : grandFinalList) {
+            // this language is fucked bro i cant believe there isnt a better way to do this other than creating whole new classes
+            String teamName = match.getWinningTeamName();
+            int teamNameIndex = returnString.indexOf(teamName);
+            int endOfTeamLine = returnString.indexOf("\n", teamNameIndex);
+            String matchRound = match.getRound();
+            int startOfYearIndex = matchRound.indexOf(",") + 2;
+            String year = matchRound.substring(startOfYearIndex, matchRound.length());
             if (returnString.contains(match.getWinningTeamName())) {
                 // INSERT NEXT PREMIERSHIP AT CORRECT POINT. FIND INDEX OF END OF LINE AND ADD PREMIERSHIP BEFORE IT
-                returnString = returnString.substring(0, returnString.indexOf("\n", returnString.indexOf(match.getWinningTeamName()))) + ", " + match.getRound().substring(match.getRound().indexOf(",") + 2, match.getRound().length()) + returnString.substring(returnString.indexOf("\n", returnString.indexOf(match.getWinningTeamName())), returnString.length());
+                returnString = returnString.substring(0, endOfTeamLine) + ", " + year + returnString.substring(endOfTeamLine, returnString.length());
             }
             else {
-                returnString += String.format("%s: %s\n", match.getWinningTeamName(), match.getRound().substring(match.getRound().indexOf(",") + 2, match.getRound().length()));
+                returnString += String.format("%s: %s\n", teamName, matchRound.substring(startOfYearIndex, matchRound.length()));
             }
         }
         return returnString;
