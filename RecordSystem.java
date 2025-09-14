@@ -13,6 +13,9 @@ public class RecordSystem {
     // matches to be stored in array. DO NOT SORT. CLONE AND SORT AFTER
     private ArrayList<Match> matches;
 
+    public static final String[] conferenceATeams2019 = {"Adelaide", "Fremantle", "Melbourne", "North Melbourne", "Western Bulldogs"};
+    public static final String[] conferenceATeams2020 = {"North Melbourne", "Greater Western Sydney", "Brisbane", "Gold Coast", "Adelaide", "Geelong", "Richmond"};
+
     public RecordSystem() {
         this.matches = new ArrayList<Match>();
     }
@@ -112,41 +115,150 @@ public class RecordSystem {
     }
 
     public void createLadder(ArrayList<Match> matchSet) {
-        Ladder ladder = new Ladder();
-        for (Match match : matchSet) {
-            // instantiate team objects when a new team appears
-            if (!ladder.doesTeamExist(match.getHomeTeamName())) {
-                ladder.addTeam(match.getHomeTeamName());
-            }
-            // adjust stats for home team
-            Team currentHomeTeam = ladder.getTeam(match.getHomeTeamName());
-            currentHomeTeam.incrementPercentage(match.getHomeScore(), match.getAwayScore());
-            if (match.homeTeamWin()) {
-                currentHomeTeam.incrementHomeWins();
-            }
-            else if (match.wasDrawn()) {
-                currentHomeTeam.incrementHomeDraws();
-            }
-            else {
-                currentHomeTeam.incrementHomeLosses();
-            }
-            // same function but for away team
-            if (!ladder.doesTeamExist(match.getAwayTeamName())) {
-                ladder.addTeam(match.getAwayTeamName());
-            }
-            Team currentAwayTeam = ladder.getTeam(match.getAwayTeamName());
-            currentAwayTeam.incrementPercentage(match.getAwayScore(), match.getHomeScore());
-            if (match.homeTeamWin()) {
-                currentAwayTeam.incrementAwayLosses();
-            }
-            else if (match.wasDrawn()) {
-                currentAwayTeam.incrementAwayDraws();
-            }
-            else {
-                currentAwayTeam.incrementAwayWins();
+        
+        // variable used to determine whether teams should be shown in conferences or not
+        boolean conferenceFlag = true;
+        // picks first match of dataset as a tester
+        Match conferenceRefMatch = matchSet.get(0);
+
+        if ((conferenceRefMatch.getRound().contains("2019") || conferenceRefMatch.getRound().contains("2020")) && !conferenceRefMatch.isFinal()) {
+            String targetSeason = conferenceRefMatch.getSeason();
+            for (Match match : matchSet) {
+                // checks to see if any match falls outside of a season where conferences were used, or 
+                if (!match.getRound().contains(targetSeason) || match.isFinal()) {
+                    conferenceFlag = false;
+                }
             }
         }
-        ladder.display();
+
+        if (!conferenceFlag) {
+            Ladder ladder = new Ladder();
+            for (Match match : matchSet) {
+                // instantiate team objects when a new team appears
+                if (!ladder.doesTeamExist(match.getHomeTeamName())) {
+                    ladder.addTeam(match.getHomeTeamName());
+                }
+                // adjust stats for home team
+                Team currentHomeTeam = ladder.getTeam(match.getHomeTeamName());
+                currentHomeTeam.incrementPercentage(match.getHomeScore(), match.getAwayScore());
+                if (match.homeTeamWin()) {
+                    currentHomeTeam.incrementHomeWins();
+                }
+                else if (match.wasDrawn()) {
+                    currentHomeTeam.incrementHomeDraws();
+                }
+                else {
+                    currentHomeTeam.incrementHomeLosses();
+                }
+                // same function but for away team
+                if (!ladder.doesTeamExist(match.getAwayTeamName())) {
+                    ladder.addTeam(match.getAwayTeamName());
+                }
+                Team currentAwayTeam = ladder.getTeam(match.getAwayTeamName());
+                currentAwayTeam.incrementPercentage(match.getAwayScore(), match.getHomeScore());
+                if (match.homeTeamWin()) {
+                    currentAwayTeam.incrementAwayLosses();
+                }
+                else if (match.wasDrawn()) {
+                    currentAwayTeam.incrementAwayDraws();
+                }
+                else {
+                    currentAwayTeam.incrementAwayWins();
+                }
+            }
+            ladder.display();
+        }
+        else {
+            Ladder conferenceA = new Ladder();
+            Ladder conferenceB = new Ladder();
+            for (Match match : matchSet) {
+                boolean conferenceAHomeTeamFlag = false;
+                boolean conferenceAAwayTeamFlag = false;
+                String[] conferenceATeamSet;
+                int teamNumber;
+                if (match.getRound().contains("2019")) {
+                    conferenceATeamSet = conferenceATeams2019.clone();
+                    teamNumber = 5;
+                }
+                else {
+                    conferenceATeamSet = conferenceATeams2020.clone();
+                    teamNumber = 7;
+                }
+                // instantiate team objects when a new team appears
+                if (!conferenceA.doesTeamExist(match.getHomeTeamName()) && !conferenceB.doesTeamExist(match.getHomeTeamName())) {
+                    for (int i = 0; i < teamNumber; i++) {
+                        if (match.getHomeTeamName().equals(conferenceATeamSet[i])) {
+                            conferenceA.addTeam(match.getHomeTeamName());
+                            conferenceAHomeTeamFlag = true;
+                        }
+                    }
+                    if (!conferenceAHomeTeamFlag) {
+                        conferenceB.addTeam(match.getHomeTeamName());
+                    }
+                    
+                    
+                }
+                // adjust stats for home team
+                Team currentHomeTeam = null;
+                for (int i = 0; i < teamNumber; i++) {
+                    if (match.getHomeTeamName().equals(conferenceATeamSet[i])) {
+                        currentHomeTeam = conferenceA.getTeam(match.getHomeTeamName());
+                        conferenceAHomeTeamFlag = true;
+                    }
+                }
+                if (!conferenceAHomeTeamFlag) {
+                    currentHomeTeam = conferenceB.getTeam(match.getHomeTeamName());
+                }
+                currentHomeTeam.incrementPercentage(match.getHomeScore(), match.getAwayScore());
+                if (match.homeTeamWin()) {
+                    currentHomeTeam.incrementHomeWins();
+                }
+                else if (match.wasDrawn()) {
+                    currentHomeTeam.incrementHomeDraws();
+                }
+                else {
+                    currentHomeTeam.incrementHomeLosses();
+                }
+                // same function but for away team
+                if (!conferenceA.doesTeamExist(match.getAwayTeamName()) && !conferenceB.doesTeamExist(match.getAwayTeamName())) {
+                    for (int i = 0; i < teamNumber; i++) {
+                        if (match.getAwayTeamName().equals(conferenceATeamSet[i])) {
+                            conferenceA.addTeam(match.getAwayTeamName());
+                            conferenceAAwayTeamFlag = true;
+                        }
+                    }
+                    if (!conferenceAAwayTeamFlag) {
+                        conferenceB.addTeam(match.getAwayTeamName());
+                    }
+                    
+                    
+                }
+                Team currentAwayTeam = null;
+                for (int i = 0; i < teamNumber; i++) {
+                    if (match.getAwayTeamName().equals(conferenceATeamSet[i])) {
+                        currentAwayTeam = conferenceA.getTeam(match.getAwayTeamName());
+                        conferenceAAwayTeamFlag = true;
+                    }
+                }
+                if (!conferenceAAwayTeamFlag) {
+                    currentAwayTeam = conferenceB.getTeam(match.getAwayTeamName());
+                }
+                currentAwayTeam.incrementPercentage(match.getAwayScore(), match.getHomeScore());
+                if (match.homeTeamWin()) {
+                    currentAwayTeam.incrementAwayLosses();
+                }
+                else if (match.wasDrawn()) {
+                    currentAwayTeam.incrementAwayDraws();
+                }
+                else {
+                    currentAwayTeam.incrementAwayWins();
+                }
+            }
+            System.out.println("|---------------------------------------CONFERENCE A---------------------------------------------------|");
+            conferenceA.display();
+            System.out.println("|---------------------------------------CONFERENCE B---------------------------------------------------|");
+            conferenceB.display();
+        }
     }
     
     public void displayMatchesByRound(String round, String year) {
@@ -377,19 +489,18 @@ public class RecordSystem {
             String teamName = match.getWinningTeamName();
             int teamNameIndex = returnString.indexOf(teamName);
             int endOfTeamLine = returnString.indexOf("\n", teamNameIndex);
-            String matchRound = match.getRound();
-            int startOfYearIndex = matchRound.indexOf(",") + 2;
-            String year = matchRound.substring(startOfYearIndex, matchRound.length());
+            String year = match.getSeason();
             if (returnString.contains(match.getWinningTeamName())) {
                 // INSERT NEXT PREMIERSHIP AT CORRECT POINT. FIND INDEX OF END OF LINE AND ADD PREMIERSHIP BEFORE IT
                 returnString = returnString.substring(0, endOfTeamLine) + ", " + year + returnString.substring(endOfTeamLine, returnString.length());
             }
             else {
-                returnString += String.format("%s: %s\n", teamName, matchRound.substring(startOfYearIndex, matchRound.length()));
+                returnString += String.format("%s: %s\n", teamName, year);
             }
         }
         return returnString;
     }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public ArrayList<Match> getAllMatches() {
         return (ArrayList)matches.clone();

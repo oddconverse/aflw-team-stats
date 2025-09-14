@@ -103,7 +103,10 @@ public class Match {
         else 
             return String.format("%s: %s %d.%d (%d) def. by %s %d.%d (%d)", round, homeTeamName, homeTeamGoals, homeTeamBehinds, getHomeScore(), awayTeamName, awayTeamGoals, awayTeamBehinds, getAwayScore());
     }
-
+    public String getSeason() {
+        int startOfYearIndex = getRound().indexOf(",") + 2;
+        return getRound().substring(startOfYearIndex, getRound().length());
+    }
     // getters
     public String getRound() {
         return round;

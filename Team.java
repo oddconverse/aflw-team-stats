@@ -33,7 +33,7 @@ public class Team implements Comparable<Team> {
         if (this.getWinPercentage() - t.getWinPercentage() != 0) {
             return Double.compare(t.getWinPercentage(), this.getWinPercentage());
         }
-        return (int) (t.getPercentage() - this.getPercentage());
+        return Double.compare(t.getPercentage(), this.getPercentage());
     }
     public void incrementHomeWins() {
         this.gamesPlayed++;
