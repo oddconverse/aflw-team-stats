@@ -4,47 +4,96 @@ import java.util.*;
 // Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
 
 public class Ladder {
-    private Team[] teams;
-    private int teamCount;
+    private ArrayList<Team> teams;
+    private final String[] allParameters = {"pos", "name", "pl", "w", "l", "d", "pts", "pf", "pa", "%", "w%"};
 
     public Ladder() {
-        this.teams = new Team[20];
-        this.teamCount = 0;
+        this.teams = new ArrayList<Team>();
     }
     public void addTeam(String name) {
         Team newTeam = new Team(name);
-        teams[teamCount] = newTeam;
-        teamCount++;
+        teams.add(newTeam);
     }
 
     public Team getTeam(String name) {
-        for (int i = 0; i < teamCount; i++) {
-            if (teams[i].getName().equals(name)) {
-                return teams[i];
+        for (Team team : teams) {
+            if (team.getName().equals(name)) {
+                return team;
             }
         }
         return null;
     }
     public boolean doesTeamExist(String name) {
-        for (int i = 0; i < teamCount; i++) {
-            if (teams[i].getName().equals(name)) {
+        for (Team team : teams) {
+            if (team.getName().equals(name)) {
                 return true;
             }
         }
         return false;
     }
-    public void display() {
-        System.out.println();
-        System.out.println("|------------------------------------------------------------------------------------------------------|");
-        System.out.println(String.format("| %4s | %24s | %4s | %4s | %4s | %4s | %4s | %4s | %4s | %7s | %7s |", "Pos", "Name", "Pl", "W", "L", "D", "Pts", "PF", "PA", "%", "W%"));
-        System.out.println("|------|--------------------------|------|------|------|------|------|------|------|---------|---------|");
-        Arrays.sort(teams, 0, teamCount);
-        for (int i = 0; i < teamCount; i++) {
-            System.out.println(String.format("| %4d | %s", i + 1, teams[i].ladderDisplay()));
+    public void display(Comparator<Team> orderBy, ArrayList<String> parameterList) {
+        String teamOutputFormat = "|";
+
+        if (orderBy == null) {
+            Collections.sort(teams);
         }
-        System.out.println("|------------------------------------------------------------------------------------------------------|");
+        else {
+            Collections.sort(teams, orderBy);
+        }
+        if (parameterList == null) {
+            parameterList = new ArrayList<>(Arrays.asList(allParameters));
+        }
+        for (String parameter : parameterList) {
+            switch (parameter) {
+                case "pts":
+                case "pos":
+                case "pl":
+                case "w":
+                case "d":
+                case "l":
+                case "pf":
+                case "pa":
+                    teamOutputFormat += " %4d |";
+                    break;
+                case "%":
+                case "w%":
+                    teamOutputFormat += " %7.2f |";
+                    break;
+                case "name":
+                    teamOutputFormat += " %24s |";
+                    break;
+            }
+        }
+        System.out.println(String.format("|%102s", String.format("%-51s|", "Hi bro i hope this works").replace(' ', '-')));
+        System.out.println(String.format(teamOutputFormat.replace('d', 's').replace('f', 's'), "Pos", "Name", "Pl", "W", "L", "D", "Pts", "PF", "PA", "%", "W%"));
+        System.out.println("|------|--------------------------|------|------|------|------|------|------|------|---------|---------|");
+        for (int i = 0; i < teams.size(); i++) {
+            System.out.println(String.format("| %4d | %s", i + 1, teams.get(i).ladderDisplay(teamOutputFormat, parameterList)));
+            if (i == 7) {
+                System.out.println(String.format("|%102s|", "TOP 8 PLAY FINALS").replace(' ', '-'));
+            }
+        }
+        System.out.println(String.format("|%102s|", "  ").replace(' ', '-'));;
         System.out.println();
         System.out.println("Key: Pl = Games Played, W = Wins, L = Losses, D = Draws, Pts = Premiership Points, PF = Points For, PA = Points Against, % = Percentage (PF / PA * 100), W% = Win Percentage (W / Pl * 100)");
         System.out.println();
+    }
+    public String centreOutput(String input, int length) {
+        return null;
+    }
+}
+class SeasonLadderComparator implements Comparator<Team> {
+    @Override
+    public int compare (Team a, Team b) {
+        if (a.getPoints() - b.getPoints() != 0) {
+            return Integer.compare(b.getPoints(), a.getPoints());
+        }
+        return Double.compare(b.getPercentage(), a.getPercentage());
+    }
+}
+class PointsForComparator implements Comparator<Team> {
+    @Override
+    public int compare (Team a, Team b) {
+        return Integer.compare(b.getPointsFor(), a.getPointsFor());
     }
 }

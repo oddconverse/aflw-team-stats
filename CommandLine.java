@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -17,11 +18,9 @@ public class CommandLine {
         while (!exit) {
             StringTokenizer stk = new StringTokenizer(command);
             String firstWord = stk.nextToken().trim();
-            String[] words = new String[50];
-            int wordCount = 0;
+            ArrayList<String> words = new ArrayList<String>();
             while (stk.hasMoreTokens()) {
-                words[wordCount] = stk.nextToken().trim().toLowerCase();
-                wordCount++;
+                words.add(stk.nextToken().trim().toLowerCase());
             }
             switch (firstWord.toLowerCase()) {
                 case "help":
@@ -38,12 +37,12 @@ public class CommandLine {
                 case "h2h":
                     String team1 = null;
                     String team2 = null;
-                    for (int i = 0; i < wordCount; i++) {
-                        if (system.abbreviationToName(words[i]) != null && team1 == null) {
-                            team1 = system.abbreviationToName(words[i]);
+                    for (String word : words) {
+                        if (system.abbreviationToName(word) != null && team1 == null) {
+                            team1 = system.abbreviationToName(word);
                         }
-                        else if (system.abbreviationToName(words[i]) != null) {
-                            team2 = system.abbreviationToName(words[i]);
+                        else if (system.abbreviationToName(word) != null) {
+                            team2 = system.abbreviationToName(word);
                         }
                     }
                     system.displayHeadToHead(team1, team2);
@@ -53,7 +52,7 @@ public class CommandLine {
                 case "l":
                 // TODO: implement per round commands
                 // TODO: ALSO DOES NOT ACCOUNT FOR CONFERENCES
-                    if (wordCount == 0) {
+                    if (words.isEmpty()) {
                         system.createLadder(system.getAllMatches());
                     }
                     else {
@@ -61,19 +60,19 @@ public class CommandLine {
                         String secondSeason = null;
                         boolean includeFinals = true;
                         boolean includeHomeAway = true;
-                        for (int i = 0; i < wordCount; i++) {
-                            if (system.isSeason(words[i])) {
+                        for (String word : words) {
+                            if (system.isSeason(word)) {
                                 if (firstSeason == null) {
-                                    firstSeason = words[i];
+                                    firstSeason = word;
                                     includeFinals = false;
                                 }
                                 else {
-                                    secondSeason = words[i];
+                                    secondSeason = word;
                                     includeFinals = true;
                                 }
                             }
                             // switch should be moved somewhere better
-                            switch (words[i]) {
+                            switch (word) {
                                 case "nofinals":
                                 case "nf":
                                     includeFinals = false;
@@ -131,8 +130,8 @@ public class CommandLine {
                             // sucks
                             Match firstMatch = system.getAllMatches().get(0);
                             Match lastMatch = system.getAllMatches().get(system.getAllMatches().size() - 1);
-                            firstSeason = firstMatch.getRound().substring(firstMatch.getRound().indexOf(",") + 2, firstMatch.getRound().length());
-                            secondSeason = lastMatch.getRound().substring(firstMatch.getRound().indexOf(",") + 2, firstMatch.getRound().length());
+                            firstSeason = firstMatch.getSeason();
+                            secondSeason = lastMatch.getSeason();
                             system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway));
                         }
                         else if (secondSeason == null)
@@ -169,25 +168,25 @@ public class CommandLine {
                     String firstSeason = null;
                     String secondSeason = null;
                     int resultCount = 5;
-                    for (int i = 0; i < wordCount; i++) {
-                        if (system.stringToRecordComparator(words[i]) != null) {
-                            comparators[comparatorCount] = (Comparator) system.stringToRecordComparator(words[i]);
+                    for (String word : words) {
+                        if (system.stringToRecordComparator(word) != null) {
+                            comparators[comparatorCount] = (Comparator) system.stringToRecordComparator(word);
                             comparatorCount++;
                         }
-                        else if (system.abbreviationToName(words[i]) != null) {
-                            teamName = system.abbreviationToName(words[i]);
+                        else if (system.abbreviationToName(word) != null) {
+                            teamName = system.abbreviationToName(word);
                         }
                         
-                        else if (system.isSeason(words[i])) {
+                        else if (system.isSeason(word)) {
                             if (firstSeason == null) {
-                                firstSeason = words[i];
+                                firstSeason = word;
                             }
                             else {
-                                secondSeason = words[i];
+                                secondSeason = word;
                             }
                         }
-                        else if (system.isNumeric(words[i]) && Integer.parseInt(words[i]) < 100) {
-                            resultCount = Integer.parseInt(words[i]);
+                        else if (system.isNumeric(word) && Integer.parseInt(word) < 100) {
+                            resultCount = Integer.parseInt(word);
                         }
                     }
                     if (comparators[0] == null) {

@@ -119,16 +119,24 @@ public class RecordSystem {
         // variable used to determine whether teams should be shown in conferences or not
         boolean conferenceFlag = true;
         // picks first match of dataset as a tester
-        Match conferenceRefMatch = matchSet.get(0);
+        Match firstMatch = matchSet.get(0);
+        Match lastMatch = matchSet.get(matchSet.size() - 1);
+        boolean singleSeason = false;
 
-        if ((conferenceRefMatch.getRound().contains("2019") || conferenceRefMatch.getRound().contains("2020")) && !conferenceRefMatch.isFinal()) {
-            String targetSeason = conferenceRefMatch.getSeason();
+        if ((firstMatch.getRound().contains("2019") || firstMatch.getRound().contains("2020")) && !firstMatch.isFinal()) {
+            String targetSeason = firstMatch.getSeason();
             for (Match match : matchSet) {
-                // checks to see if any match falls outside of a season where conferences were used, or 
+                // checks to see if any match falls outside of a season where conferences were used, or if a match is a final
                 if (!match.getRound().contains(targetSeason) || match.isFinal()) {
                     conferenceFlag = false;
                 }
             }
+        }
+        else {
+            conferenceFlag = false;
+        }
+        if (firstMatch.getSeason().equals(lastMatch.getSeason()) && !lastMatch.isFinal()) {
+            singleSeason = true;
         }
 
         if (!conferenceFlag) {
@@ -166,7 +174,14 @@ public class RecordSystem {
                     currentAwayTeam.incrementAwayWins();
                 }
             }
-            ladder.display();
+            if (singleSeason) {
+                SeasonLadderComparator orderBy = new SeasonLadderComparator();
+                ladder.display(orderBy, null);
+            }
+            else {
+                ladder.display(null, null);
+            }
+
         }
         else {
             Ladder conferenceA = new Ladder();
@@ -254,10 +269,11 @@ public class RecordSystem {
                     currentAwayTeam.incrementAwayWins();
                 }
             }
+            SeasonLadderComparator orderBy = new SeasonLadderComparator();
             System.out.println("|---------------------------------------CONFERENCE A---------------------------------------------------|");
-            conferenceA.display();
+            conferenceA.display(orderBy, null);
             System.out.println("|---------------------------------------CONFERENCE B---------------------------------------------------|");
-            conferenceB.display();
+            conferenceB.display(orderBy, null);
         }
     }
     
