@@ -114,7 +114,7 @@ public class RecordSystem {
         }
     }
 
-    public void createLadder(ArrayList<Match> matchSet) {
+    public void createLadder(ArrayList<Match> matchSet, Comparator<Team> orderBy) {
         
         // variable used to determine whether teams should be shown in conferences or not
         boolean conferenceFlag = true;
@@ -174,8 +174,11 @@ public class RecordSystem {
                     currentAwayTeam.incrementAwayWins();
                 }
             }
-            if (singleSeason) {
-                SeasonLadderComparator orderBy = new SeasonLadderComparator();
+            if (singleSeason && orderBy == null) {
+                orderBy = new SeasonLadderComparator();
+                ladder.display(orderBy, null);
+            }
+            else if (orderBy != null) {
                 ladder.display(orderBy, null);
             }
             else {
@@ -269,7 +272,10 @@ public class RecordSystem {
                     currentAwayTeam.incrementAwayWins();
                 }
             }
-            SeasonLadderComparator orderBy = new SeasonLadderComparator();
+            if (orderBy == null) {
+                orderBy = new SeasonLadderComparator();
+            }
+
             System.out.println("|---------------------------------------CONFERENCE A---------------------------------------------------|");
             conferenceA.display(orderBy, null);
             System.out.println("|---------------------------------------CONFERENCE B---------------------------------------------------|");
@@ -295,7 +301,7 @@ public class RecordSystem {
         }
     }
 
-    public void displayHeadToHead(String team1str, String team2str) {
+    public void displayHeadToHead(String team1str, String team2str, boolean displayResults) {
         // TODO: if a team has no wins, program crashes at greatest win checkpoint
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
@@ -304,13 +310,14 @@ public class RecordSystem {
             }
         }
         Team team1 = new Team(team1str);
-        Match team1GreatestWin = null;
+        String team1GreatestWin = null;
         int team1GreatestWinningMargin = 0;
         Team team2 = new Team(team2str);
-        Match team2GreatestWin = null;
+        String team2GreatestWin = null;
         int team2GreatestWinningMargin = 0;
         for (Match result : results) {
-            System.out.println(result);
+            if (displayResults) 
+                System.out.println(result);
             // trigger if team 1 is winning team
             if (result.getWinningTeamName().equals(team1.getName())){
                 // increment if team 1 is home team and team 1 win
@@ -326,7 +333,7 @@ public class RecordSystem {
                 team1.incrementPercentage(result.getWinningScore(), result.getLosingScore());
                 team2.incrementPercentage(result.getLosingScore(), result.getWinningScore());
                 if (result.getMargin() > team1GreatestWinningMargin) {
-                    team1GreatestWin = result;
+                    team1GreatestWin = String.format("%dpts, %s", result.getMargin(), result.getRound());
                     team1GreatestWinningMargin = result.getMargin();
                 }
             }
@@ -345,7 +352,7 @@ public class RecordSystem {
                 team1.incrementPercentage(result.getLosingScore(), result.getWinningScore());
                 team2.incrementPercentage(result.getWinningScore(), result.getLosingScore());
                 if (result.getMargin() > team2GreatestWinningMargin) {
-                    team2GreatestWin = result;
+                    team2GreatestWin = String.format("%dpts, %s", result.getMargin(), result.getRound());
                     team2GreatestWinningMargin = result.getMargin();
                 }
             }
@@ -363,6 +370,12 @@ public class RecordSystem {
                 team2.incrementPercentage(result.getHomeScore(), result.getHomeScore());
             }
         }
+        if (team1GreatestWin == null) {
+            team1GreatestWin = "N/A";
+        }
+        if (team2GreatestWin == null) {
+            team2GreatestWin = "N/A";
+        } 
         System.out.println(String.format("|-------------------------------------------HEAD TO HEAD-------------------------------------------|"));
         System.out.println(String.format("| %-45s Name %45s |", team1.getName(), team2.getName()));
         System.out.println(String.format("| %-41d Games Played %41d |", team1.getGamesPlayed(), team2.getGamesPlayed()));
@@ -371,7 +384,7 @@ public class RecordSystem {
         System.out.println(String.format("| %-40d Points Scored %41d |", team1.getPointsFor(), team2.getPointsFor()));
         System.out.println(String.format("| %-43d Home Wins %42d |", team1.getHomeWins(), team2.getHomeWins()));
         System.out.println(String.format("| %-43d Away Wins %42d |", team1.getAwayWins(), team2.getAwayWins()));
-        System.out.println(String.format("| %-41s Greatest Win %41s |", String.format("%dpts, %s", team1GreatestWinningMargin, team1GreatestWin.getRound()), String.format("%dpts, %s", team2GreatestWinningMargin, team2GreatestWin.getRound())));
+        System.out.println(String.format("| %-41s Greatest Win %41s |", team1GreatestWin, team2GreatestWin));
         System.out.println(String.format("|--------------------------------------------------------------------------------------------------|"));
     }
     public boolean isNumeric(String str) {

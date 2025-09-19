@@ -37,6 +37,7 @@ public class CommandLine {
                 case "h2h":
                     String team1 = null;
                     String team2 = null;
+                    boolean displayMatches = false;
                     for (String word : words) {
                         if (system.abbreviationToName(word) != null && team1 == null) {
                             team1 = system.abbreviationToName(word);
@@ -44,8 +45,11 @@ public class CommandLine {
                         else if (system.abbreviationToName(word) != null) {
                             team2 = system.abbreviationToName(word);
                         }
+                        else if (word.equals("allresults")) {
+                            displayMatches = true;
+                        }
                     }
-                    system.displayHeadToHead(team1, team2);
+                    system.displayHeadToHead(team1, team2, displayMatches);
                     command = input.nextLine();
                     break;
                 case "ladder":
@@ -53,7 +57,7 @@ public class CommandLine {
                 // TODO: implement per round commands
                 // TODO: ALSO DOES NOT ACCOUNT FOR CONFERENCES
                     if (words.isEmpty()) {
-                        system.createLadder(system.getAllMatches());
+                        system.createLadder(system.getAllMatches(), null);
                     }
                     else {
                         String firstSeason = null;
@@ -79,6 +83,12 @@ public class CommandLine {
                                     break;
                                 case "finals":
                                 case "f":
+                                case "nohomeaway":
+                                case "nha":
+                                case "nohome+away":
+                                case "nohome&away":
+                                case "noh+a":
+                                case "noh&a":
                                     includeFinals = true;
                                     includeHomeAway = false;
                                     break;
@@ -87,14 +97,6 @@ public class CommandLine {
                                 case "if":
                                 case "incf":
                                     includeFinals = true;
-                                    break;
-                                case "nohomeaway":
-                                case "nha":
-                                case "nohome+away":
-                                case "nohome&away":
-                                case "noh+a":
-                                case "noh&a":
-                                    includeHomeAway = false;
                                     break;
                                 case "homeaway":
                                 case "ha":
@@ -132,17 +134,18 @@ public class CommandLine {
                             Match lastMatch = system.getAllMatches().get(system.getAllMatches().size() - 1);
                             firstSeason = firstMatch.getSeason();
                             secondSeason = lastMatch.getSeason();
-                            system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway));
+                            system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway), null);
                         }
                         else if (secondSeason == null)
-                            system.createLadder(system.getMatchesByYear(firstSeason, includeFinals, includeHomeAway));
+                            system.createLadder(system.getMatchesByYear(firstSeason, includeFinals, includeHomeAway), null);
                         else {
-                            system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway));
+                            system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway), null);
                         }
                     }
                     
                     command = input.nextLine();
-                    break;
+                    break; 
+                    
                 case "minorpremiers":
                 case "mp":
                     System.out.println("");

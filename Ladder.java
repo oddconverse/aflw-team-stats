@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Ladder {
     private ArrayList<Team> teams;
-    private final String[] allParameters = {"pos", "name", "pl", "w", "l", "d", "pts", "pf", "pa", "%", "w%"};
+    public final String[] allParameters = {"pos", "name", "pl", "w", "l", "d", "pts", "pf", "pa", "%", "w%"};
 
     public Ladder() {
         this.teams = new ArrayList<Team>();
