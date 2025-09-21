@@ -20,18 +20,16 @@ public class CommandLine {
                 words.add(stk.nextToken().trim().toLowerCase());
             }
             switch (firstWord.toLowerCase()) {
-                case "help":
+                case "help" -> {
                     String defaultFormat = "| %s: %s |";
                     System.out.println("|----------------------------------LIST OF COMMANDS-------------------------------------------|");
                     System.out.println(String.format("| %60s |", "Parameters listed between <> arrows. Default values marked with an = after parameter name."));
                     System.out.println(String.format(defaultFormat, "headtohead <team1> <team2>", "Command will output a head to head comparison between two teams."));
                     System.out.println(String.format(defaultFormat, "ladder <firstSeason> <secondSeason> <includefinals=true> <includehomeandaway=true>", "Command will output a ladder of all matches played during and between the given seasons."));
                     command = input.nextLine();
-                    break;
-                case "headtohead":
-                case "head2head":
-                case "htoh":
-                case "h2h":
+                }
+                // HEAD TO HEAD
+                case "headtohead", "head2head", "htoh", "h2h" -> {
                     String team1 = null;
                     String team2 = null;
                     boolean displayMatches = false;
@@ -48,11 +46,10 @@ public class CommandLine {
                     }
                     system.displayHeadToHead(team1, team2, displayMatches);
                     command = input.nextLine();
-                    break;
-                case "ladder":
-                case "l":
-                // TODO: implement per round commands
-                // TODO: ALSO DOES NOT ACCOUNT FOR CONFERENCES
+                }
+                // LADDER
+                case "ladder", "l" -> {
+                    // TODO: implement per round commands
                     if (words.isEmpty()) {
                         system.createLadder(system.getAllMatches(), null);
                     }
@@ -74,52 +71,17 @@ public class CommandLine {
                             }
                             // switch should be moved somewhere better
                             switch (word) {
-                                case "nofinals":
-                                case "nf":
-                                    includeFinals = false;
-                                    break;
-                                case "finals":
-                                case "f":
-                                case "nohomeaway":
-                                case "nha":
-                                case "nohome+away":
-                                case "nohome&away":
-                                case "noh+a":
-                                case "noh&a":
+                                case "nofinals", "nf" -> includeFinals = false;
+                                case "finals", "f", "nohomeaway", "nha", "nohome+away", "nohome&away", "noh+a", "noh&a" -> {
                                     includeFinals = true;
                                     includeHomeAway = false;
-                                    break;
-                                case "includefinals":
-                                case "incfinals":
-                                case "if":
-                                case "incf":
-                                    includeFinals = true;
-                                    break;
-                                case "homeaway":
-                                case "ha":
-                                case "home&away":
-                                case "h&a":
-                                case "home+away":
-                                case "h+a":
+                                }
+                                case "includefinals", "incfinals", "if", "incf" -> includeFinals = true;
+                                case "homeaway", "ha", "home&away", "h&a", "home+away", "h+a" -> {
                                     includeHomeAway = true;
                                     includeFinals = false;
-                                    break;
-                                case "includehomeandaway":
-                                case "inchomeandaway":
-                                case "includehomeaway":
-                                case "inchomeaway":
-                                case "iha":
-                                case "incha":
-                                case "includehome+away":
-                                case "inchome+away":
-                                case "ih+a":
-                                case "inch+a":
-                                case "includehome&away":
-                                case "inchome&away":
-                                case "ih&a":
-                                case "inch&a":
-                                    includeHomeAway = true;
-                                    break;
+                                }
+                                case "includehomeandaway", "inchomeandaway", "includehomeaway", "inchomeaway", "iha", "incha", "includehome+away", "inchome+away", "ih+a", "inch+a", "includehome&away", "inchome&away", "ih&a", "inch&a" -> includeHomeAway = true;
                             }
                         }
                         if (firstSeason == null) 
@@ -131,21 +93,18 @@ public class CommandLine {
                     }
                     
                     command = input.nextLine();
-                    break; 
-                    
-                case "minorpremiers":
-                case "mp":
+                }
+                case "minorpremiers", "mp" -> {
                     System.out.println("");
                     command = input.nextLine();
-                    break;
-                case "premiers":
-                case "p":
+                }
+                case "premiers", "p" -> {
                     System.out.println(system.getPremiers());
                     command = input.nextLine();
-                    break;
-                case "records":
-                case "r":
-                // 21/9/25: command now functional
+                }
+                // RECORDS
+                case "records", "r" -> {
+                    // 21/9/25: command now functional
                     String teamName = null;
                     ArrayList<String> recordList = new ArrayList<String>();
                     String firstSeason = null;
@@ -234,16 +193,16 @@ public class CommandLine {
                         }
                     }
                     command = input.nextLine();
-                    break;
-                case "exit":
-                case "x":
+                }
+                case "exit", "x" -> {
                     System.out.println("Thank you for using the AFLW Team Stats centre.");
                     exit = true;
-                    break;
-                default: 
+                }
+                     
+                default -> {
                     System.out.println("Unknown command. Type \"help\" for a list of commands.");
                     command = input.nextLine();
-                    break;
+                }
             }
         }
         input.close();

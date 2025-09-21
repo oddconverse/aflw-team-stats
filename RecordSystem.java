@@ -18,8 +18,8 @@ public class RecordSystem {
     public static final String[] conferenceATeams2020 = {"North Melbourne", "Greater Western Sydney", "Brisbane", "Gold Coast", "Adelaide", "Geelong", "Richmond"};
 
     public RecordSystem() {
-        this.matches = new ArrayList<Match>();
-        this.scores = new ArrayList<Score>();
+        this.matches = new ArrayList<>();
+        this.scores = new ArrayList<>();
     }
     // add score to array
     public void addScore(Score score) {
@@ -53,6 +53,7 @@ public class RecordSystem {
         saveScores();
     }
     // save matches to text file to open later
+    @SuppressWarnings("ConvertToTryWithResources")
     public void saveMatches() {
         try {
             File matchFile = new File("matches.txt");
@@ -62,11 +63,12 @@ public class RecordSystem {
             }
             matchWriter.close();
         }
-        catch (Exception e) {
+        catch (IOException e) {
             System.out.println(e);
         }
     }
     // save scores to file 
+    @SuppressWarnings("ConvertToTryWithResources")
     public void saveScores() {
         try {
             File scoresFile = new File("scores.txt");
@@ -76,10 +78,11 @@ public class RecordSystem {
             }
             scoreWriter.close();
         }
-        catch (Exception e) {
+        catch (IOException e) {
             System.out.println(e);
         }
     }
+    @SuppressWarnings("ConvertToTryWithResources")
     public void loadMatches() {
         try {
             File scoreFile = new File("scores.txt");
@@ -97,7 +100,7 @@ public class RecordSystem {
             scoreInfile.close();
             System.out.println("Load successful. Loaded from: " + scoreFile.getAbsolutePath());
         } 
-        catch (Exception e) {
+        catch (IOException e) {
             System.out.println("Reading scores failed. Restart now.");
         }
 
@@ -116,7 +119,7 @@ public class RecordSystem {
             matchInfile.close();
             System.out.println("Load successful. Loaded from: " + matchFile.getAbsolutePath());
         }
-        catch (Exception e) {
+        catch (IOException e) {
             System.out.println(e);
         }
 
@@ -478,35 +481,20 @@ public class RecordSystem {
     }
     public boolean isNumeric(String str) {
         try {
-            Double.parseDouble(str);
+            Double.valueOf(str);
             return true;
         }
-        catch (Exception e) {
+        catch (NumberFormatException e) {
             return false;
         }
     }
     public ArrayList<Match> getMatchesByYears(String startYear, String endYear) {
-        startYear = abbreviationToSeason(startYear);
-        endYear = abbreviationToSeason(endYear);
-        ArrayList<Match> results = new ArrayList<Match>();
-        boolean seasonFlag = false;
-        for (Match match : getAllMatches()) {
-            if (match.getRound().contains(startYear)) {
-                seasonFlag = true;
-            }
-            if (match.getRound().contains(endYear)) {
-                seasonFlag = false;
-            }
-            if ((match.getRound().contains(endYear) || seasonFlag)) {
-                results.add(match);
-            }
-        }
-        return results;
+        return getMatchesByYears(startYear, endYear, getAllMatches());
     }
     public ArrayList<Match> getMatchesByYears(String startYear, String endYear, ArrayList<Match> matchSet) {
         startYear = abbreviationToSeason(startYear);
         endYear = abbreviationToSeason(endYear);
-        ArrayList<Match> results = new ArrayList<Match>();
+        ArrayList<Match> results = new ArrayList<>();
         boolean seasonFlag = false;
         for (Match match : matchSet) {
             if (match.getRound().contains(startYear)) {
@@ -523,19 +511,12 @@ public class RecordSystem {
     }
     
     public ArrayList<Match> getMatchesByYear(String year) {
-        year = abbreviationToSeason(year);
-        ArrayList<Match> results = new ArrayList<Match>();
-        for (Match match : getAllMatches()) {
-            if (match.getRound().contains(year)) {
-                results.add(match);
-            }
-        }
-        return results;
+        return getMatchesByYear(year, getAllMatches());
     }
 
     public ArrayList<Match> getMatchesByYear(String year, ArrayList<Match> inputArray) {
         year = abbreviationToSeason(year);
-        ArrayList<Match> results = new ArrayList<Match>();
+        ArrayList<Match> results = new ArrayList<>();
         for (Match match : inputArray) {
             if (match.getRound().contains(year)) {
                 results.add(match);
@@ -544,20 +525,10 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Match> filterMatchesByFinals(boolean includeFinals, boolean includeHomeAway) {
-        ArrayList<Match> results = new ArrayList<Match>();
-        for (Match match : getAllMatches()) {
-            // checks if match took place in the year being checked
-            // then if both includeFinals and includeHomeAway are true
-            // OR if match is a final and includeFinals is true
-            // OR if match is a home and away game and includeHomeAway is true
-            if ((includeFinals && includeHomeAway) || (match.isFinal() && includeFinals) || (!match.isFinal() && includeHomeAway)) {
-                results.add(match);
-            }
-        }
-        return results;
+        return filterMatchesByFinals(includeFinals, includeHomeAway, getAllMatches());
     }
     public ArrayList<Match> filterMatchesByFinals(boolean includeFinals, boolean includeHomeAway, ArrayList<Match> inputArray) {
-        ArrayList<Match> results = new ArrayList<Match>();
+        ArrayList<Match> results = new ArrayList<>();
         for (Match match : inputArray) {
             // checks if match took place in the year being checked
             // then if both includeFinals and includeHomeAway are true
@@ -571,16 +542,7 @@ public class RecordSystem {
     }
 
     public ArrayList<Match> getMatchesByTeam(String team) {
-        if (team == null) {
-            return getAllMatches();
-        }
-        ArrayList<Match> results = new ArrayList<Match>();
-        for (Match match : getAllMatches()) {
-            if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
-                results.add(match);
-            }
-        }
-        return results;
+        return getMatchesByTeam(team, getAllMatches());
     }
     public ArrayList<Match> getMatchesByTeam(String team, ArrayList<Match> inputArray) {
         if (team == null) {
@@ -595,13 +557,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Score> getAllScoresByTeam(String teamName) {
-        ArrayList<Score> results = new ArrayList<Score>();
-        for (Score score : getAllScores()) {
-            if (score.getTeam().equals(teamName)) {
-                results.add(score);
-            }
-        }
-        return results;
+        return getAllScoresByTeam(teamName, getAllScores());
     }
     public ArrayList<Score> getAllScoresByTeam(String teamName, ArrayList<Score> inputArray) {
         ArrayList<Score> results = new ArrayList<Score>();
@@ -612,14 +568,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Score> getWinningScoresByTeam(String teamName) {
-        ArrayList<Score> results = new ArrayList<Score>();
-        for (Score score : getAllScores()) {
-            Match match = getMatch(score.getMatchID());
-            if (match.getWinningTeamName().equals(teamName)) {
-                results.add(score);
-            }
-        }
-        return results;
+        return getWinningScoresByTeam(teamName, getAllScores());
     }
     public ArrayList<Score> getWinningScoresByTeam(String teamName, ArrayList<Score> inputArray) {
         ArrayList<Score> results = new ArrayList<Score>();
@@ -632,14 +581,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Score> getLosingScoresByTeam(String teamName) {
-        ArrayList<Score> results = new ArrayList<Score>();
-        for (Score score : getAllScores()) {
-            Match match = getMatch(score.getMatchID());
-            if (match.getLosingTeamName().equals(teamName)) {
-                results.add(score);
-            }
-        }
-        return results;
+        return getLosingScoresByTeam(teamName, getAllScores());
     }
     public ArrayList<Score> getLosingScoresByTeam(String teamName, ArrayList<Score> inputArray) {
         ArrayList<Score> results = new ArrayList<Score>();
@@ -652,13 +594,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Score> getScoresByYear(String year) {
-        ArrayList<Score> results = new ArrayList<Score>();
-        for (Score score : scores) {
-            Match match = getMatch(score.getMatchID());
-            if (match.getRound().contains(year))
-                results.add(score);
-        }
-        return results;
+        return getScoresByYear(year, getAllScores());
     }
     public ArrayList<Score> getScoresByYear(String year, ArrayList<Score> inputArray) {
         ArrayList<Score> results = new ArrayList<Score>();
@@ -670,21 +606,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Score> getScoresByYears(String firstYear, String lastYear) {
-        ArrayList<Score> results = new ArrayList<Score>();
-        boolean seasonFlag = false;
-        for (Score score : scores) {
-            Match currentMatch = getMatch(score.getMatchID());
-            if (currentMatch.getRound().contains(firstYear)) 
-                seasonFlag = true;
-            else if (currentMatch.getRound().contains(lastYear)) {
-                results.add(score);
-                seasonFlag = false;
-            }
-            else if (seasonFlag) {
-                results.add(score);
-            }
-        }
-        return results;
+        return getScoresByYears(firstYear, lastYear, getAllScores());
     }
     public ArrayList<Score> getScoresByYears(String firstYear, String lastYear, ArrayList<Score> inputArray) {
         ArrayList<Score> results = new ArrayList<Score>();
@@ -704,13 +626,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Score> getWinningScores() {
-        ArrayList<Score> results = new ArrayList<Score>();
-        for (Score score : getAllScores()) {
-            Match match = getMatch(score.getMatchID());
-            if (match.getWinningTeamName().equals(score.getTeam()))
-                results.add(score);
-        }
-        return results;
+        return getWinningScores(getAllScores());
     }
     public ArrayList<Score> getWinningScores(ArrayList<Score> inputArray) {
         ArrayList<Score> results = new ArrayList<Score>();
@@ -722,13 +638,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Score> getLosingScores() {
-        ArrayList<Score> results = new ArrayList<Score>();
-        for (Score score : getAllScores()) {
-            Match match = getMatch(score.getMatchID());
-            if (match.getLosingTeamName().equals(score.getTeam()))
-                results.add(score);
-        }
-        return results;
+        return getLosingScores(getAllScores());
     }
     public ArrayList<Score> getLosingScores(ArrayList<Score> inputArray) {
         ArrayList<Score> results = new ArrayList<Score>();
@@ -792,71 +702,23 @@ public class RecordSystem {
 
     public String stringToRecord(String str) {
         try {
-            switch (str.toLowerCase()) {
+            return switch (str.toLowerCase()) {
                 // greatest winning margin abbreviations
-                case "greatest margin":
-                case "greatest winning margin":
-                case "margin":
-                case "gm":
-                    return "Greatest Winning Margin";
+                case "greatest margin", "greatest winning margin", "margin", "gm" -> "Greatest Winning Margin";
                 // highest team score abbreviations
-                case "high score":
-                case "highest score":
-                case "hs":
-                case "score":
-                case "top score":
-                case "highscore":
-                case "topscore":
-                case "ts":
-                case "highest team score":
-                case "hts":
-                case "highteamscore":
-                case "high team score":
-                case "highestteamscore":
-                    return "Highest Team Score";
+                case "high score", "highest score", "hs", "score", "top score", "highscore", "topscore", "ts", "highest team score", "hts", "highteamscore", "high team score", "highestteamscore" -> "Highest Team Score";
                 // highest combined score abbreviations
-                case "hcs":
-                case "highest combined score":
-                case "high combined score":
-                case "top combined score":
-                case "tcs":
-                    return "Highest Combined Score";
+                case "hcs", "highest combined score", "high combined score", "top combined score", "tcs" -> "Highest Combined Score";
                 // lowest score abbreviations
-                case "ls":
-                case "lowest score":
-                case "low score":
-                case "lowscore":
-                case "lowestscore":
-                case "lowest team score":
-                case "low team score":
-                case "lts":
-                case "lowestteamscore":
-                case "lowteamscore":
-                    return "Lowest Team Score";
+                case "ls", "lowest score", "low score", "lowscore", "lowestscore", "lowest team score", "low team score", "lts", "lowestteamscore", "lowteamscore" -> "Lowest Team Score";
                 // lowest combined score abbreviations
-                case "lowest combined score":
-                case "lcs":
-                case "low combined score":
-                case "lowestcombinedscore":
-                case "lowcombinedscore":
-                    return "Lowest Combined Score";
+                case "lowest combined score", "lcs", "low combined score", "lowestcombinedscore", "lowcombinedscore" -> "Lowest Combined Score";
                 // highest losing score abbreviations
-                case "highest losing score":
-                case "hls":
-                case "highestlosingscore":
-                case "highlosingscore":
-                case "high losing score":
-                    return "Highest Losing Score";
+                case "highest losing score", "hls", "highestlosingscore", "highlosingscore", "high losing score" -> "Highest Losing Score";
                 // lowest winning score abbreviations
-                case "lowest winning score":
-                case "lowestwinningscore":
-                case "lws":
-                case "lowwinningscore":
-                case "low winning score":
-                    return "Lowest Winning Score";
-                default:
-                    return null;
-            }
+                case "lowest winning score", "lowestwinningscore", "lws", "lowwinningscore", "low winning score" -> "Lowest Winning Score";
+                default -> null;
+            };
         }
         catch (Exception e) {
             return null;
@@ -864,173 +726,82 @@ public class RecordSystem {
     }
     public String abbreviationToName(String abbr) {
         try {
-            switch (abbr.toLowerCase()) {
-                case "a":
-                case "ad":
-                case "ade":
-                case "adel":
-                case "adelaide":
-                    return "Adelaide";
-                case "b":
-                case "br":
-                case "bris":
-                case "brisbane":
-                    return "Brisbane";
-                case "ca":
-                case "carl":
-                case "carlton":
-                    return "Carlton";
-                case "co":
-                case "coll":
-                case "collingwood":
-                    return "Collingwood";
-                case "e":
-                case "es":
-                case "ess":
-                case "essendon":
-                    return "Essendon";
-                case "f":
-                case "fr":
-                case "fre":
-                case "freo":
-                case "fremantle":
-                    return "Fremantle";
-                case "ge":
-                case "gee":
-                case "geelong":
-                    return "Geelong";
-                case "gc":
-                case "gold coast":
-                    return "Gold Coast";
-                case "gws":
-                case "greater western sydney":
-                    return "Greater Western Sydney";
-                case "h":
-                case "ha":
-                case "haw":
-                case "hawthorn":
-                    return "Hawthorn";
-                case "m":
-                case "me":
-                case "mel":
-                case "melb":
-                case "melbourne":
-                    return "Melbourne";
-                case "nm":
-                case "n":
-                case "north melbourne":
-                case "north":
-                case "kangaroos":
-                    return "North Melbourne";
-                case "p":
-                case "pa":
-                case "port":
-                case "port adelaide":
-                    return "Port Adelaide";
-                case "r":
-                case "ri":
-                case "rich":
-                case "richmond":
-                    return "Richmond";
-                case "st":
-                case "stk":
-                case "st kilda":
-                    return "St Kilda";
-                case "ss":
-                case "syd":
-                case "sydney":
-                case "sydney swans":
-                    return "Sydney Swans";
-                case "wc":
-                case "wce":
-                case "west coast":
-                case "west coast eagles":
-                    return "West Coast Eagles";
-                case "footscray":
-                case "wb":
-                case "western bulldogs":
-                    return "Western Bulldogs";
-                default:
-                    return null;
-            }
+            return switch (abbr.toLowerCase()) {
+                // adelaide
+                case "a", "ad", "ade", "adel", "adelaide" -> "Adelaide";
+                // brisbane
+                case "b", "br", "bris", "brisbane" -> "Brisbane";
+                // carlton
+                case "ca", "carl", "carlton" -> "Carlton";
+                // collingwood
+                case "co", "coll", "collingwood" -> "Collingwood";
+                // essendon
+                case "e", "es", "ess", "essendon" -> "Essendon";
+                // fremantle
+                case "f", "fr", "fre", "freo", "fremantle" -> "Fremantle";
+                // geelong
+                case "ge", "gee", "geelong" -> "Geelong";
+                // gold coast
+                case "gc", "gcs", "gold coast" -> "Gold Coast";
+                // greater western sydney
+                case "gws", "greater western sydney" -> "Greater Western Sydney";
+                // hawthorn
+                case "h", "ha", "haw", "hawthorn" -> "Hawthorn";
+                // melbourne
+                case "m", "me", "mel", "melb", "melbourne" -> "Melbourne";
+                // north melbourne
+                case "nm", "n", "north melbourne", "north", "kangaroos" -> "North Melbourne";
+                // port adelaide
+                case "p", "pa", "port", "port adelaide" -> "Port Adelaide";
+                // richmond
+                case "r", "ri", "rich", "richmond" -> "Richmond";
+                // st kilda
+                case "st", "stk", "st kilda" -> "St Kilda";
+                // sydney
+                case "ss", "syd", "sydney", "sydney swans" -> "Sydney Swans";
+                // west coast eagles
+                case "wc", "wce", "west coast", "west coast eagles" -> "West Coast Eagles";
+                // western bulldogs
+                case "footscray", "wb", "western bulldogs" -> "Western Bulldogs";
+                default -> null;
+            };
         }
         catch (Exception e) {
             return null;
         }
     }
     public boolean isSeason(String str) {
-
-        switch (str.toLowerCase()) {
-            case "s1":
-            case "season1":
-            case "2017":
-            case "s2":
-            case "season2":
-            case "2018":
-            case "s3":
-            case "season3":
-            case "2019":
-            case "s4":
-            case "season4":
-            case "2020": 
-            case "s5":
-            case "season5":
-            case "2021":
-            case "2022":
-            case "s6":
-            case "s7":
-            case "season7":
-            case "season6":
-            case "s8":
-            case "season8":
-            case "2023":
-            case "s9":
-            case "season9":
-            case "2024":
-            case "s10":
-            case "season10":
-            case "2025":
-                return true;
-            default:
-                return false;
-        }
+        return switch (str.toLowerCase()) {
+            // all seasons return true
+            case "s1", "season1", "2017", "s2", "season2", "2018", "s3", "season3", "2019", "s4", "season4", "2020", "s5", "season5", "2021", "2022", "s6", "s7", "season7", "season6", "s8", "season8", "2023", "s9", "season9", "2024", "s10", "season10", "2025" -> true;
+            default -> false;
+        };
     }
     public String abbreviationToSeason(String abbr) {
         try {
-            switch (abbr.toLowerCase()) {
-                case "s1":
-                case "season1":
-                    return "2017";
-                case "s2":
-                case "season2":
-                    return "2018";
-                case "s3":
-                case "season3":
-                    return "2019";
-                case "s4":
-                case "season4":
-                    return "2020";
-                case "s5":
-                case "season5":
-                    return "2021";
-                case "s6":
-                case "season6":
-                    return "Season 6";
-                case "s7":
-                case "season7":
-                    return "Season 7";
-                case "s8":
-                case "season8":
-                    return "2023";
-                case "s9":
-                case "season9":
-                    return "2024";
-                case "s10":
-                case "season10":
-                    return "2025";
-                default:
-                    return abbr;
-            }
+            return switch (abbr.toLowerCase()) {
+                // 2017
+                case "s1", "season1" -> "2017";
+                // 2018
+                case "s2", "season2" -> "2018";
+                // 2019
+                case "s3", "season3" -> "2019";
+                // 2020
+                case "s4", "season4" -> "2020";
+                // 2021
+                case "s5", "season5" -> "2021";
+                // 2022 season 6
+                case "s6", "season6" -> "Season 6";
+                // 2022 season 7
+                case "s7", "season7" -> "Season 7";
+                // 2023
+                case "s8", "season8" -> "2023";
+                // 2024
+                case "s9", "season9" -> "2024";
+                // 2025
+                case "s10", "season10" -> "2025";
+                default -> abbr;
+            };
         }
         catch (Exception e) {
             return null;
