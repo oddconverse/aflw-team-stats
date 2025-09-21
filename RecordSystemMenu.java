@@ -124,6 +124,10 @@ public class RecordSystemMenu {
                     System.out.println("Round name: ");
                     String roundName = input.nextLine();
                     while (!matchExitFlag) {
+                        String lastMatchID = system.getAllMatches().get(system.getAllMatches().size() - 1).getID();
+                        String matchID = String.format("M%6d", Integer.parseInt(lastMatchID.substring(1, lastMatchID.length())) + 1).replace(' ', '0');
+                        String lastScoreID = system.getAllScores().get(system.getAllScores().size() - 1).getID();
+                        int scoreIDNumber = Integer.parseInt(lastScoreID.substring(1, lastScoreID.length())) + 1;
                         System.out.println("Home team name: ");
                         String homeTeamName = nameTranslation(input.nextLine());
                         System.out.println("Home team goals: ");
@@ -136,8 +140,15 @@ public class RecordSystemMenu {
                         int awayTeamGoals = Integer.parseInt(input.nextLine());
                         System.out.println("Away team behinds: ");
                         int awayTeamBehinds = Integer.parseInt(input.nextLine());
-                        Match currentMatch = new Match(roundName, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
-                        system.addMatch(roundName, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
+                        Score homeScore = new Score(String.format("S%6d", scoreIDNumber).replace(' ', '0'), matchID, homeTeamName, homeTeamGoals, homeTeamBehinds);
+                        scoreIDNumber++;
+                        Score awayScore = new Score(String.format("S%6d", scoreIDNumber).replace(' ', '0'), matchID, awayTeamName, awayTeamGoals, awayTeamBehinds);
+                        Match currentMatch = new Match(matchID, roundName, homeScore, awayScore);
+                        System.out.println(homeScore);
+                        System.out.println(awayScore);
+                        system.addScore(homeScore);
+                        system.addScore(awayScore);
+                        system.addMatch(currentMatch);
                         System.out.println("Match added successfully. " + currentMatch);
                         System.out.println("Add another match from same round? (y)/n");
                         String matchSelection = input.nextLine();
@@ -151,7 +162,7 @@ public class RecordSystemMenu {
                     break;
                     
                 case "2":
-                    system.saveMatches();
+                    system.saveData();
                     selection = selectOption(input);
                     break;
                 case "3":
@@ -181,7 +192,7 @@ public class RecordSystemMenu {
                     selection = selectOption(input);
                     break;
                 case "5":
-                    system.createLadder(system.getAllMatches());
+                    system.createLadder(system.getAllMatches(), null);
                     selection = selectOption(input);
                     break;
                 case "6":

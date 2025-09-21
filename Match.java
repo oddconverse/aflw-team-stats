@@ -1,31 +1,32 @@
 // Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
 
 public class Match {
+    private String id;
     private String round;
-    private String homeTeamName;
-    private int homeTeamGoals;
-    private int homeTeamBehinds;
-    private String awayTeamName;
-    private int awayTeamGoals;
-    private int awayTeamBehinds;
+    private Score homeTeamScore;
+    private Score awayTeamScore;
 
-    public Match(String round, String homeTeamName, int homeTeamGoals, int homeTeamBehinds, String awayTeamName, int awayTeamGoals, int awayTeamBehinds) {
+    public Match(String matchID, String round, String homeScoreID, String homeTeamName, int homeTeamGoals, int homeTeamBehinds, String awayScoreID, String awayTeamName, int awayTeamGoals, int awayTeamBehinds) {
+        this.id = matchID;
         this.round = round;
-        this.homeTeamName = homeTeamName;
-        this.homeTeamGoals = homeTeamGoals;
-        this.homeTeamBehinds = homeTeamBehinds;
-        this.awayTeamName = awayTeamName;
-        this.awayTeamGoals = awayTeamGoals;
-        this.awayTeamBehinds = awayTeamBehinds;
+        this.homeTeamScore = new Score(homeScoreID, matchID, homeTeamName, homeTeamGoals, homeTeamBehinds);
+        this.awayTeamScore = new Score(awayScoreID, matchID, awayTeamName, awayTeamGoals, awayTeamBehinds);
+    }
+
+    public Match(String matchID, String round, Score homeTeamScore, Score awayTeamScore) {
+        this.id = matchID;
+        this.round = round;
+        this.homeTeamScore = homeTeamScore;
+        this.awayTeamScore = awayTeamScore;
     }
 
     // determines home team score based on goals and behinds
     public int getHomeScore() {
-        return homeTeamGoals * 6 + homeTeamBehinds;
+        return homeTeamScore.getTotalScore();
     }
     // determines away team score based on goals and behinds
     public int getAwayScore() {
-        return awayTeamGoals * 6 + awayTeamBehinds;
+        return awayTeamScore.getTotalScore();
     }
     public int getWinningScore() {
         //function assumes no draws, draws need to be accounted for later on
@@ -97,11 +98,11 @@ public class Match {
 
     public String toString() {
         if (homeTeamWin())
-            return String.format("%s: %s %d.%d (%d) def. %s %d.%d (%d)", round, homeTeamName, homeTeamGoals, homeTeamBehinds, getHomeScore(), awayTeamName, awayTeamGoals, awayTeamBehinds, getAwayScore());
+            return String.format("%s: %s %d.%d (%d) def. %s %d.%d (%d)", getRound(), getHomeTeamName(), getHomeTeamGoals(), getHomeTeamBehinds(), getHomeScore(), getAwayTeamName(), getAwayTeamGoals(), getAwayTeamBehinds(), getAwayScore());
         else if (wasDrawn())
-            return String.format("%s: %s %d.%d (%d) drew with %s %d.%d (%d)", round, homeTeamName, homeTeamGoals, homeTeamBehinds, getHomeScore(), awayTeamName, awayTeamGoals, awayTeamBehinds, getAwayScore());
+            return String.format("%s: %s %d.%d (%d) drew with %s %d.%d (%d)", getRound(), getHomeTeamName(), getHomeTeamGoals(), getHomeTeamBehinds(), getHomeScore(), getAwayTeamName(), getAwayTeamGoals(), getAwayTeamBehinds(), getAwayScore());
         else 
-            return String.format("%s: %s %d.%d (%d) def. by %s %d.%d (%d)", round, homeTeamName, homeTeamGoals, homeTeamBehinds, getHomeScore(), awayTeamName, awayTeamGoals, awayTeamBehinds, getAwayScore());
+            return String.format("%s: %s %d.%d (%d) def. by %s %d.%d (%d)", getRound(), getHomeTeamName(), getHomeTeamGoals(), getHomeTeamBehinds(), getHomeScore(), getAwayTeamName(), getAwayTeamGoals(), getAwayTeamBehinds(), getAwayScore());
     }
     public String getSeason() {
         int startOfYearIndex = getRound().indexOf(",") + 2;
@@ -111,22 +112,31 @@ public class Match {
     public String getRound() {
         return round;
     }
+    public String getID() {
+        return id;
+    }
+    public String getHomeTeamScoreID() {
+        return homeTeamScore.getID();
+    }
     public String getHomeTeamName() {
-        return homeTeamName;
+        return homeTeamScore.getTeam();
     }
     public int getHomeTeamGoals() {
-        return homeTeamGoals;
+        return homeTeamScore.getGoals();
     }
     public int getHomeTeamBehinds() {
-        return homeTeamBehinds;
+        return homeTeamScore.getBehinds();
+    }
+    public String getAwayTeamScoreID() {
+        return awayTeamScore.getID();
     }
     public String getAwayTeamName() {
-        return awayTeamName;
+        return awayTeamScore.getTeam();
     }
     public int getAwayTeamGoals() {
-        return awayTeamGoals;
+        return awayTeamScore.getGoals();
     }
     public int getAwayTeamBehinds() {
-        return awayTeamBehinds;
+        return awayTeamScore.getBehinds();
     }
 }

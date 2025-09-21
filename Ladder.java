@@ -64,14 +64,11 @@ public class Ladder {
                     break;
             }
         }
-        System.out.println(String.format("|%102s", String.format("%-51s|", "Hi bro i hope this works").replace(' ', '-')));
+        System.out.println(String.format("|%102s|", "").replace(' ', '-'));
         System.out.println(String.format(teamOutputFormat.replace('d', 's').replace('f', 's'), "Pos", "Name", "Pl", "W", "L", "D", "Pts", "PF", "PA", "%", "W%"));
         System.out.println("|------|--------------------------|------|------|------|------|------|------|------|---------|---------|");
         for (int i = 0; i < teams.size(); i++) {
             System.out.println(String.format("| %4d | %s", i + 1, teams.get(i).ladderDisplay(teamOutputFormat, parameterList)));
-            if (i == 7) {
-                System.out.println(String.format("|%102s|", "TOP 8 PLAY FINALS").replace(' ', '-'));
-            }
         }
         System.out.println(String.format("|%102s|", "  ").replace(' ', '-'));;
         System.out.println();

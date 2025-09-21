@@ -12,25 +12,53 @@ import java.util.*;
 public class RecordSystem {
     // matches to be stored in array. DO NOT SORT. CLONE AND SORT AFTER
     private ArrayList<Match> matches;
+    private ArrayList<Score> scores;
 
     public static final String[] conferenceATeams2019 = {"Adelaide", "Fremantle", "Melbourne", "North Melbourne", "Western Bulldogs"};
     public static final String[] conferenceATeams2020 = {"North Melbourne", "Greater Western Sydney", "Brisbane", "Gold Coast", "Adelaide", "Geelong", "Richmond"};
 
     public RecordSystem() {
         this.matches = new ArrayList<Match>();
+        this.scores = new ArrayList<Score>();
+    }
+    // add score to array
+    public void addScore(Score score) {
+        scores.add(score);
+    }
+    public void addScore(String scoreID, String matchID, String teamName, int goals, int behinds) {
+        scores.add(new Score(scoreID, matchID, teamName, goals, behinds));
+    }
+    // find score in arraylist using id
+    public Score getScore(String id) {
+        for (Score score : scores) {
+            if (score.getID().equals(id)) {
+                return score;
+            }
+        }
+        return null;
     }
     // add match to array
-    public void addMatch(String round, String homeTeamName, int homeTeamGoals, int homeTeamBehinds, String awayTeamName, int awayTeamGoals, int awayTeamBehinds) {
-        matches.add(new Match(round, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds));
+    public void addMatch(String matchID, String round, String homeScoreID, String homeTeamName, int homeTeamGoals, int homeTeamBehinds, String awayScoreID, String awayTeamName, int awayTeamGoals, int awayTeamBehinds) {
+        matches.add(new Match(matchID, round, homeScoreID, homeTeamName, homeTeamGoals, homeTeamBehinds, awayScoreID, awayTeamName, awayTeamGoals, awayTeamBehinds));
+    }
+    public void addMatch(String matchID, String round, Score homeScore, Score awayScore) {
+        matches.add(new Match(matchID, round, homeScore, awayScore));
+    }
+    public void addMatch(Match match) {
+        matches.add(match);
+    }
+    // save all data
+    public void saveData() {
+        saveMatches();
+        saveScores();
     }
     // save matches to text file to open later
     public void saveMatches() {
         try {
-            File matchFile = new File("data.txt");
+            File matchFile = new File("matches.txt");
             FileWriter matchWriter = new FileWriter(matchFile);
             for (Match match : matches) {
-                Match currentMatch = match;
-                matchWriter.write(String.format("%s; %s; %d; %d; %s; %d; %d\n", currentMatch.getRound(), currentMatch.getHomeTeamName(), currentMatch.getHomeTeamGoals(), currentMatch.getHomeTeamBehinds(), currentMatch.getAwayTeamName(), currentMatch.getAwayTeamGoals(), currentMatch.getAwayTeamBehinds()));
+                matchWriter.write(String.format("%s; %s; %s; %s;\n", match.getID(), match.getRound(), match.getHomeTeamScoreID(), match.getAwayTeamScoreID()));
             }
             matchWriter.close();
         }
@@ -38,24 +66,56 @@ public class RecordSystem {
             System.out.println(e);
         }
     }
-
+    // save scores to file 
+    public void saveScores() {
+        try {
+            File scoresFile = new File("scores.txt");
+            FileWriter scoreWriter = new FileWriter(scoresFile);
+            for (Score score : scores) {
+                scoreWriter.write(String.format("%s; %s; %s; %d; %d;\n", score.getID(), score.getMatchID(), score.getTeam(), score.getGoals(), score.getBehinds()));
+            }
+            scoreWriter.close();
+        }
+        
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
     public void loadMatches() {
         try {
-            File matchFile = new File("data.txt");
+            File scoreFile = new File("scores.txt");
+            Scanner scoreInfile = new Scanner(scoreFile);
+            while (scoreInfile.hasNextLine()) {
+                String s = scoreInfile.nextLine();
+                StringTokenizer stk = new StringTokenizer(s, ";");
+                String scoreID = stk.nextToken().trim();
+                String matchID = stk.nextToken().trim();
+                String teamName = stk.nextToken().trim();
+                int goals = Integer.parseInt(stk.nextToken().trim());
+                int behinds = Integer.parseInt(stk.nextToken().trim());
+                addScore(scoreID, matchID, teamName, goals, behinds);
+            }
+            scoreInfile.close();
+            System.out.println("Load successful. Loaded from: " + scoreFile.getAbsolutePath());
+        } 
+        catch (Exception e) {
+            System.out.println("Reading scores failed. Restart now.");
+        }
+
+        try {
+            File matchFile = new File("matches.txt");
             Scanner matchInfile = new Scanner(matchFile);
             while (matchInfile.hasNextLine()) {
                 String s = matchInfile.nextLine();
                 StringTokenizer stk = new StringTokenizer(s, ";");
+                String matchID = stk.nextToken().trim();
                 String round = stk.nextToken().trim();
-                String homeTeamName = stk.nextToken().trim();
-                int homeTeamGoals = Integer.parseInt(stk.nextToken().trim());
-                int homeTeamBehinds = Integer.parseInt(stk.nextToken().trim());
-                String awayTeamName = stk.nextToken().trim();
-                int awayTeamGoals = Integer.parseInt(stk.nextToken().trim());
-                int awayTeamBehinds = Integer.parseInt(stk.nextToken().trim());
-                addMatch(round, homeTeamName, homeTeamGoals, homeTeamBehinds, awayTeamName, awayTeamGoals, awayTeamBehinds);
+                Score homeScore = getScore(stk.nextToken().trim());
+                Score awayScore = getScore(stk.nextToken().trim());
+                addMatch(matchID, round, homeScore, awayScore);
             }
             matchInfile.close();
+            System.out.println("Load successful. Loaded from: " + matchFile.getAbsolutePath());
         }
         catch (Exception e) {
             System.out.println(e);
@@ -302,7 +362,6 @@ public class RecordSystem {
     }
 
     public void displayHeadToHead(String team1str, String team2str, boolean displayResults) {
-        // TODO: if a team has no wins, program crashes at greatest win checkpoint
         ArrayList<Match> results = new ArrayList<Match>();
         for (Match match : matches) {
             if ((match.getHomeTeamName().equals(team1str) || match.getHomeTeamName().equals(team2str)) && (match.getAwayTeamName().equals(team2str) || match.getAwayTeamName().equals(team1str))) {
@@ -530,9 +589,22 @@ public class RecordSystem {
         return returnString;
     }
 
+    public Match getMatch(String id) {
+        for (Match match : matches) {
+            if (match.getID().equals(id)) {
+                return match;
+            }
+        }
+        return null;
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public ArrayList<Match> getAllMatches() {
         return (ArrayList)matches.clone();
+    }
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public ArrayList<Score> getAllScores() {
+        return (ArrayList)scores.clone();
     }
 
     public Comparator<Match> stringToRecordComparator(String str) {
