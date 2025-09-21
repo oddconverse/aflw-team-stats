@@ -76,7 +76,6 @@ public class RecordSystem {
             }
             scoreWriter.close();
         }
-        
         catch (Exception e) {
             System.out.println(e);
         }
@@ -130,18 +129,7 @@ public class RecordSystem {
     // TODO: tie tracker no longer works
     // TODO: must code a "getDifferential" method to determine how ties should be handled
 
-    public void findRecord(String teamName, Comparator<Match> compareBy, int resultCount, String startSeason, String endSeason) {
-        ArrayList<Match> matchSet;
-        if (startSeason == null) {
-            matchSet = getMatchesByTeam(teamName);
-        }
-        else if (endSeason == null) {
-            matchSet = getMatchesByTeam(teamName, getMatchesByYear(startSeason));
-        }
-        else {
-            matchSet = getMatchesByTeam(teamName, getMatchesByYears(startSeason, endSeason));
-        }
-        
+    public void greatestWinningMargin(ArrayList<Match> matchSet, int resultCount) {
         // tieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
         // if it is tied, tieRank will not be updated
         // e.g two matches with the same winning margin should be displayed as:
@@ -151,29 +139,71 @@ public class RecordSystem {
         int tieRank = 0;
 
         // array sorted using byMargin comparator, note 0 - matchCount range is used as everything after matchCount is a null value
-        matchSet.sort(compareBy);
+        matchSet.sort(new GreatestMarginComparator());
         // for loop conditions allow loop to continue even after i = 5 to get through extra tied 5th place records, ensures that loop ends at some stage
-        int wrongResults = 0;
-        for (int i = 0; (i < resultCount || tieTracker == matchSet.get(i + wrongResults).getMargin()) && i + wrongResults < matchSet.size(); i++) {
-            // code below allows records to only be shown in the case where the selected team won the match
-            /* if (!matchSet.get(i + wrongResults).getWinningTeamName().equals(teamName) && teamName != null) {
-                wrongResults++;
-                i--;
-                continue;
-            }*/
-            // same as above but if team loses
-            /*if (!matchSet.get(i + wrongResults).getLosingTeamName().equals(teamName) && teamName != null) {
-                wrongResults++;
-                i--;
-                continue;
-            }*/
-            if (tieTracker != matchSet.get(i + wrongResults).getMargin())
+
+        for (int i = 0; (i < resultCount || tieTracker == matchSet.get(i).getMargin()) && i < matchSet.size(); i++) {
+            if (tieTracker != matchSet.get(i).getMargin())
                 tieRank = i + 1;
-            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i + wrongResults), matchSet.get(i + wrongResults).getWinningTeamName(), matchSet.get(i + wrongResults).getMargin()));
-            tieTracker = matchSet.get(i + wrongResults).getMargin();
+            System.out.println(String.format("%5d: %s. %s won by %d points.", tieRank, matchSet.get(i), matchSet.get(i).getWinningTeamName(), matchSet.get(i).getMargin()));
+            tieTracker = matchSet.get(i).getMargin();
         }
     }
 
+    public void highestTeamScore(ArrayList<Score> scoreSet, int resultCount) {
+        int tieTracker = 0;
+        int tieRank = 0;
+        scoreSet.sort(new HighScoreComparator());
+
+        for (int i = 0; (i < resultCount || tieTracker == scoreSet.get(i).getTotalScore()) && i < scoreSet.size(); i++) {
+            if (tieTracker != scoreSet.get(i).getTotalScore())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s", tieRank, getMatch(scoreSet.get(i).getMatchID())));
+            tieTracker = scoreSet.get(i).getTotalScore();
+        }
+    }
+
+    public void highestCombinedScore(ArrayList<Match> matchSet, int resultCount) {
+        int tieTracker = 0;
+        int tieRank = 0;
+        matchSet.sort(new HighCombinedScoreComparator());
+
+        for (int i = 0; (i < resultCount || tieTracker == matchSet.get(i).getCombinedScore()) && i < matchSet.size(); i++) {
+            Match match = matchSet.get(i);
+            if (tieTracker != matchSet.get(i).getCombinedScore()) {
+                tieRank = i + 1;
+            }
+            System.out.println(String.format("%5d: %s. Combined score: %d.%d (%d)", tieRank, match, match.getHomeTeamGoals() + match.getAwayTeamGoals(), match.getHomeTeamBehinds() + match.getAwayTeamBehinds(), match.getCombinedScore()));
+            tieTracker = match.getCombinedScore();
+        }
+    }
+    public void lowestTeamScore(ArrayList<Score> scoreSet, int resultCount) {
+        int tieTracker = 0;
+        int tieRank = 0;
+        scoreSet.sort(new LowScoreComparator());
+
+        for (int i = 0; (i < resultCount || tieTracker == scoreSet.get(i).getTotalScore()) && i < scoreSet.size(); i++) {
+            if (tieTracker != scoreSet.get(i).getTotalScore())
+                tieRank = i + 1;
+            System.out.println(String.format("%5d: %s", tieRank, getMatch(scoreSet.get(i).getMatchID())));
+            tieTracker = scoreSet.get(i).getTotalScore();
+        }
+
+    }
+    public void lowestCombinedScore(ArrayList<Match> matchSet, int resultCount) {
+        int tieTracker = 0;
+        int tieRank = 0;
+        matchSet.sort(new LowestCombinedScoreComparator());
+        for (int i = 0; (i < resultCount || tieTracker == matchSet.get(i).getCombinedScore()) && i < matchSet.size(); i++) {
+            Match match = matchSet.get(i);
+            if (tieTracker != matchSet.get(i).getCombinedScore()) {
+                tieRank = i + 1;
+            }
+            System.out.println(String.format("%5d: %s. Combined score: %d.%d (%d)", tieRank, match, match.getHomeTeamGoals() + match.getAwayTeamGoals(), match.getHomeTeamBehinds() + match.getAwayTeamBehinds(), match.getCombinedScore()));
+            tieTracker = match.getCombinedScore();
+        }
+    }
+    
     public void createLadder(ArrayList<Match> matchSet, Comparator<Team> orderBy) {
         
         // variable used to determine whether teams should be shown in conferences or not
@@ -460,7 +490,7 @@ public class RecordSystem {
         endYear = abbreviationToSeason(endYear);
         ArrayList<Match> results = new ArrayList<Match>();
         boolean seasonFlag = false;
-        for (Match match : matches) {
+        for (Match match : getAllMatches()) {
             if (match.getRound().contains(startYear)) {
                 seasonFlag = true;
             }
@@ -473,39 +503,29 @@ public class RecordSystem {
         }
         return results;
     }
-    public ArrayList<Match> getMatchesByYears(String startYear, String endYear, boolean includeFinals, boolean includeHomeAway) {
+    public ArrayList<Match> getMatchesByYears(String startYear, String endYear, ArrayList<Match> matchSet) {
         startYear = abbreviationToSeason(startYear);
         endYear = abbreviationToSeason(endYear);
         ArrayList<Match> results = new ArrayList<Match>();
         boolean seasonFlag = false;
-        for (Match match : matches) {
+        for (Match match : matchSet) {
             if (match.getRound().contains(startYear)) {
                 seasonFlag = true;
             }
             if (match.getRound().contains(endYear)) {
                 seasonFlag = false;
             }
-            // if statement checks if the match is within the desired timeframe
-            // then checks if includeFinals and includeHomeAway are both true
-            // OR checks if match isnt a final and includeHomeAway is true
-            // OR checks if match is a final and includeFinals is true
-            
-            if ((match.getRound().contains(endYear) || seasonFlag) && ((includeFinals && includeHomeAway) || (!match.isFinal() && includeHomeAway) || (match.isFinal() && includeFinals))) {
+            if ((match.getRound().contains(endYear) || seasonFlag)) {
                 results.add(match);
             }
-            /*else if ((match.getRound().contains(endYear) || seasonFlag) && !match.isFinal() && includeHomeAway) {
-                results.add(match);
-            }
-            else if ((match.getRound().contains(endYear) || seasonFlag) && match.isFinal() && includeFinals) {
-                results.add(match);
-            }*/
         }
-    return results;
+        return results;
     }
+    
     public ArrayList<Match> getMatchesByYear(String year) {
         year = abbreviationToSeason(year);
         ArrayList<Match> results = new ArrayList<Match>();
-        for (Match match : matches) {
+        for (Match match : getAllMatches()) {
             if (match.getRound().contains(year)) {
                 results.add(match);
             }
@@ -523,28 +543,39 @@ public class RecordSystem {
         }
         return results;
     }
-    public ArrayList<Match> getMatchesByYear(String year, boolean includeFinals, boolean includeHomeAway) {
-        year = abbreviationToSeason(year);
+    public ArrayList<Match> filterMatchesByFinals(boolean includeFinals, boolean includeHomeAway) {
         ArrayList<Match> results = new ArrayList<Match>();
-        for (Match match : matches) {
+        for (Match match : getAllMatches()) {
             // checks if match took place in the year being checked
             // then if both includeFinals and includeHomeAway are true
             // OR if match is a final and includeFinals is true
             // OR if match is a home and away game and includeHomeAway is true
-            if (match.getRound().contains(year) && ((includeFinals && includeHomeAway) || (match.isFinal() && includeFinals) || (!match.isFinal() && includeHomeAway))) {
+            if ((includeFinals && includeHomeAway) || (match.isFinal() && includeFinals) || (!match.isFinal() && includeHomeAway)) {
                 results.add(match);
             }
         }
         return results;
     }
-     
+    public ArrayList<Match> filterMatchesByFinals(boolean includeFinals, boolean includeHomeAway, ArrayList<Match> inputArray) {
+        ArrayList<Match> results = new ArrayList<Match>();
+        for (Match match : inputArray) {
+            // checks if match took place in the year being checked
+            // then if both includeFinals and includeHomeAway are true
+            // OR if match is a final and includeFinals is true
+            // OR if match is a home and away game and includeHomeAway is true
+            if ((includeFinals && includeHomeAway) || (match.isFinal() && includeFinals) || (!match.isFinal() && includeHomeAway)) {
+                results.add(match);
+            }
+        }
+        return results;
+    }
 
     public ArrayList<Match> getMatchesByTeam(String team) {
         if (team == null) {
             return getAllMatches();
         }
         ArrayList<Match> results = new ArrayList<Match>();
-        for (Match match : matches) {
+        for (Match match : getAllMatches()) {
             if (match.getHomeTeamName().equals(team) || match.getAwayTeamName().equals(team)) {
                 results.add(match);
             }
@@ -563,7 +594,159 @@ public class RecordSystem {
         }
         return results;
     }
-
+    public ArrayList<Score> getAllScoresByTeam(String teamName) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : getAllScores()) {
+            if (score.getTeam().equals(teamName)) {
+                results.add(score);
+            }
+        }
+        return results;
+    }
+    public ArrayList<Score> getAllScoresByTeam(String teamName, ArrayList<Score> inputArray) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : inputArray) {
+            if (score.getTeam().equals(teamName)) 
+                results.add(score);
+        }
+        return results;
+    }
+    public ArrayList<Score> getWinningScoresByTeam(String teamName) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : getAllScores()) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getWinningTeamName().equals(teamName)) {
+                results.add(score);
+            }
+        }
+        return results;
+    }
+    public ArrayList<Score> getWinningScoresByTeam(String teamName, ArrayList<Score> inputArray) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : inputArray) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getWinningTeamName().equals(teamName)) {
+                results.add(score);
+            }
+        }
+        return results;
+    }
+    public ArrayList<Score> getLosingScoresByTeam(String teamName) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : getAllScores()) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getLosingTeamName().equals(teamName)) {
+                results.add(score);
+            }
+        }
+        return results;
+    }
+    public ArrayList<Score> getLosingScoresByTeam(String teamName, ArrayList<Score> inputArray) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : inputArray) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getLosingTeamName().equals(teamName)) {
+                results.add(score);
+            }
+        }
+        return results;
+    }
+    public ArrayList<Score> getScoresByYear(String year) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : scores) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getRound().contains(year))
+                results.add(score);
+        }
+        return results;
+    }
+    public ArrayList<Score> getScoresByYear(String year, ArrayList<Score> inputArray) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : inputArray) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getRound().contains(year));
+                results.add(score);
+        }
+        return results;
+    }
+    public ArrayList<Score> getScoresByYears(String firstYear, String lastYear) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        boolean seasonFlag = false;
+        for (Score score : scores) {
+            Match currentMatch = getMatch(score.getMatchID());
+            if (currentMatch.getRound().contains(firstYear)) 
+                seasonFlag = true;
+            else if (currentMatch.getRound().contains(lastYear)) {
+                results.add(score);
+                seasonFlag = false;
+            }
+            else if (seasonFlag) {
+                results.add(score);
+            }
+        }
+        return results;
+    }
+    public ArrayList<Score> getScoresByYears(String firstYear, String lastYear, ArrayList<Score> inputArray) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        boolean seasonFlag = false;
+        for (Score score : inputArray) {
+            Match currentMatch = getMatch(score.getMatchID());
+            if (currentMatch.getRound().contains(firstYear)) 
+                seasonFlag = true;
+            else if (currentMatch.getRound().contains(lastYear)) {
+                results.add(score);
+                seasonFlag = false;
+            }
+            else if (seasonFlag) {
+                results.add(score);
+            }
+        }
+        return results;
+    }
+    public ArrayList<Score> getWinningScores() {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : getAllScores()) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getWinningTeamName().equals(score.getTeam()))
+                results.add(score);
+        }
+        return results;
+    }
+    public ArrayList<Score> getWinningScores(ArrayList<Score> inputArray) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : inputArray) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getWinningTeamName().equals(score.getTeam()))
+                results.add(score);
+        }
+        return results;
+    }
+    public ArrayList<Score> getLosingScores() {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : getAllScores()) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getLosingTeamName().equals(score.getTeam()))
+                results.add(score);
+        }
+        return results;
+    }
+    public ArrayList<Score> getLosingScores(ArrayList<Score> inputArray) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Score score : inputArray) {
+            Match match = getMatch(score.getMatchID());
+            if (match.getLosingTeamName().equals(score.getTeam()))
+                results.add(score);
+        }
+        return results;
+    }
+    public ArrayList<Score> matchListToScores(ArrayList<Match> matches) {
+        ArrayList<Score> results = new ArrayList<Score>();
+        for (Match match : matches) {
+            results.add(getScore(match.getHomeTeamScoreID()));
+            results.add(getScore(match.getAwayTeamScoreID()));
+        }
+        return results;
+    }
     public String getPremiers() {
         ArrayList<Match> grandFinalList = new ArrayList<Match>();
         String returnString = "";
@@ -590,7 +773,7 @@ public class RecordSystem {
     }
 
     public Match getMatch(String id) {
-        for (Match match : matches) {
+        for (Match match : getAllMatches()) {
             if (match.getID().equals(id)) {
                 return match;
             }
@@ -607,76 +790,78 @@ public class RecordSystem {
         return (ArrayList)scores.clone();
     }
 
-    public Comparator<Match> stringToRecordComparator(String str) {
-        switch (str.toLowerCase()) {
-            // greatest winning margin abbreviations
-            case "greatest margin":
-            case "greatest winning margin":
-            case "margin":
-            case "gm":
-                return new MarginComparator();
-            // highest team score abbreviations
-            case "high score":
-            case "highest score":
-            case "hs":
-            case "score":
-            case "top score":
-            case "highscore":
-            case "topscore":
-            case "ts":
-            case "highest team score":
-            case "hts":
-            case "highteamscore":
-            case "high team score":
-            case "highestteamscore":
-                return new HighSingleTeamScoreComparator();
-            // highest combined score abbreviations
-            case "hcs":
-            case "highest combined score":
-            case "high combined score":
-            case "top combined score":
-            case "tcs":
-                return new HighCombinedScoreComparator();
-            // lowest score abbreviations
-            case "ls":
-            case "lowest score":
-            case "low score":
-            case "lowscore":
-            case "lowestscore":
-            case "lowest team score":
-            case "low team score":
-            case "lts":
-            case "lowestteamscore":
-            case "lowteamscore":
-                return new LowestTeamScoreComparator();
-            // lowest combined score abbreviations
-            case "lowest combined score":
-            case "lcs":
-            case "low combined score":
-            case "lowestcombinedscore":
-            case "lowcombinedscore":
-                return new LowestCombinedScoreComparator();
-            // highest losing score abbreviations
-            case "highest losing score":
-            case "hls":
-            case "highestlosingscore":
-            case "highlosingscore":
-            case "high losing score":
-                return new HighestLosingScoreComparator();
-            // lowest winning score abbreviations
-            case "lowest winning score":
-            case "lowestwinningscore":
-            case "lws":
-            case "lowwinningscore":
-            case "low winning score":
-                return new LowestWinningScoreComparator();
-
-            default:
-                return null;
-
+    public String stringToRecord(String str) {
+        try {
+            switch (str.toLowerCase()) {
+                // greatest winning margin abbreviations
+                case "greatest margin":
+                case "greatest winning margin":
+                case "margin":
+                case "gm":
+                    return "Greatest Winning Margin";
+                // highest team score abbreviations
+                case "high score":
+                case "highest score":
+                case "hs":
+                case "score":
+                case "top score":
+                case "highscore":
+                case "topscore":
+                case "ts":
+                case "highest team score":
+                case "hts":
+                case "highteamscore":
+                case "high team score":
+                case "highestteamscore":
+                    return "Highest Team Score";
+                // highest combined score abbreviations
+                case "hcs":
+                case "highest combined score":
+                case "high combined score":
+                case "top combined score":
+                case "tcs":
+                    return "Highest Combined Score";
+                // lowest score abbreviations
+                case "ls":
+                case "lowest score":
+                case "low score":
+                case "lowscore":
+                case "lowestscore":
+                case "lowest team score":
+                case "low team score":
+                case "lts":
+                case "lowestteamscore":
+                case "lowteamscore":
+                    return "Lowest Team Score";
+                // lowest combined score abbreviations
+                case "lowest combined score":
+                case "lcs":
+                case "low combined score":
+                case "lowestcombinedscore":
+                case "lowcombinedscore":
+                    return "Lowest Combined Score";
+                // highest losing score abbreviations
+                case "highest losing score":
+                case "hls":
+                case "highestlosingscore":
+                case "highlosingscore":
+                case "high losing score":
+                    return "Highest Losing Score";
+                // lowest winning score abbreviations
+                case "lowest winning score":
+                case "lowestwinningscore":
+                case "lws":
+                case "lowwinningscore":
+                case "low winning score":
+                    return "Lowest Winning Score";
+                default:
+                    return null;
+            }
+        }
+        catch (Exception e) {
+            return null;
         }
     }
-
     public String abbreviationToName(String abbr) {
         try {
             switch (abbr.toLowerCase()) {
@@ -811,44 +996,49 @@ public class RecordSystem {
         }
     }
     public String abbreviationToSeason(String abbr) {
-        switch (abbr.toLowerCase()) {
-            case "s1":
-            case "season1":
-                return "2017";
-            case "s2":
-            case "season2":
-                return "2018";
-            case "s3":
-            case "season3":
-                return "2019";
-            case "s4":
-            case "season4":
-                return "2020";
-            case "s5":
-            case "season5":
-                return "2021";
-            case "s6":
-            case "season6":
-                return "Season 6";
-            case "s7":
-            case "season7":
-                return "Season 7";
-            case "s8":
-            case "season8":
-                return "2023";
-            case "s9":
-            case "season9":
-                return "2024";
-            case "s10":
-            case "season10":
-                return "2025";
-            default:
-                return abbr;
+        try {
+            switch (abbr.toLowerCase()) {
+                case "s1":
+                case "season1":
+                    return "2017";
+                case "s2":
+                case "season2":
+                    return "2018";
+                case "s3":
+                case "season3":
+                    return "2019";
+                case "s4":
+                case "season4":
+                    return "2020";
+                case "s5":
+                case "season5":
+                    return "2021";
+                case "s6":
+                case "season6":
+                    return "Season 6";
+                case "s7":
+                case "season7":
+                    return "Season 7";
+                case "s8":
+                case "season8":
+                    return "2023";
+                case "s9":
+                case "season9":
+                    return "2024";
+                case "s10":
+                case "season10":
+                    return "2025";
+                default:
+                    return abbr;
+            }
+        }
+        catch (Exception e) {
+            return null;
         }
     }
 }
 
-class MarginComparator implements Comparator<Match> {
+class GreatestMarginComparator implements Comparator<Match> {
     @Override
     public int compare(Match a, Match b) {
         return Integer.compare(b.getMargin(), a.getMargin());

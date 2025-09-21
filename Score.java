@@ -1,4 +1,6 @@
-public class Score {
+import java.util.*;
+
+public class Score implements Comparable<Score>{
     private String scoreID;
     private String matchID;
     private String teamName;
@@ -11,6 +13,11 @@ public class Score {
         this.goals = goals;
         this.behinds = behinds;
     }
+    @Override
+    public int compareTo(Score s) {
+        return Integer.compare(s.getTotalScore(), this.getTotalScore());
+    }
+    @Override
     public String toString() {
         return String.format("%s: %d.%d (%d)", getTeam(), getGoals(), getBehinds(), getTotalScore());
     }
@@ -33,4 +40,15 @@ public class Score {
         return behinds;
     }
 }
-public
+class HighScoreComparator implements Comparator<Score> {
+    @Override
+    public int compare(Score a, Score b) {
+        return Integer.compare(b.getTotalScore(), a.getTotalScore());
+    }
+}
+class LowScoreComparator implements Comparator<Score> {
+    @Override
+    public int compare(Score a, Score b) {
+        return Integer.compare(a.getTotalScore(), b.getTotalScore());
+    }
+}

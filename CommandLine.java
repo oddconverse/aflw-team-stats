@@ -1,11 +1,8 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class CommandLine {
-    private static final Comparator[] allComparators = {new HighCombinedScoreComparator(), new MarginComparator(), new HighSingleTeamScoreComparator(), new HighestLosingScoreComparator(), new LowestWinningScoreComparator(), new LowestCombinedScoreComparator(), new LowestTeamScoreComparator()};
-    private static final int allComparatorCount = 7;
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -125,22 +122,12 @@ public class CommandLine {
                                     break;
                             }
                         }
-                        if (firstSeason == null) {
-                            // code generates values for first and last seasons using the first and last matches in the database
-                            // will fail if list ever not ordered chronologically
-                            // flawed logic
-                            // sucks
-                            Match firstMatch = system.getAllMatches().get(0);
-                            Match lastMatch = system.getAllMatches().get(system.getAllMatches().size() - 1);
-                            firstSeason = firstMatch.getSeason();
-                            secondSeason = lastMatch.getSeason();
-                            system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway), null);
-                        }
+                        if (firstSeason == null) 
+                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getAllMatches()), null);
                         else if (secondSeason == null)
-                            system.createLadder(system.getMatchesByYear(firstSeason, includeFinals, includeHomeAway), null);
-                        else {
-                            system.createLadder(system.getMatchesByYears(firstSeason, secondSeason, includeFinals, includeHomeAway), null);
-                        }
+                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getMatchesByYear(firstSeason)), null);
+                        else 
+                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getMatchesByYears(firstSeason, secondSeason)), null);
                     }
                     
                     command = input.nextLine();
@@ -158,28 +145,19 @@ public class CommandLine {
                     break;
                 case "records":
                 case "r":
-                // TODO:
-                // want to rework
-                // check if command contains a team, or a season, or multiple seasons
-                // if so, run commands to get team data, or season data, or multiple season data
-                // if not, run command on all matches
-
-                // 7/9/25: command now functional without season implementation
+                // 21/9/25: command now functional
                     String teamName = null;
-                    Comparator[] comparators = new Comparator[10];
-                    int comparatorCount = 0;
+                    ArrayList<String> recordList = new ArrayList<String>();
                     String firstSeason = null;
                     String secondSeason = null;
                     int resultCount = 5;
                     for (String word : words) {
-                        if (system.stringToRecordComparator(word) != null) {
-                            comparators[comparatorCount] = (Comparator) system.stringToRecordComparator(word);
-                            comparatorCount++;
+                        if (system.stringToRecord(word) != null) {
+                            recordList.add(system.stringToRecord(word));
                         }
                         else if (system.abbreviationToName(word) != null) {
                             teamName = system.abbreviationToName(word);
                         }
-                        
                         else if (system.isSeason(word)) {
                             if (firstSeason == null) {
                                 firstSeason = word;
@@ -192,36 +170,68 @@ public class CommandLine {
                             resultCount = Integer.parseInt(word);
                         }
                     }
-                    if (comparators[0] == null) {
-                        comparators = allComparators;
-                        comparatorCount = allComparatorCount;
+                    ArrayList<Score> teamScoreSet;
+                    ArrayList<Match> teamMatchSet;
+                    ArrayList<Match> finalMatchSet;
+                    ArrayList<Score> finalScoreSet;
+                    if (teamName == null) {
+                        teamMatchSet = system.getAllMatches();
+                        teamScoreSet = system.getAllScores();
                     }
-                    for (int i = 0; i < comparatorCount; i++) {
-                        switch (comparators[i].getClass().getName()) {
-                            case "MarginComparator":
-                                System.out.println("Greatest Winning Margins");
-                                break;
-                            case "HighSingleTeamScoreComparator":
-                                System.out.println("Highest Scores");
-                                break;
-                            case "HighCombinedScoreComparator":
-                                System.out.println("Highest Combined Scores");
-                                break;
-                            case "HighestLosingScoreComparator":
-                                System.out.println("Highest Losing Scores");
-                                break;
-                            case "LowestWinningScoreComparator":
-                                System.out.println("Lowest Winning Scores");
-                                break;
-                            case "LowestTeamScoreComparator":
-                                System.out.println("Lowest Scores");
-                                break;
-                            case "LowestCombinedScoreComparator":
-                                System.out.println("Lowest Combined Scores");
-                                break;
-
+                    else { 
+                        teamScoreSet = system.getAllScoresByTeam(teamName);
+                        teamMatchSet = system.getMatchesByTeam(teamName);
+                    }
+                    if (firstSeason == null) {
+                        finalScoreSet = teamScoreSet;
+                        finalMatchSet = teamMatchSet;
+                    }
+                    else if (secondSeason == null) {
+                        finalScoreSet = system.getScoresByYear(firstSeason, teamScoreSet);
+                        finalMatchSet = system.getMatchesByYear(firstSeason, teamMatchSet);
+                    }
+                    
+                    else {
+                        finalScoreSet = system.getScoresByYears(firstSeason, secondSeason, teamScoreSet);
+                        finalMatchSet = system.getMatchesByYears(firstSeason, secondSeason, teamMatchSet);
+                    }
+                    
+                    if (recordList.isEmpty()) {
+                        // run all record commands
+                        System.out.println("Greatest Winning Margin");
+                        system.greatestWinningMargin(finalMatchSet, resultCount);
+                        System.out.println("Highest Team Score");
+                        system.highestTeamScore(finalScoreSet, resultCount);
+                        System.out.println("Highest Combined Score");
+                        system.highestCombinedScore(finalMatchSet, resultCount);
+                        System.out.println("Lowest Team Score");
+                        system.lowestTeamScore(finalScoreSet, resultCount);
+                        System.out.println("Lowest Combined Score");
+                        system.lowestCombinedScore(finalMatchSet, resultCount);
+                        System.out.println("Highest Losing Score");
+                        system.highestTeamScore(system.getLosingScores(finalScoreSet), resultCount);
+                        System.out.println("Lowest Winning Score");
+                        system.lowestTeamScore(system.getWinningScores(finalScoreSet), resultCount);
+                    }
+                    else {
+                        for (String record : recordList) {
+                            // run record commands based on list entries
+                            System.out.println(record);
+                            if (record.equals("Greatest Winning Margin"))
+                                system.greatestWinningMargin(finalMatchSet, resultCount);
+                            else if (record.equals("Highest Team Score")) 
+                                system.highestTeamScore(finalScoreSet, resultCount);
+                            else if (record.equals("Highest Combined Score")) 
+                                system.highestCombinedScore(finalMatchSet, resultCount);
+                            else if (record.equals("Lowest Team Score")) 
+                                system.lowestTeamScore(finalScoreSet, resultCount);
+                            else if (record.equals("Lowest Combined Score"))
+                                system.lowestCombinedScore(finalMatchSet, resultCount);
+                            else if (record.equals("Highest Losing Score"))
+                                system.highestTeamScore(system.getLosingScores(finalScoreSet), resultCount);
+                            else if (record.equals("Lowest Winning Score"))
+                                system.lowestTeamScore(system.getWinningScores(finalScoreSet), resultCount);
                         }
-                        system.findRecord(teamName, comparators[i], resultCount, firstSeason, secondSeason);
                     }
                     command = input.nextLine();
                     break;
