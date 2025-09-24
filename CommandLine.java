@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class CommandLine {
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -34,11 +32,11 @@ public class CommandLine {
                     String team2 = null;
                     boolean displayMatches = false;
                     for (String word : words) {
-                        if (system.abbreviationToName(word) != null && team1 == null) {
-                            team1 = system.abbreviationToName(word);
+                        if (system.abbreviationToTeamName(word) != null && team1 == null) {
+                            team1 = system.abbreviationToTeamName(word);
                         }
-                        else if (system.abbreviationToName(word) != null) {
-                            team2 = system.abbreviationToName(word);
+                        else if (system.abbreviationToTeamName(word) != null) {
+                            team2 = system.abbreviationToTeamName(word);
                         }
                         else if (word.equals("allresults")) {
                             displayMatches = true;
@@ -56,6 +54,7 @@ public class CommandLine {
                     else {
                         String firstSeason = null;
                         String secondSeason = null;
+                        Comparator<Team> sortBy = null;
                         boolean includeFinals = true;
                         boolean includeHomeAway = true;
                         for (String word : words) {
@@ -70,7 +69,7 @@ public class CommandLine {
                                 }
                             }
                             // switch should be moved somewhere better
-                            switch (word) {
+                            switch (word.toLowerCase()) {
                                 case "nofinals", "nf" -> includeFinals = false;
                                 case "finals", "f", "nohomeaway", "nha", "nohome+away", "nohome&away", "noh+a", "noh&a" -> {
                                     includeFinals = true;
@@ -82,14 +81,15 @@ public class CommandLine {
                                     includeFinals = false;
                                 }
                                 case "includehomeandaway", "inchomeandaway", "includehomeaway", "inchomeaway", "iha", "incha", "includehome+away", "inchome+away", "ih+a", "inch+a", "includehome&away", "inchome&away", "ih&a", "inch&a" -> includeHomeAway = true;
+                                case "sortpointsfor" -> sortBy = new PointsForComparator();
                             }
                         }
                         if (firstSeason == null) 
-                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getAllMatches()), null);
+                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getAllMatches()), sortBy);
                         else if (secondSeason == null)
-                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getMatchesByYear(firstSeason)), null);
+                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getMatchesByYear(firstSeason)), sortBy);
                         else 
-                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getMatchesByYears(firstSeason, secondSeason)), null);
+                            system.createLadder(system.filterMatchesByFinals(includeFinals, includeHomeAway, system.getMatchesByYears(firstSeason, secondSeason)), sortBy);
                     }
                     
                     command = input.nextLine();
@@ -114,8 +114,8 @@ public class CommandLine {
                         if (system.stringToRecord(word) != null) {
                             recordList.add(system.stringToRecord(word));
                         }
-                        else if (system.abbreviationToName(word) != null) {
-                            teamName = system.abbreviationToName(word);
+                        else if (system.abbreviationToTeamName(word) != null) {
+                            teamName = system.abbreviationToTeamName(word);
                         }
                         else if (system.isSeason(word)) {
                             if (firstSeason == null) {
@@ -149,7 +149,6 @@ public class CommandLine {
                         finalScoreSet = system.getScoresByYear(firstSeason, teamScoreSet);
                         finalMatchSet = system.getMatchesByYear(firstSeason, teamMatchSet);
                     }
-                    
                     else {
                         finalScoreSet = system.getScoresByYears(firstSeason, secondSeason, teamScoreSet);
                         finalMatchSet = system.getMatchesByYears(firstSeason, secondSeason, teamMatchSet);
@@ -158,7 +157,15 @@ public class CommandLine {
                     if (recordList.isEmpty()) {
                         // run all record commands
                         System.out.println("Greatest Winning Margin");
-                        system.greatestWinningMargin(finalMatchSet, resultCount);
+                        if (teamName != null) {
+                            ArrayList<Match> finalMatchSetWins = system.getWinningMatchesByTeam(teamName, finalMatchSet);
+                            ArrayList<Match> finalMatchSetLosses = system.getLosingMatchesByTeam(teamName, finalMatchSet);
+                            system.greatestMargin(finalMatchSetWins, resultCount);
+                            System.out.println("Greatest Losing Margin");
+                            system.greatestMargin(finalMatchSetLosses, resultCount);
+                        }
+                        else 
+                            system.greatestMargin(finalMatchSet, resultCount);
                         System.out.println("Highest Team Score");
                         system.highestTeamScore(finalScoreSet, resultCount);
                         System.out.println("Highest Combined Score");
@@ -177,7 +184,7 @@ public class CommandLine {
                             // run record commands based on list entries
                             System.out.println(record);
                             if (record.equals("Greatest Winning Margin"))
-                                system.greatestWinningMargin(finalMatchSet, resultCount);
+                                system.greatestMargin(finalMatchSet, resultCount);
                             else if (record.equals("Highest Team Score")) 
                                 system.highestTeamScore(finalScoreSet, resultCount);
                             else if (record.equals("Highest Combined Score")) 

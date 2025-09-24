@@ -132,7 +132,7 @@ public class RecordSystem {
     // TODO: tie tracker no longer works
     // TODO: must code a "getDifferential" method to determine how ties should be handled
 
-    public void greatestWinningMargin(ArrayList<Match> matchSet, int resultCount) {
+    public void greatestMargin(ArrayList<Match> matchSet, int resultCount) {
         // tieTracker keeps track of what the record of the previously checked match was, to see if it is tied with the current match to be analysed
         // if it is tied, tieRank will not be updated
         // e.g two matches with the same winning margin should be displayed as:
@@ -556,6 +556,28 @@ public class RecordSystem {
         }
         return results;
     }
+    public ArrayList<Match> getWinningMatchesByTeam(String team) {
+        return getWinningMatchesByTeam(team, getAllMatches());
+    }
+    public ArrayList<Match> getWinningMatchesByTeam(String team, ArrayList<Match> inputArray) {
+        ArrayList<Match> results = new ArrayList<>();
+        for (Match match : inputArray) {
+            if (match.getWinningTeamName().equals(team))
+                results.add(match);
+        }
+        return results;
+    }
+    public ArrayList<Match> getLosingMatchesByTeam(String team) {
+        return getLosingMatchesByTeam(team, getAllMatches());
+    }
+    public ArrayList<Match> getLosingMatchesByTeam(String team, ArrayList<Match> inputArray) {
+        ArrayList<Match> results = new ArrayList<>();
+        for (Match match : inputArray) {
+            if (match.getLosingTeamName().equals(team))
+                results.add(match);
+        }
+        return results;
+    }
     public ArrayList<Score> getAllScoresByTeam(String teamName) {
         return getAllScoresByTeam(teamName, getAllScores());
     }
@@ -724,7 +746,7 @@ public class RecordSystem {
             return null;
         }
     }
-    public String abbreviationToName(String abbr) {
+    public String abbreviationToTeamName(String abbr) {
         try {
             return switch (abbr.toLowerCase()) {
                 // adelaide

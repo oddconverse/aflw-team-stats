@@ -62,17 +62,15 @@ public class Match {
     }
     // checks for a home team win
     public boolean homeTeamWin() {
-        if (getHomeScore() > getAwayScore()) {
-            return true;
-        }
-        return false;
+        return getHomeScore() > getAwayScore();
     }
     // checks for a draw
     public boolean wasDrawn() {
-        if (getHomeScore() == getAwayScore()) {
-            return true;
-        }
-        return false;
+        return getHomeScore() == getAwayScore();
+    }
+
+    public boolean hasTeam(String teamName) {
+        return getHomeTeamName().equals(teamName) || getAwayTeamName().equals(teamName);
     }
     // finds the margin of the match, returns an absolute value
     // could use this to determine if the winner was the home or away team? remove absolute and use in later programs
@@ -86,10 +84,7 @@ public class Match {
     }
 
     public boolean isFinal() {
-        if (getRound().contains("Round") || getRound().contains("Week")) {
-            return false;
-        }
-        return true;
+        return !(getRound().contains("Round") || getRound().contains("Week"));
     }
     // String returned is dependent on result of match
     // e.g if home team wins it will say "Richmond 6.2 (38) def. Essendon 6.1 (37)"

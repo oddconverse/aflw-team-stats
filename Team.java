@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 // IMPORTANT: NEVER EVER SORT THE MATSTER MATCHES DATASET. ALWAYS CLONE AND SORT. NO WAY TO RE-SORT INTO CHRONOLOGICAL ORDER
 // Lucy Beattie (oddconverse) 2025. All use legal. Free Palestine.
 
@@ -77,26 +76,8 @@ public class Team implements Comparable<Team> {
     public int getPoints() {
         return getWins() * 4 + getDraws() * 2;
     }
-    public HashMap<String, Object> getMap() {
-        HashMap<String, Object> tempMap = new HashMap<String, Object>();
-        tempMap.put("name", name);
-        tempMap.put("pl", getGamesPlayed());
-        tempMap.put("w", getWins());
-        tempMap.put("l", getLosses());
-        tempMap.put("d", getDraws());
-        tempMap.put("pts", getPoints());
-        tempMap.put("pf", getPointsFor());
-        tempMap.put("pa", getPointsAgainst());
-        tempMap.put("%", getPercentage());
-        tempMap.put("w%", getWinPercentage());
-        return tempMap;
-    }
+
     public String ladderDisplay(String format, ArrayList<String> parameterList) {
-        String temp = "";
-        HashMap<String, Object> teamMap = getMap();
-        for (String parameter : parameterList) {
-            teamMap.get(parameter);
-        }
         return String.format("%24s | %4d | %4d | %4d | %4d | %4d | %4d | %4d | %7.2f | %7.2f |", name, gamesPlayed, getWins(), getLosses(), getDraws(), getPoints(), pointsFor, pointsAgainst, getPercentage(), getWinPercentage());
     }
     public String getName() {
