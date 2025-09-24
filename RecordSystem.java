@@ -631,7 +631,7 @@ public class RecordSystem {
         return getScoresByYears(firstYear, lastYear, getAllScores());
     }
     public ArrayList<Score> getScoresByYears(String firstYear, String lastYear, ArrayList<Score> inputArray) {
-        ArrayList<Score> results = new ArrayList<Score>();
+        ArrayList<Score> results = new ArrayList<>();
         boolean seasonFlag = false;
         for (Score score : inputArray) {
             Match currentMatch = getMatch(score.getMatchID());
@@ -651,7 +651,7 @@ public class RecordSystem {
         return getWinningScores(getAllScores());
     }
     public ArrayList<Score> getWinningScores(ArrayList<Score> inputArray) {
-        ArrayList<Score> results = new ArrayList<Score>();
+        ArrayList<Score> results = new ArrayList<>();
         for (Score score : inputArray) {
             Match match = getMatch(score.getMatchID());
             if (match.getWinningTeamName().equals(score.getTeam()))
@@ -663,7 +663,7 @@ public class RecordSystem {
         return getLosingScores(getAllScores());
     }
     public ArrayList<Score> getLosingScores(ArrayList<Score> inputArray) {
-        ArrayList<Score> results = new ArrayList<Score>();
+        ArrayList<Score> results = new ArrayList<>();
         for (Score score : inputArray) {
             Match match = getMatch(score.getMatchID());
             if (match.getLosingTeamName().equals(score.getTeam()))
@@ -672,7 +672,7 @@ public class RecordSystem {
         return results;
     }
     public ArrayList<Score> matchListToScores(ArrayList<Match> matches) {
-        ArrayList<Score> results = new ArrayList<Score>();
+        ArrayList<Score> results = new ArrayList<>();
         for (Match match : matches) {
             results.add(getScore(match.getHomeTeamScoreID()));
             results.add(getScore(match.getAwayTeamScoreID()));
@@ -680,7 +680,7 @@ public class RecordSystem {
         return results;
     }
     public String getPremiers() {
-        ArrayList<Match> grandFinalList = new ArrayList<Match>();
+        ArrayList<Match> grandFinalList = new ArrayList<>();
         String returnString = "";
         for (Match match : getAllMatches()) {
             if (match.getRound().contains("Grand Final")) {

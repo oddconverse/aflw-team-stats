@@ -94,3 +94,16 @@ class PointsForComparator implements Comparator<Team> {
         return Integer.compare(b.getPointsFor(), a.getPointsFor());
     }
 }
+class PointsAgainstComparator implements Comparator<Team> {
+    @Override
+    public int compare (Team a, Team b) {
+        return Integer.compare(a.getPointsAgainst(), b.getPointsAgainst());
+    }
+}
+class PercentageComparator implements Comparator<Team> {
+    @Override
+    public int compare (Team a, Team b) {
+        return Double.compare(b.getPercentage(), a.getPercentage());
+    }
+}
+class 
