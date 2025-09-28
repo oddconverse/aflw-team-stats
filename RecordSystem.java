@@ -47,6 +47,35 @@ public class RecordSystem {
     public void addMatch(Match match) {
         matches.add(match);
     }
+    public void removeMatch(String id) {
+        Match targetMatch = getMatch(id);
+        for (int i = 0; i < scores.size(); i++) {
+            Score score = scores.get(i);
+            if (score.getID().equals(targetMatch.getHomeTeamScoreID()) || score.getID().equals(targetMatch.getAwayTeamScoreID()))
+                scores.remove(i);
+        }
+        for (int i = 0; i < matches.size(); i++) {
+            Match match = matches.get(i);
+            if (match.getID().equals(id)) 
+                matches.remove(i);
+        }
+    }
+    public String createMatchID() {
+        Match lastMatch = getAllMatches().get(getAllMatches().size() - 1);
+        String oldID = lastMatch.getID();
+        int idNumber = Integer.parseInt(oldID.substring(1)) + 1;
+        String newID = String.format("M%6d", idNumber).replace(' ', '0');
+        return newID;
+    }
+    public String[] createScoreIDs() {
+        Score lastScore = getAllScores().get(getAllScores().size() - 1);
+        String oldID = lastScore.getID();
+        int idNumber = Integer.parseInt(oldID.substring(1)) + 1;
+        String[] idArray = new String[2];
+        idArray[0] = String.format("M%6d", idNumber).replace(' ', '0');
+        idArray[1] = String.format("M%6d", ++idNumber).replace(' ', '0');
+        return idArray;
+    }
     // save all data
     public void saveData() {
         saveMatches();
@@ -799,29 +828,36 @@ public class RecordSystem {
             default -> false;
         };
     }
+    public boolean containsSeason(String str) {
+        return true;
+    }
     public String abbreviationToSeason(String abbr) {
         try {
             return switch (abbr.toLowerCase()) {
                 // 2017
-                case "s1", "season1" -> "2017";
+                case "s1", "season1", "2017" -> "2017";
                 // 2018
-                case "s2", "season2" -> "2018";
+                case "s2", "season2", "2018" -> "2018";
                 // 2019
-                case "s3", "season3" -> "2019";
+                case "s3", "season3", "2019" -> "2019";
                 // 2020
-                case "s4", "season4" -> "2020";
+                case "s4", "season4", "2020" -> "2020";
                 // 2021
-                case "s5", "season5" -> "2021";
+                case "s5", "season5", "2021" -> "2021";
+                // 2022
+                case "2022" -> "2022";
                 // 2022 season 6
                 case "s6", "season6" -> "Season 6";
                 // 2022 season 7
                 case "s7", "season7" -> "Season 7";
                 // 2023
-                case "s8", "season8" -> "2023";
+                case "s8", "season8", "2023" -> "2023";
                 // 2024
-                case "s9", "season9" -> "2024";
+                case "s9", "season9", "2024" -> "2024";
                 // 2025
-                case "s10", "season10" -> "2025";
+                case "s10", "season10", "2025" -> "2025";
+                // blank entry
+                case "" -> null;
                 default -> abbr;
             };
         }

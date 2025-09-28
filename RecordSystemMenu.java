@@ -134,7 +134,7 @@ public class RecordSystemMenu {
                     }
                     System.out.println("Should finals be included in this ladder? (Y)/N");
                     boolean includeFinals = true;
-                    if (input.nextLine().equals("N"))
+                    if (input.nextLine().toLowerCase().equals("n"))
                         includeFinals = false;
                     if (firstSeason.equals("")) {
                         system.createLadder(system.filterMatchesByFinals(includeFinals, true, system.getAllMatches()), null);

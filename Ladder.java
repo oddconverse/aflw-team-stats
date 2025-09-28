@@ -106,4 +106,3 @@ class PercentageComparator implements Comparator<Team> {
         return Double.compare(b.getPercentage(), a.getPercentage());
     }
 }
-class 

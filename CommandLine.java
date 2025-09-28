@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommandLine {
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -15,7 +17,13 @@ public class CommandLine {
             String firstWord = stk.nextToken().trim();
             ArrayList<String> words = new ArrayList<String>();
             while (stk.hasMoreTokens()) {
-                words.add(stk.nextToken().trim().toLowerCase());
+                String word = stk.nextToken();
+                words.add(word.trim());
+            }
+            StringTokenizer quoteFinder = new StringTokenizer(command, "\"");
+            while (quoteFinder.hasMoreTokens()) {
+                String word = quoteFinder.nextToken().trim();
+                words.add(word.trim());
             }
             switch (firstWord.toLowerCase()) {
                 case "help" -> {
@@ -24,6 +32,49 @@ public class CommandLine {
                     System.out.println(String.format("| %60s |", "Parameters listed between <> arrows. Default values marked with an = after parameter name."));
                     System.out.println(String.format(defaultFormat, "headtohead <team1> <team2>", "Command will output a head to head comparison between two teams."));
                     System.out.println(String.format(defaultFormat, "ladder <firstSeason> <secondSeason> <includefinals=true> <includehomeandaway=true>", "Command will output a ladder of all matches played during and between the given seasons."));
+                    command = input.nextLine();
+                }
+                // work in progress
+                // todo: make round input work
+                case "add" -> {
+                    System.out.println("Add match");
+                    String round = null;
+                    String matchID = system.createMatchID();
+                    String[] scoreIDs = system.createScoreIDs();
+                    String team1 = null;
+                    String team2 = null;
+                    int team1goals = -1;
+                    int team1behinds = -1;
+                    int team2goals = -1;
+                    int team2behinds = -1;
+                    for (String word : words) {
+                        if (system.abbreviationToTeamName(word) != null && team1 == null) {
+                            team1 = system.abbreviationToTeamName(word);
+                        }
+                        else if (system.abbreviationToTeamName(word) != null && team2 == null) {
+                            team2 = system.abbreviationToTeamName(word);
+                        }
+                        else if (system.isNumeric(word) && team1goals < 0) {
+                            team1goals = Integer.parseInt(word);
+                        }
+                        else if (system.isNumeric(word) && team1behinds < 0) {
+                            team1behinds = Integer.parseInt(word);
+                        }
+                        else if (system.isNumeric(word) && team2goals < 0) {
+                            team2goals = Integer.parseInt(word);
+                        }
+                        else if (system.isNumeric(word) && team2behinds < 0) {
+                            team2behinds = Integer.parseInt(word);
+                        }
+                        // check if string can be used as round
+                        else if (system.containsSeason(word)) {
+                            round = word;
+                        }
+                    }
+                    System.out.println(new Match(matchID, round, scoreIDs[0], team1, team1goals, team1behinds, scoreIDs[1], team2, team2goals, team2behinds));
+                    system.addScore(scoreIDs[0], matchID, team1, team1goals, team1behinds);
+                    system.addScore(scoreIDs[1], matchID, team2, team2goals, team2behinds);
+                    system.addMatch(matchID, round, scoreIDs[0], team1, team1goals, team1behinds, scoreIDs[1], team2, team2goals, team2behinds);
                     command = input.nextLine();
                 }
                 // HEAD TO HEAD
@@ -164,20 +215,21 @@ public class CommandLine {
                             System.out.println("Greatest Losing Margin");
                             system.greatestMargin(finalMatchSetLosses, resultCount);
                         }
-                        else 
+                        else {
                             system.greatestMargin(finalMatchSet, resultCount);
-                        System.out.println("Highest Team Score");
-                        system.highestTeamScore(finalScoreSet, resultCount);
-                        System.out.println("Highest Combined Score");
-                        system.highestCombinedScore(finalMatchSet, resultCount);
-                        System.out.println("Lowest Team Score");
-                        system.lowestTeamScore(finalScoreSet, resultCount);
-                        System.out.println("Lowest Combined Score");
-                        system.lowestCombinedScore(finalMatchSet, resultCount);
-                        System.out.println("Highest Losing Score");
-                        system.highestTeamScore(system.getLosingScores(finalScoreSet), resultCount);
-                        System.out.println("Lowest Winning Score");
-                        system.lowestTeamScore(system.getWinningScores(finalScoreSet), resultCount);
+                            System.out.println("Highest Team Score");
+                            system.highestTeamScore(finalScoreSet, resultCount);
+                            System.out.println("Highest Combined Score");
+                            system.highestCombinedScore(finalMatchSet, resultCount);
+                            System.out.println("Lowest Team Score");
+                            system.lowestTeamScore(finalScoreSet, resultCount);
+                            System.out.println("Lowest Combined Score");
+                            system.lowestCombinedScore(finalMatchSet, resultCount);
+                            System.out.println("Highest Losing Score");
+                            system.highestTeamScore(system.getLosingScores(finalScoreSet), resultCount);
+                            System.out.println("Lowest Winning Score");
+                            system.lowestTeamScore(system.getWinningScores(finalScoreSet), resultCount);
+                        }
                     }
                     else {
                         for (String record : recordList) {
@@ -200,6 +252,15 @@ public class CommandLine {
                         }
                     }
                     command = input.nextLine();
+                }
+                case "rm", "remove" -> {
+                    Pattern matchIDPattern = Pattern.compile("M[0-9]{6}");
+                    for (String word : words) {
+                        Matcher matcher = matchIDPattern.matcher(word);
+                        if (matcher.find()) {
+                            system.removeMatch(word);
+                        }
+                    }
                 }
                 case "exit", "x" -> {
                     System.out.println("Thank you for using the AFLW Team Stats centre.");
